@@ -1,0 +1,101 @@
+/* HEADER LAYOUT - LOGO + TEXT ON LEFT, LANGUAGE + MENU ON RIGHT */
+
+/* Left side: Logo + Text */
+.nav__left {
+    display: flex;
+    align-items: center;
+}
+
+.nav__logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav__logo-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.nav__logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Menu button on right side */
+.nav__actions .nav__toggle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav__actions .nav__toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Language indicator styling */
+.language-indicator {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 0;
+}
+
+.language-indicator:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.flag-icon {
+    font-size: 1.5rem;
+}
+
+/* Right side actions */
+.nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .nav__left {
+        gap: 0.75rem;
+    }
+    
+    .nav__left .nav__toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .language-indicator {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+}
+

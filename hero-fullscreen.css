@@ -1,0 +1,221 @@
+/* HERO FULLSCREEN - FIRST SIGHT, HIGH QUALITY, MOBILE PERFECT */
+
+/* Full viewport hero - 20% smaller */
+.hero {
+    min-height: 80vh !important;
+    height: 80vh !important;
+    width: 100vw !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 0 !important;
+}
+
+/* Background container */
+.hero__background {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+}
+
+/* Slideshow container */
+.hero__slideshow {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Individual slides - HIGH QUALITY */
+.hero__slide {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    opacity: 0 !important;
+    transition: opacity 2s ease-in-out !important;
+    filter: brightness(1.15) contrast(1.25) saturate(1.4) !important;
+}
+
+.hero__slide.active {
+    opacity: 1 !important;
+}
+
+/* No color overlay - pure image visibility */
+.hero__background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 2;
+}
+
+/* Content container */
+.hero__container {
+    position: relative !important;
+    z-index: 10 !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    padding: 0 2rem !important;
+    text-align: center !important;
+}
+
+.hero__content {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.hero__text {
+    text-align: center !important;
+}
+
+/* Title styling - no shadows */
+.hero__title {
+    font-size: 4rem !important;
+    line-height: 1.2 !important;
+    margin: 0 auto !important;
+    text-shadow: none !important;
+    color: white !important;
+    -webkit-text-stroke: none;
+}
+
+.hero__title-accent {
+    color: #ffd700 !important;
+}
+
+/* TABLET RESPONSIVE (768px - 1024px) */
+@media (max-width: 1024px) {
+    .hero {
+        min-height: 80vh !important;
+        height: 80vh !important;
+    }
+    
+    .hero__title {
+        font-size: 3.5rem !important;
+    }
+    
+    .hero__container {
+        padding: 0 1.5rem !important;
+    }
+}
+
+/* MOBILE RESPONSIVE (481px - 767px) */
+@media (max-width: 767px) {
+    .hero {
+        min-height: 80vh !important;
+        height: 80vh !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    .hero__background::after {
+        background: transparent;
+    }
+    
+    .hero__slide {
+        background-size: cover !important;
+        background-position: center center !important;
+    }
+    
+    .hero__container {
+        padding: 0 1.25rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 80vh !important;
+    }
+    
+    .hero__title {
+        font-size: 2.5rem !important;
+        line-height: 1.2 !important;
+        text-shadow: none !important;
+        -webkit-text-stroke: none;
+    }
+}
+
+/* SMALL PHONES (320px - 480px) */
+@media (max-width: 480px) {
+    .hero {
+        min-height: 80vh !important;
+        height: 80vh !important;
+    }
+    
+    .hero__container {
+        padding: 0 1rem !important;
+    }
+    
+    .hero__title {
+        font-size: 2rem !important;
+        line-height: 1.3 !important;
+    }
+}
+
+/* iPhone SE (375px) */
+@media (max-width: 375px) {
+    .hero__title {
+        font-size: 1.85rem !important;
+    }
+}
+
+/* Very small phones (320px) */
+@media (max-width: 320px) {
+    .hero__title {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* LANDSCAPE MODE */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: 80vh !important;
+        height: auto !important;
+        padding: 2rem 0 !important;
+    }
+    
+    .hero__title {
+        font-size: 2rem !important;
+    }
+}
+
+/* HIGH RESOLUTION DISPLAYS (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero__slide {
+        background-size: cover !important;
+        image-rendering: -webkit-optimize-contrast !important;
+        image-rendering: crisp-edges !important;
+    }
+}
+
+/* Remove any hidden badges or extra elements */
+.hero-logo-badge {
+    display: none !important;
+}
+
+.hero__image {
+    display: none !important;
+}
+
+/* Ensure no bottom spacing on mobile */
+@media (max-width: 767px) {
+    body {
+        padding-bottom: 0 !important;
+    }
+    
+    .hero {
+        margin-bottom: 0 !important;
+    }
+}
+

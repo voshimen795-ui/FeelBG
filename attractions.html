@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Discover the best restaurants in Belgrade - Serbian and international cuisine">
+    <meta name="keywords" content="Belgrade restaurants, Serbian food, dining Belgrade, food guide">
+    
+    <title>Best Restaurants in Belgrade | FeelBG</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+    
+    <!-- Mobile Nav Fixed CSS -->
+    <link rel="stylesheet" href="mobile-nav-fixed.css">
+</head>
+<body>
+    <!-- Cursor Effect -->
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+    
+    <!-- Header -->
+    <header class="header scroll-header" id="header">
+        <nav class="nav container">
+            <div class="nav__left">
+                <div class="nav__logo">
+                    <a href="index.html" class="nav__logo-link">
+                        <img src="slike/logo/headerlogo.png" alt="FeelBG Ornament" class="nav__logo-img nav__logo-ornamental">
+                        <img src="slike/feelbgslicica.png" alt="FeelBG" class="nav__logo-img nav__logo-text">
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="restaurants.html" class="nav__link active-link">
+                            <i class="fas fa-utensils"></i> Restaurants
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="cafes.html" class="nav__link">
+                            <i class="fas fa-coffee"></i> Cafes
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="nightlife.html" class="nav__link">
+                            <i class="fas fa-glass-cheers"></i> Nightlife
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="attractions.html" class="nav__link">
+                            <i class="fas fa-landmark"></i> Attractions
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="about.html" class="nav__link">
+                            <i class="fas fa-info-circle"></i> About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav__actions">
+                <div class="language-dropdown">
+                    <button id="language-indicator" class="language-indicator" title="English (US)">
+                        <img src="https://flagcdn.com/w80/us.png" alt="US" class="flag-icon-img" id="current-flag">
+                    </button>
+                    <div class="language-dropdown-menu" id="language-menu">
+                        <button class="language-option" data-code="en" data-flag="gb" title="English">
+                            <img src="https://flagcdn.com/w80/gb.png" alt="GB" class="flag-img">
+                            <span class="lang-code">EN</span>
+                        </button>
+                        <button class="language-option" data-code="us" data-flag="us" title="English (US)">
+                            <img src="https://flagcdn.com/w80/us.png" alt="US" class="flag-img">
+                            <span class="lang-code">US</span>
+                        </button>
+                        <button class="language-option" data-code="tr" data-flag="tr" title="Türkçe">
+                            <img src="https://flagcdn.com/w80/tr.png" alt="TR" class="flag-img">
+                            <span class="lang-code">TR</span>
+                        </button>
+                        <button class="language-option" data-code="de" data-flag="de" title="Deutsch">
+                            <img src="https://flagcdn.com/w80/de.png" alt="DE" class="flag-img">
+                            <span class="lang-code">DE</span>
+                        </button>
+                        <button class="language-option" data-code="fr" data-flag="fr" title="Français">
+                            <img src="https://flagcdn.com/w80/fr.png" alt="FR" class="flag-img">
+                            <span class="lang-code">FR</span>
+                        </button>
+                        <button class="language-option" data-code="it" data-flag="it" title="Italiano">
+                            <img src="https://flagcdn.com/w80/it.png" alt="IT" class="flag-img">
+                            <span class="lang-code">IT</span>
+                        </button>
+                        <button class="language-option" data-code="ru" data-flag="ru" title="Русский">
+                            <img src="https://flagcdn.com/w80/ru.png" alt="RU" class="flag-img">
+                            <span class="lang-code">RU</span>
+                        </button>
+                        <button class="language-option" data-code="el" data-flag="gr" title="Ελληνικά">
+                            <img src="https://flagcdn.com/w80/gr.png" alt="GR" class="flag-img">
+                            <span class="lang-code">GR</span>
+                        </button>
+                        <button class="language-option" data-code="sr" data-flag="rs" title="Српски">
+                            <img src="https://flagcdn.com/w80/rs.png" alt="RS" class="flag-img">
+                            <span class="lang-code">SR</span>
+                        </button>
+                        <button class="language-option" data-code="he" data-flag="il" title="עברית">
+                            <img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img">
+                            <span class="lang-code">HE</span>
+                        </button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero__background"></div>
+            <div class="container">
+                <div class="page-hero__content" data-aos="fade-up">
+                    <div class="breadcrumb">
+                        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                        <span>/</span>
+                        <span>Restaurants</span>
+                    </div>
+                    <h1 class="page-hero__title">Belgrade Restaurants</h1>
+                    <p class="page-hero__description">
+                        From traditional Serbian cuisine to international flavors - discover over 250 amazing restaurants
+                    </p>
+                    <div class="page-hero__stats">
+                        <div class="stat-item">
+                            <i class="fas fa-utensils"></i>
+                            <span>250+ Restaurants</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <span>4.7 Avg Rating</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>All Districts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Filters & Search Section -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-container" data-aos="fade-up">
+                    <!-- Search Bar -->
+                    <div class="filter-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search restaurants by name or cuisine...">
+                    </div>
+                    
+                    <!-- Filter Buttons -->
+                    <div class="filter-pills">
+                        <button class="filter-pill active" data-filter="all">
+                            <i class="fas fa-th"></i> All
+                        </button>
+                        <button class="filter-pill" data-filter="serbian">
+                            🇷🇸 Serbian
+                        </button>
+                        <button class="filter-pill" data-filter="international">
+                            🌍 International
+                        </button>
+                        <button class="filter-pill" data-filter="italian">
+                            🇮🇹 Italian
+                        </button>
+                        <button class="filter-pill" data-filter="asian">
+                            🥢 Asian
+                        </button>
+                        <button class="filter-pill" data-filter="mediterranean">
+                            🌊 Mediterranean
+                        </button>
+                    </div>
+                    
+                    <!-- Advanced Filters -->
+                    <div class="filter-advanced">
+                        <select id="filter-price" class="filter-select">
+                            <option value="all">All Prices</option>
+                            <option value="budget">$ Budget</option>
+                            <option value="moderate">$$ Moderate</option>
+                            <option value="upscale">$$$ Upscale</option>
+                            <option value="fine-dining">$$$$ Fine Dining</option>
+                        </select>
+                        
+                        <select id="filter-area" class="filter-select">
+                            <option value="all">All Areas</option>
+                            <option value="stari-grad">Stari Grad</option>
+                            <option value="skadarlija">Skadarlija</option>
+                            <option value="savamala">Savamala</option>
+                            <option value="dorcol">Dorćol</option>
+                            <option value="vracar">Vračar</option>
+                        </select>
+                        
+                        <select id="filter-sort" class="filter-select">
+                            <option value="rating">Highest Rated</option>
+                            <option value="popular">Most Popular</option>
+                            <option value="name">Name A-Z</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                        
+                        <button class="filter-toggle" id="map-toggle">
+                            <i class="fas fa-map"></i> View Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section class="results-section section">
+            <div class="container">
+                <div class="results-header">
+                    <h2 class="results-count" id="results-count">Showing 18 restaurants</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Restaurants Grid -->
+                <div class="places-grid" id="restaurants-grid">
+                    <!-- Restaurant Card 1 -->
+                    <div class="place-card" data-cuisine="serbian" data-price="upscale" data-area="stari-grad" data-rating="4.9">
+                        <div class="place-card__image">
+                            <div class="place-card__badge">Top Rated</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Salon 1905</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.9
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Traditional Serbian
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Strahinjića Bana 7, Stari Grad
+                            </p>
+                            <p class="place-card__description">
+                                Elegant Serbian cuisine in historic ambiance with live music
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 2 -->
+                    <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="skadarlija" data-rating="4.7">
+                        <div class="place-card__image">
+                            <div class="place-card__badge popular">Popular</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Tri Šešira</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.7
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Traditional Serbian
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Skadarska 29, Skadarlija
+                            </p>
+                            <p class="place-card__description">
+                                Iconic bohemian restaurant with authentic Serbian dishes
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 3 -->
+                    <div class="place-card" data-cuisine="italian" data-price="upscale" data-area="vracar" data-rating="4.8">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Little Bay</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.8
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Italian Fine Dining
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Dečanska 6, Vračar
+                            </p>
+                            <p class="place-card__description">
+                                Italian cuisine with live opera performances
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status closed">Opens 6 PM</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 4 -->
+                    <div class="place-card" data-cuisine="asian" data-price="moderate" data-area="savamala" data-rating="4.6">
+                        <div class="place-card__image">
+                            <div class="place-card__badge new">New</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Sakura</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.6
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Japanese Sushi
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Karađorđeva 2-4, Savamala
+                            </p>
+                            <p class="place-card__description">
+                                Authentic sushi and Japanese cuisine by the river
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 5 -->
+                    <div class="place-card" data-cuisine="international" data-price="moderate" data-area="dorcol" data-rating="4.5">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Comunale Caffè</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> International Fusion
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Kralja Petra 18, Dorćol
+                            </p>
+                            <p class="place-card__description">
+                                Modern international cuisine in trendy Dorćol
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 6 -->
+                    <div class="place-card" data-cuisine="mediterranean" data-price="upscale" data-area="vracar" data-rating="4.7">
+                        <div class="place-card__image" style="background-image: url('slike/belgrade-by-night-4576220_1280.jpg'); background-size: cover; background-position: center;">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Ambar</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.7
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Balkan & Mediterranean
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Kralja Petra 6a, Vračar
+                            </p>
+                            <p class="place-card__description">
+                                Contemporary Balkan cuisine with Mediterranean twist
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 7 -->
+                    <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="vracar" data-rating="4.6">
+                        <div class="place-card__image">
+                            <div class="place-card__badge">Local Favorite</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Dva Jelena</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.6
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Traditional Serbian
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Skadarska 32, Skadarlija
+                            </p>
+                            <p class="place-card__description">
+                                Historic restaurant serving authentic Serbian dishes since 1832
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 8 -->
+                    <div class="place-card" data-cuisine="international" data-price="upscale" data-area="savamala" data-rating="4.8">
+                        <div class="place-card__image">
+                            <div class="place-card__badge new">New</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Smokvica</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.8
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Modern European
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Bulevar Despota Stefana 22, Savamala
+                            </p>
+                            <p class="place-card__description">
+                                Creative modern cuisine with local ingredients
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 9 -->
+                    <div class="place-card" data-cuisine="asian" data-price="upscale" data-area="stari-grad" data-rating="4.7">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Toro Latin GastroBar</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.7
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Latin American Fusion
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Karađorđeva 2, Stari Grad
+                            </p>
+                            <p class="place-card__description">
+                                Latin American cuisine with Asian influences
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 10 -->
+                    <div class="place-card" data-cuisine="italian" data-price="moderate" data-area="dorcol" data-rating="4.5">
+                        <div class="place-card__image">
+                            <div class="place-card__badge popular">Popular</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Trattoria Bella Vista</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Authentic Italian
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Dorćol, Kralja Petra 45
+                            </p>
+                            <p class="place-card__description">
+                                Family-owned Italian trattoria with homemade pasta
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 11 -->
+                    <div class="place-card" data-cuisine="serbian" data-price="budget" data-area="vracar" data-rating="4.4">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Kafana Question Mark</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.4
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Traditional Serbian
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Kralja Petra 6, Vračar
+                            </p>
+                            <p class="place-card__description">
+                                Belgrade's oldest kafana, operating since 1823
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$ - $$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 12 -->
+                    <div class="place-card" data-cuisine="mediterranean" data-price="moderate" data-area="savamala" data-rating="4.6">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Lorenzo & Kakalamba</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.6
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Mediterranean Fusion
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Kralja Petra 23, Savamala
+                            </p>
+                            <p class="place-card__description">
+                                Quirky decor with excellent Mediterranean menu
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 13 -->
+                    <div class="place-card" data-cuisine="asian" data-price="budget" data-area="dorcol" data-rating="4.3">
+                        <div class="place-card__image">
+                            <div class="place-card__badge new">New</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Sushi Time</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.3
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Japanese Fast Casual
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Dorćol, Jevrejska 16
+                            </p>
+                            <p class="place-card__description">
+                                Quick, affordable sushi and Asian dishes
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$ - $$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 14 -->
+                    <div class="place-card" data-cuisine="international" data-price="fine-dining" data-area="stari-grad" data-rating="4.9">
+                        <div class="place-card__image">
+                            <div class="place-card__badge">Michelin Recommended</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Franš</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.9
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Contemporary Fine Dining
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Kralja Petra 13, Stari Grad
+                            </p>
+                            <p class="place-card__description">
+                                Exquisite tasting menus with wine pairings
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$$</span>
+                                <span class="open-status closed">Opens 7 PM</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 15 -->
+                    <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="skadarlija" data-rating="4.5">
+                        <div class="place-card__image">
+                            <div class="place-card__badge popular">Popular</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Ima Dana</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Serbian Home Cooking
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Skadarska 38, Skadarlija
+                            </p>
+                            <p class="place-card__description">
+                                Traditional home-style Serbian dishes in cozy atmosphere
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 16 -->
+                    <div class="place-card" data-cuisine="international" data-price="upscale" data-area="vracar" data-rating="4.7">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Mezestoran Dvorište</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.7
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Balkan Tapas
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Svetog Save 21, Vračar
+                            </p>
+                            <p class="place-card__description">
+                                Small plates and mezze in a charming courtyard
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$$ - $$$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 17 -->
+                    <div class="place-card" data-cuisine="italian" data-price="budget" data-area="savamala" data-rating="4.2">
+                        <div class="place-card__image">
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Pizza Lab</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.2
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Neapolitan Pizza
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Gavrila Principa 12, Savamala
+                            </p>
+                            <p class="place-card__description">
+                                Authentic wood-fired Neapolitan pizzas
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$ - $$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant Card 18 -->
+                    <div class="place-card" data-cuisine="asian" data-price="moderate" data-area="dorcol" data-rating="4.6">
+                        <div class="place-card__image" style="background-image: url('slike/wmremove-transformed (1).png'); background-size: cover; background-position: center;">
+                            <div class="place-card__badge">Chef's Choice</div>
+                            <div class="place-card__heart">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="place-card__content">
+                            <div class="place-card__header">
+                                <h3 class="place-card__title">Dim Sum Belgrade</h3>
+                                <div class="place-card__rating">
+                                    <i class="fas fa-star"></i> 4.6
+                                </div>
+                            </div>
+                            <p class="place-card__cuisine">
+                                <i class="fas fa-tag"></i> Chinese Dim Sum
+                            </p>
+                            <p class="place-card__location">
+                                <i class="fas fa-map-marker-alt"></i> Džordža Vašingtona 32, Dorćol
+                            </p>
+                            <p class="place-card__description">
+                                Authentic dim sum and Cantonese specialties
+                            </p>
+                            <div class="place-card__meta">
+                                <span class="price-range">$$ - $$$</span>
+                                <span class="open-status open">Open Now</span>
+                            </div>
+                            <div class="place-card__footer">
+                                <button class="btn-icon" title="Get Directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-icon" title="Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn-details">
+                                    View Details <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Load More -->
+                <div class="load-more-container" data-aos="fade-up">
+                    <button class="btn btn-primary load-more-btn">
+                        <span>Load More Restaurants</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <h3 class="footer__title">Feel<span class="logo-accent">BG</span></h3>
+                    <p class="footer__text">
+                        Your trusted guide to discovering the best of Belgrade.
+                    </p>
+                </div>
+                
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Quick Links</h4>
+                    <ul class="footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="restaurants.html">Restaurants</a></li>
+                        <li><a href="cafes.html">Cafes</a></li>
+                        <li><a href="nightlife.html">Nightlife</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Contact</h4>
+                    <p class="footer__text">hello@feelbg.com</p>
+                    <p class="footer__text">+381 11 123 4567</p>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2025 FeelBG. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scroll To Top -->
+    <button class="scroll-top" id="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Language Selector -->
+    <script src="language-selector.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+    <script src="pages.js"></script>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="mobile-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="restaurants.html" class="mobile-nav-item">
+            <i class="fas fa-utensils"></i>
+            <span>Food</span>
+        </a>
+        <a href="attractions.html" class="mobile-nav-item active">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Places</span>
+        </a>
+        <a href="nightlife.html" class="mobile-nav-item">
+            <i class="fas fa-glass-cheers"></i>
+            <span>Night</span>
+        </a>
+        <a href="cafes.html" class="mobile-nav-item">
+            <i class="fas fa-coffee"></i>
+            <span>Cafes</span>
+        </a>
+    </nav>
+
+</body>
+</html>
+

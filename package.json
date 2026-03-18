@@ -1,0 +1,23 @@
+{
+  "name": "feelbg",
+  "version": "1.0.0",
+  "description": "Modern website with royal blue and bronze gold theme",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx live-server",
+    "dev": "npx live-server --port=8080"
+  },
+  "keywords": [
+    "modern",
+    "website",
+    "html5",
+    "css3",
+    "animations"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
+

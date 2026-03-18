@@ -1,0 +1,50 @@
+/* REMOVE ALL BLANK SPACES */
+
+/* Sections right after hero */
+.categories,
+.featured,
+.neighborhoods,
+.section {
+    margin-top: 0 !important;
+    padding-top: 2rem !important;
+}
+
+/* First section after hero */
+.hero + .section,
+.hero + section {
+    margin-top: 0 !important;
+    padding-top: 3rem !important;
+}
+
+/* Remove extra spacing */
+.hero__content {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* No gaps */
+.main {
+    margin-top: 0 !important;
+}
+
+/* Categories section (first after hero) */
+.categories {
+    margin-top: 0 !important;
+    padding-top: 3rem !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .categories,
+    .section {
+        padding-top: 2rem !important;
+    }
+    
+    .hero + .section,
+    .hero + section {
+        padding-top: 2rem !important;
+    }
+}
+
+
+

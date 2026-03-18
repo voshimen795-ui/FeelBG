@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Discover the best restaurants, cafes, nightlife and hidden gems in Belgrade. Your ultimate guide to experiencing the heart of Serbia.">
+    <meta name="keywords" content="Belgrade, restaurants, cafes, nightlife, tourism, Serbia, travel guide, local places, attractions">
+    <meta name="author" content="FeelBG">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="FeelBG - Discover Belgrade">
+    <meta property="og:description" content="Your ultimate guide to Belgrade's best restaurants, cafes, nightlife and hidden gems">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="FeelBG - Discover Belgrade">
+    <meta property="twitter:description" content="Your ultimate guide to Belgrade's best restaurants, cafes, nightlife and hidden gems">
+    
+    <title>FeelBG - Discover Belgrade | Best Restaurants, Places & Experiences</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Mobile Optimized CSS -->
+    <link rel="stylesheet" href="mobile-optimized.css">
+    
+    <!-- Dropdown Menu CSS -->
+    <link rel="stylesheet" href="dropdown-menu.css">
+    
+    <!-- Header Layout CSS -->
+    <link rel="stylesheet" href="header-layout.css">
+    
+    <!-- Hero Fullscreen CSS -->
+    <link rel="stylesheet" href="hero-fullscreen.css">
+    
+    <!-- Remove Blank Space CSS -->
+    <link rel="stylesheet" href="remove-blank-space.css">
+    
+    <!-- Mobile Nav Fixed CSS -->
+    <link rel="stylesheet" href="mobile-nav-fixed.css">
+</head>
+<body>
+    <!-- Cursor Effect Container -->
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+    
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="loader"></div>
+            <h2 class="preloader-text">Loading Excellence</h2>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    
+    <header class="header" id="header">
+        <nav class="nav container">
+            <div class="nav__left">
+                <div class="nav__logo" data-aos="fade-right" data-aos-duration="1000">
+                    <a href="index.html" class="nav__logo-link">
+                        <img src="slike/logo/headerlogo.png" alt="FeelBG Ornament" class="nav__logo-img nav__logo-ornamental">
+                        <img src="slike/feelbgslicica.png" alt="FeelBG" class="nav__logo-img nav__logo-text">
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="100">
+                        <a href="index.html" class="nav__link active-link">
+                            <i class="fas fa-home"></i> <span data-i18n="nav.home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="200">
+                        <a href="restaurants.html" class="nav__link">
+                            <i class="fas fa-utensils"></i> <span data-i18n="nav.restaurants">Restaurants</span>
+                        </a>
+                    </li>
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="300">
+                        <a href="cafes.html" class="nav__link">
+                            <i class="fas fa-coffee"></i> <span data-i18n="nav.cafes">Cafes</span>
+                        </a>
+                    </li>
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="400">
+                        <a href="nightlife.html" class="nav__link">
+                            <i class="fas fa-glass-cheers"></i> <span data-i18n="nav.nightlife">Nightlife</span>
+                        </a>
+                    </li>
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="500">
+                        <a href="attractions.html" class="nav__link">
+                            <i class="fas fa-landmark"></i> <span data-i18n="nav.attractions">Attractions</span>
+                        </a>
+                    </li>
+                    <li class="nav__item" data-aos="fade-down" data-aos-delay="600">
+                        <a href="about.html" class="nav__link">
+                            <i class="fas fa-info-circle"></i> <span data-i18n="nav.about">About</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav__actions" data-aos="fade-left" data-aos-duration="1000">
+                <div class="language-dropdown">
+                    <button id="language-indicator" class="language-indicator" title="English (US)">
+                        <img src="https://flagcdn.com/w80/us.png" alt="US" class="flag-icon-img" id="current-flag">
+                    </button>
+                    <div class="language-dropdown-menu" id="language-menu">
+                        <button class="language-option" data-code="en" data-flag="gb" title="English">
+                            <img src="https://flagcdn.com/w80/gb.png" alt="GB" class="flag-img">
+                            <span class="lang-code">EN</span>
+                        </button>
+                        <button class="language-option" data-code="us" data-flag="us" title="English (US)">
+                            <img src="https://flagcdn.com/w80/us.png" alt="US" class="flag-img">
+                            <span class="lang-code">US</span>
+                        </button>
+                        <button class="language-option" data-code="tr" data-flag="tr" title="Türkçe">
+                            <img src="https://flagcdn.com/w80/tr.png" alt="TR" class="flag-img">
+                            <span class="lang-code">TR</span>
+                        </button>
+                        <button class="language-option" data-code="de" data-flag="de" title="Deutsch">
+                            <img src="https://flagcdn.com/w80/de.png" alt="DE" class="flag-img">
+                            <span class="lang-code">DE</span>
+                        </button>
+                        <button class="language-option" data-code="fr" data-flag="fr" title="Français">
+                            <img src="https://flagcdn.com/w80/fr.png" alt="FR" class="flag-img">
+                            <span class="lang-code">FR</span>
+                        </button>
+                        <button class="language-option" data-code="it" data-flag="it" title="Italiano">
+                            <img src="https://flagcdn.com/w80/it.png" alt="IT" class="flag-img">
+                            <span class="lang-code">IT</span>
+                        </button>
+                        <button class="language-option" data-code="ru" data-flag="ru" title="Русский">
+                            <img src="https://flagcdn.com/w80/ru.png" alt="RU" class="flag-img">
+                            <span class="lang-code">RU</span>
+                        </button>
+                        <button class="language-option" data-code="el" data-flag="gr" title="Ελληνικά">
+                            <img src="https://flagcdn.com/w80/gr.png" alt="GR" class="flag-img">
+                            <span class="lang-code">GR</span>
+                        </button>
+                        <button class="language-option" data-code="sr" data-flag="rs" title="Српски">
+                            <img src="https://flagcdn.com/w80/rs.png" alt="RS" class="flag-img">
+                            <span class="lang-code">SR</span>
+                        </button>
+                        <button class="language-option" data-code="he" data-flag="il" title="עברית">
+                            <img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img">
+                            <span class="lang-code">HE</span>
+                        </button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <!-- Hero Logo Badge -->
+            <div class="hero-logo-badge">
+                <img src="slike/logo/feelbg-high-resolution-logo.png" alt="FeelBG" loading="eager">
+            </div>
+            
+            <div class="hero__background">
+                <div class="hero__slideshow">
+                    <div class="hero__slide active" style="background-image: url('slike/belgrade-by-night-4576220_1280.jpg');"></div>
+                    <div class="hero__slide" style="background-image: url('slike/wmremove-transformed (1).png');"></div>
+                </div>
+                <div class="hero__overlay"></div>
+                <div class="animated-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                    <div class="shape shape-4"></div>
+                    <div class="shape shape-5"></div>
+                </div>
+                <div class="particles" id="particles"></div>
+            </div>
+            
+            <div class="hero__container container">
+                <div class="hero__content">
+                    <div class="hero__text">
+                        <h1 class="hero__title" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                            <span data-i18n="hero.title">Discover the Heart</span>
+                            <span class="hero__title-of">
+                                <span data-i18n="hero.of">of</span> 
+                                <span class="hero__title-serbia">
+                                    <span class="letter" style="animation-delay: 0s">S</span><span class="letter" style="animation-delay: 0.1s">E</span><span class="letter" style="animation-delay: 0.2s">R</span><span class="letter" style="animation-delay: 0.3s">B</span><span class="letter" style="animation-delay: 0.4s">I</span><span class="letter" style="animation-delay: 0.5s">A</span>
+                                </span>
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Categories Section -->
+        <section class="section categories belgrade-pattern" id="categories">
+            <div class="container">
+                <div class="section__header belgrade-accent scroll-reveal">
+                    <span class="section__subtitle" data-i18n="categories.subtitle">What to Explore</span>
+                    <h2 class="section__title" data-i18n="categories.title">Discover Belgrade</h2>
+                    <p class="section__description" data-i18n="categories.description">
+                        From world-class dining to vibrant nightlife - explore everything Belgrade has to offer
+                    </p>
+                </div>
+                
+                <div class="categories__grid">
+                    <a href="restaurants.html" class="category__card scroll-reveal ripple bounce-on-tap">
+                        <div class="category__icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3 class="category__title" data-i18n="categories.restaurants">Restaurants</h3>
+                        <p class="category__description" data-i18n="categories.restaurantsDesc">
+                            Discover amazing Serbian and international cuisine
+                        </p>
+                        <span class="category__count" data-i18n="categories.restaurantsCount">250+ Places</span>
+                        <div class="category__overlay"></div>
+                    </a>
+                    
+                    <a href="cafes.html" class="category__card scroll-reveal ripple bounce-on-tap">
+                        <div class="category__icon">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <h3 class="category__title" data-i18n="categories.cafes">Cafes & Bars</h3>
+                        <p class="category__description" data-i18n="categories.cafesDesc">
+                            Cozy cafes and trendy bars for every mood
+                        </p>
+                        <span class="category__count" data-i18n="categories.cafesCount">150+ Spots</span>
+                        <div class="category__overlay"></div>
+                    </a>
+                    
+                    <a href="nightlife.html" class="category__card scroll-reveal ripple bounce-on-tap">
+                        <div class="category__icon">
+                            <i class="fas fa-glass-cheers"></i>
+                        </div>
+                        <h3 class="category__title" data-i18n="categories.nightlife">Nightlife</h3>
+                        <p class="category__description" data-i18n="categories.nightlifeDesc">
+                            Experience the city that never sleeps
+                        </p>
+                        <span class="category__count" data-i18n="categories.nightlifeCount">80+ Clubs</span>
+                        <div class="category__overlay"></div>
+                    </a>
+                    
+                    <a href="attractions.html" class="category__card scroll-reveal ripple bounce-on-tap">
+                        <div class="category__icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3 class="category__title" data-i18n="categories.attractions">Attractions</h3>
+                        <p class="category__description" data-i18n="categories.attractionsDesc">
+                            Historic sites and modern landmarks
+                        </p>
+                        <span class="category__count" data-i18n="categories.attractionsCount">50+ Places</span>
+                        <div class="category__overlay"></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Newsletter Section -->
+        <section class="section newsletter-section" id="newsletter">
+            <div class="container">
+                <div class="newsletter-content" data-aos="fade-up">
+                    <form class="newsletter-form-inline">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Subscribe</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="section contact" id="contact">
+            <div class="container">
+                <div class="section__header" data-aos="fade-up">
+                    <span class="section__subtitle">Get In Touch</span>
+                    <h2 class="section__title">Have Questions?</h2>
+                    <p class="section__description">
+                        We're here to help you plan the perfect Belgrade experience
+                    </p>
+                </div>
+                
+                <div class="contact__content">
+                    <div class="contact__info" data-aos="fade-right" data-aos-delay="200">
+                        <div class="contact__item">
+                            <div class="contact__icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact__details">
+                                <h4>Location</h4>
+                                <p>Belgrade, Serbia</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact__item">
+                            <div class="contact__icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact__details">
+                                <h4>Phone</h4>
+                                <p>+381 11 123 4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact__item">
+                            <div class="contact__icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact__details">
+                                <h4>Email</h4>
+                                <p>hello@feelbg.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact__item">
+                            <div class="contact__icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact__details">
+                                <h4>Support Hours</h4>
+                                <p>24/7 - Always Here</p>
+                            </div>
+                        </div>
+                        
+                        <div class="social__links">
+                            <a href="#" class="social__link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social__link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social__link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social__link" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
+                        </div>
+                    </div>
+                    
+                    <form class="contact__form" data-aos="fade-left" data-aos-delay="200" id="contact-form">
+                        <div class="form__group">
+                            <input type="text" id="name" class="form__input" placeholder=" " required>
+                            <label for="name" class="form__label">Your Name</label>
+                        </div>
+                        
+                        <div class="form__group">
+                            <input type="email" id="email" class="form__input" placeholder=" " required>
+                            <label for="email" class="form__label">Your Email</label>
+                        </div>
+                        
+                        <div class="form__group">
+                            <select id="inquiry-type" class="form__input" required>
+                                <option value="">Select inquiry type</option>
+                                <option value="general">General Question</option>
+                                <option value="recommendation">Need Recommendations</option>
+                                <option value="business">Business Partnership</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                            <label for="inquiry-type" class="form__label">Inquiry Type</label>
+                        </div>
+                        
+                        <div class="form__group">
+                            <textarea id="message" class="form__input form__textarea" placeholder=" " required></textarea>
+                            <label for="message" class="form__label">Your Message</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section footer-logo-section">
+                    <div class="footer-main-logo">
+                        <img src="slike/logo/feelbg-high-resolution-logo-transparent.png" alt="FeelBG Logo" loading="lazy">
+                    </div>
+                    <h3 class="footer__title" style="margin-top: 1rem;">Feel<span class="logo-accent">BG</span></h3>
+                    <p class="footer__text" data-i18n="footer.text">
+                        Your trusted guide to discovering the best of Belgrade. 
+                        Recommended by locals, loved by tourists.
+                    </p>
+                    <div class="footer__trust">
+                        <span><i class="fas fa-check-circle"></i> Verified Places</span>
+                        <span><i class="fas fa-star"></i> 4.8 Average Rating</span>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Explore</h4>
+                    <ul class="footer__links">
+                        <li><a href="restaurants.html">Restaurants</a></li>
+                        <li><a href="cafes.html">Cafes & Bars</a></li>
+                        <li><a href="nightlife.html">Nightlife</a></li>
+                        <li><a href="attractions.html">Attractions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Popular Areas</h4>
+                    <ul class="footer__links">
+                        <li><a href="restaurants.html?area=skadarlija">Skadarlija</a></li>
+                        <li><a href="nightlife.html?area=savamala">Savamala</a></li>
+                        <li><a href="cafes.html?area=dorcol">Dorćol</a></li>
+                        <li><a href="attractions.html?area=stari-grad">Stari Grad</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Useful Info</h4>
+                    <ul class="footer__links">
+                        <li><a href="about.html">About FeelBG</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#">For Business</a></li>
+                        <li><a href="#">Travel Tips</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2025 FeelBG - Discover Belgrade. All rights reserved.</p>
+                <div class="footer__bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scroll To Top Button -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Language Selector -->
+    <script src="language-selector.js"></script>
+    
+    
+    <!-- Booking System -->
+    <script src="booking.js"></script>
+    
+    <!-- Mobile Interactions -->
+    <script src="mobile-interactions.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+    
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="mobile-nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="restaurants.html" class="mobile-nav-item">
+            <i class="fas fa-utensils"></i>
+            <span>Food</span>
+        </a>
+        <a href="attractions.html" class="mobile-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Places</span>
+        </a>
+        <a href="nightlife.html" class="mobile-nav-item">
+            <i class="fas fa-glass-cheers"></i>
+            <span>Night</span>
+        </a>
+        <a href="#" class="mobile-nav-item" onclick="document.getElementById('hero-search').focus(); return false;">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+    </nav>
+    
+    <!-- Floating Action Button (Mobile) -->
+    <button class="mobile-fab" aria-label="Quick Access">
+        <i class="fas fa-plus"></i>
+    </button>
+    
+    <!-- Quick Access Panel -->
+    <div class="quick-access-panel">
+        <a href="tel:+381111234567" class="quick-access-item">
+            <i class="fas fa-phone"></i>
+            <span>Call Support</span>
+        </a>
+        <a href="#" class="quick-access-item">
+            <i class="fas fa-directions"></i>
+            <span>Get Directions</span>
+        </a>
+        <a href="#" class="quick-access-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Tourist Info</span>
+        </a>
+        <a href="#" class="quick-access-item">
+            <i class="fas fa-heart"></i>
+            <span>Favorites</span>
+        </a>
+    </div>
+    
+    <!-- Logo Watermark (Mobile) -->
+    <div class="logo-watermark">
+        <img src="slike/logo/feelbg-high-resolution-logo-grayscale.png" alt="FeelBG" loading="lazy">
+    </div>
+</body>
+</html>
+
