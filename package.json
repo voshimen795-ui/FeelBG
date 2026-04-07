@@ -4,8 +4,8 @@
   "description": "Modern website with royal blue and bronze gold theme",
   "main": "index.html",
   "scripts": {
-    "start": "npx live-server",
-    "dev": "npx live-server --port=8080"
+    "start": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
+    "dev": "npx live-server --port=5000 --host=0.0.0.0 --no-browser"
   },
   "keywords": [
     "modern",
@@ -20,4 +20,3 @@
     "live-server": "^1.2.2"
   }
 }
-
