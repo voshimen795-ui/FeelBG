@@ -1,0 +1,70 @@
+Act as a senior full-stack developer, UX engineer, and localization expert.
+
+Your task is to audit, fix, and optimize a website to ensure full geographic accuracy and complete multilingual consistency across all pages and components.
+
+### 1. LOCATION ACCURACY (BELGRADE-BASED DATA)
+- Ensure all local businesses, addresses, maps, and location-based content are accurate and correspond to real-world locations in Belgrade, Serbia.
+- Do NOT assign random or incorrect locations to businesses or map pins.
+- Cross-check that:
+  - Map markers match actual addresses.
+  - Business names correspond to real or logically placed entities in Belgrade.
+  - No mismatched or fake geographic placements exist.
+- If placeholder data exists, replace it with realistic Belgrade-based data or clearly mark it as placeholder.
+
+### 2. FULL WEBSITE TRANSLATION (GLOBAL LANGUAGE SWITCHING)
+- Implement a robust internationalization (i18n) system.
+- When a user switches language (e.g., by clicking a flag), EVERY visible text element on the website MUST update accordingly.
+
+This includes:
+- Headings
+- Paragraphs
+- Buttons
+- Navigation menus
+- Cards and card descriptions
+- Map labels and map-related UI text
+- Local business names and descriptions
+- Forms and placeholders
+- Footer content
+- Error messages
+- Any dynamically rendered or component-based text
+
+### 3. COMPLETE LANGUAGE CONSISTENCY
+- No partial translations are allowed.
+- There must be ZERO leftover text from the previous language after switching.
+- Ensure translations apply across:
+  - All pages
+  - All components
+  - All modals/popups
+  - All dynamically loaded content
+
+### 4. PHONE NUMBER STANDARDIZATION
+- Replace ALL phone numbers across the entire website with:
+  +381653315640
+- Ensure consistency across:
+  - Contact pages
+  - Business listings
+  - Cards
+  - Footers
+  - Structured data (if present)
+
+### 5. TECHNICAL IMPLEMENTATION REQUIREMENTS
+- Use a scalable i18n approach (e.g., JSON translation files or equivalent).
+- Avoid hardcoded text in components.
+- Ensure language state is globally managed (e.g., via context, store, or similar).
+- Support dynamic updates without requiring page reload (if possible).
+- Ensure SEO-friendly localization where applicable.
+
+### 6. QUALITY ASSURANCE
+- Verify that:
+  - Switching languages updates ALL content instantly and correctly.
+  - No UI breaks occur due to text length differences.
+  - Maps and location-based elements remain accurate regardless of language.
+  - No missing translations exist.
+
+### 7. FINAL GOAL
+Deliver a fully localized, geographically accurate, and production-ready website where:
+- All Belgrade-based data is correct and realistic.
+- Language switching results in a COMPLETE and CONSISTENT translation across the entire platform.
+- Contact information is fully standardized.
+
+Think like a perfectionist engineer and do not leave any partial implementations.

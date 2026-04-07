@@ -642,10 +642,10 @@
                 <div class="footer__section">
                     <h4 class="footer__subtitle">Explore</h4>
                     <ul class="footer__links">
-                        <li><a href="restaurants.html">Restaurants</a></li>
-                        <li><a href="cafes.html">Cafes & Bars</a></li>
-                        <li><a href="nightlife.html">Nightlife</a></li>
-                        <li><a href="attractions.html">Attractions</a></li>
+                        <li><a href="restaurants.html" data-i18n="nav.restaurants">Restaurants</a></li>
+                        <li><a href="cafes.html" data-i18n="nav.cafes">Cafes & Bars</a></li>
+                        <li><a href="nightlife.html" data-i18n="nav.nightlife">Nightlife</a></li>
+                        <li><a href="attractions.html" data-i18n="nav.attractions">Attractions</a></li>
                     </ul>
                 </div>
                 
@@ -662,10 +662,10 @@
                 <div class="footer__section">
                     <h4 class="footer__subtitle">Useful Info</h4>
                     <ul class="footer__links">
-                        <li><a href="about.html">About FeelBG</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
-                        <li><a href="#">For Business</a></li>
-                        <li><a href="#">Travel Tips</a></li>
+                        <li><a href="about.html" data-i18n="footer.aboutFeelbg">About FeelBG</a></li>
+                        <li><a href="#contact" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="#" data-i18n="footer.forBusiness">For Business</a></li>
+                        <li><a href="#" data-i18n="footer.travelTips">Travel Tips</a></li>
                     </ul>
                 </div>
             </div>
@@ -689,6 +689,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <!-- Language Selector -->
+    <script src="translations.js"></script>
     <script src="language-selector.js"></script>
     
     
@@ -705,19 +706,19 @@
     <nav class="mobile-bottom-nav">
         <a href="index.html" class="mobile-nav-item active">
             <i class="fas fa-home"></i>
-            <span>Home</span>
+            <span data-i18n="nav.home">Home</span>
         </a>
         <a href="restaurants.html" class="mobile-nav-item">
             <i class="fas fa-utensils"></i>
-            <span>Food</span>
+            <span data-i18n="nav.restaurants">Food</span>
         </a>
         <a href="attractions.html" class="mobile-nav-item">
             <i class="fas fa-map-marked-alt"></i>
-            <span>Places</span>
+            <span data-i18n="nav.attractions">Places</span>
         </a>
         <a href="nightlife.html" class="mobile-nav-item">
             <i class="fas fa-glass-cheers"></i>
-            <span>Night</span>
+            <span data-i18n="nav.nightlife">Night</span>
         </a>
         <a href="#" class="mobile-nav-item" onclick="document.getElementById('hero-search').focus(); return false;">
             <i class="fas fa-search"></i>

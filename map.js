@@ -43,7 +43,7 @@ class BelgradeMap {
             { name: 'Ksenija Jazz Club', type: 'nightlife', area: 'Stari Grad', lat: 44.8204, lng: 20.4583, rating: 4.9, price: '$$', icon: '🎺', color: '#7c3aed', desc: 'Intimate jazz venue with world-class acts' },
             { name: 'Ben Akiba Stand-Up', type: 'nightlife', area: 'Stari Grad', lat: 44.8197, lng: 20.4592, rating: 4.6, price: '$$', icon: '🎤', color: '#7c3aed', desc: 'Comedy club with local and international acts' },
             { name: 'Lasta Club', type: 'nightlife', area: 'Zemun', lat: 44.8390, lng: 20.4006, rating: 4.5, price: '$$', icon: '🌙', color: '#7c3aed', desc: 'Riverside party venue in old Zemun' },
-            { name: 'Drugstore Club', type: 'nightlife', area: 'Ada Ciganlija', lat: 44.7943, lng: 20.4222, rating: 4.7, price: '$$$', icon: '💊', color: '#7c3aed', desc: 'Open-air electronic music venue' },
+            { name: 'Drugstore Club', type: 'nightlife', area: 'Savamala', lat: 44.8145, lng: 20.4502, rating: 4.7, price: '$$$', icon: '💊', color: '#7c3aed', desc: 'Open-air electronic music venue near Beton Hala' },
 
             // Attractions
             { name: 'Kalemegdan Fortress', type: 'attraction', area: 'Stari Grad', lat: 44.8227, lng: 20.4513, rating: 4.9, price: 'Free', icon: '🏰', color: '#dc2626', desc: 'Ancient fortress at the confluence of two rivers' },
