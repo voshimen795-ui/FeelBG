@@ -55,6 +55,8 @@
     
     <!-- Mobile Nav Fixed CSS -->
     <link rel="stylesheet" href="mobile-nav-fixed.css">
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
     <!-- Cursor Effect Container -->
@@ -184,6 +186,9 @@
             <div class="hero__background">
                 <div class="hero__slideshow">
                     <div class="hero__slide active" style="background-image: url('slike/belgrade-by-night-4576220_1280.jpg');"></div>
+                    <div class="hero__slide" style="background-image: url('slike/kalemegdan-fortress.jpg');"></div>
+                    <div class="hero__slide" style="background-image: url('slike/topcider-park.jpg');"></div>
+                    <div class="hero__slide" style="background-image: url('slike/ada-ciganlija.jpg');"></div>
                     <div class="hero__slide" style="background-image: url('slike/wmremove-transformed (1).png');"></div>
                 </div>
                 <div class="hero__overlay"></div>
@@ -289,7 +294,7 @@
                 </div>
                 <div class="gems__grid">
                     <div class="gem-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="gem-card__image" style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80');">
+                        <div class="gem-card__image" style="background-image: url('slike/topcider-park.jpg');">
                             <span class="gem-badge" data-i18n="gems.badge.nature">Nature</span>
                         </div>
                         <div class="gem-card__content">
@@ -328,7 +333,7 @@
                         </div>
                     </div>
                     <div class="gem-card" data-aos="fade-up" data-aos-delay="250">
-                        <div class="gem-card__image" style="background-image: url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&q=80');">
+                        <div class="gem-card__image" style="background-image: url('slike/ada-ciganlija.jpg');">
                             <span class="gem-badge" data-i18n="gems.badge.secret">Secret Spot</span>
                         </div>
                         <div class="gem-card__content">
@@ -341,11 +346,11 @@
                         </div>
                     </div>
                     <div class="gem-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="gem-card__image" style="background-image: url('https://images.unsplash.com/photo-1566438480900-0609be27a4be?w=600&q=80');">
+                        <div class="gem-card__image" style="background-image: url('slike/kalemegdan-fortress.jpg');">
                             <span class="gem-badge" data-i18n="gems.badge.history">History</span>
                         </div>
                         <div class="gem-card__content">
-                            <h3 class="gem-card__title" data-i18n="gems.rose.name">Rose Garden, Kalemegdan</h3>
+                            <h3 class="gem-card__title" data-i18n="gems.rose.name">Kalemegdan Fortress</h3>
                             <p class="gem-card__desc" data-i18n="gems.rose.desc">Hidden within the fortress grounds, a quiet rose garden blooms in spring — the most romantic secret in the city.</p>
                             <div class="gem-card__meta">
                                 <span><i class="fas fa-map-marker-alt"></i> Stari Grad</span>
@@ -547,7 +552,7 @@
                             </div>
                             <div class="contact__details">
                                 <h4>Phone</h4>
-                                <p>+381 11 123 4567</p>
+                                <p>+381 65 331 5640</p>
                             </div>
                         </div>
                         
@@ -575,7 +580,6 @@
                             <a href="#" class="social__link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" class="social__link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                             <a href="#" class="social__link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social__link" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
                         </div>
                     </div>
                     
@@ -728,13 +732,13 @@
     
     <!-- Quick Access Panel -->
     <div class="quick-access-panel">
-        <a href="tel:+381111234567" class="quick-access-item">
+        <a href="tel:+381653315640" class="quick-access-item">
             <i class="fas fa-phone"></i>
             <span>Call Support</span>
         </a>
-        <a href="#" class="quick-access-item">
-            <i class="fas fa-directions"></i>
-            <span>Get Directions</span>
+        <a href="#" class="quick-access-item" data-map-open>
+            <i class="fas fa-map-marked-alt"></i>
+            <span>View Map</span>
         </a>
         <a href="#" class="quick-access-item">
             <i class="fas fa-info-circle"></i>
@@ -750,6 +754,8 @@
     <div class="logo-watermark">
         <img src="slike/logo/feelbg-high-resolution-logo-grayscale.png" alt="FeelBG" loading="lazy">
     </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="map.js"></script>
 </body>
 </html>
 

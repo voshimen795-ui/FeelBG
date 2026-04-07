@@ -26,6 +26,8 @@
     
     <!-- Mobile Nav Fixed CSS -->
     <link rel="stylesheet" href="mobile-nav-fixed.css">
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
     <!-- Cursor Effect -->
@@ -48,32 +50,32 @@
                 <ul class="nav__list">
                     <li class="nav__item">
                         <a href="index.html" class="nav__link">
-                            <i class="fas fa-home"></i> Home
+                            <i class="fas fa-home"></i> <span data-i18n="nav.home">Home</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <a href="restaurants.html" class="nav__link">
-                            <i class="fas fa-utensils"></i> Restaurants
+                            <i class="fas fa-utensils"></i> <span data-i18n="nav.restaurants">Restaurants</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <a href="cafes.html" class="nav__link active-link">
-                            <i class="fas fa-coffee"></i> Cafes
+                            <i class="fas fa-coffee"></i> <span data-i18n="nav.cafes">Cafes</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <a href="nightlife.html" class="nav__link">
-                            <i class="fas fa-glass-cheers"></i> Nightlife
+                            <i class="fas fa-glass-cheers"></i> <span data-i18n="nav.nightlife">Nightlife</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <a href="attractions.html" class="nav__link">
-                            <i class="fas fa-landmark"></i> Attractions
+                            <i class="fas fa-landmark"></i> <span data-i18n="nav.attractions">Attractions</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <a href="about.html" class="nav__link">
-                            <i class="fas fa-info-circle"></i> About
+                            <i class="fas fa-info-circle"></i> <span data-i18n="nav.about">About</span>
                         </a>
                     </li>
                 </ul>
@@ -145,7 +147,7 @@
             <div class="container">
                 <div class="page-hero__content" data-aos="fade-up">
                     <div class="breadcrumb">
-                        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                        <a href="index.html"><i class="fas fa-home"></i> <span data-i18n="nav.home">Home</span></a>
                         <span>/</span>
                         <span>Cafes</span>
                     </div>
@@ -257,7 +259,7 @@
                 <div class="places-grid" id="places-grid">
                     <!-- Restaurant Card 1 -->
                     <div class="place-card" data-cuisine="serbian" data-price="upscale" data-area="stari-grad" data-rating="4.9">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge">Top Rated</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -299,7 +301,7 @@
                     
                     <!-- Restaurant Card 2 -->
                     <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="skadarlija" data-rating="4.7">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge popular">Popular</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -341,7 +343,7 @@
                     
                     <!-- Restaurant Card 3 -->
                     <div class="place-card" data-cuisine="italian" data-price="upscale" data-area="vracar" data-rating="4.8">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -382,7 +384,7 @@
                     
                     <!-- Restaurant Card 4 -->
                     <div class="place-card" data-cuisine="asian" data-price="moderate" data-area="savamala" data-rating="4.6">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge new">New</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -424,7 +426,7 @@
                     
                     <!-- Restaurant Card 5 -->
                     <div class="place-card" data-cuisine="international" data-price="moderate" data-area="dorcol" data-rating="4.5">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -506,7 +508,7 @@
                     
                     <!-- Restaurant Card 7 -->
                     <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="vracar" data-rating="4.6">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge">Local Favorite</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -548,7 +550,7 @@
                     
                     <!-- Restaurant Card 8 -->
                     <div class="place-card" data-cuisine="international" data-price="upscale" data-area="savamala" data-rating="4.8">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge new">New</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -590,7 +592,7 @@
                     
                     <!-- Restaurant Card 9 -->
                     <div class="place-card" data-cuisine="asian" data-price="upscale" data-area="stari-grad" data-rating="4.7">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1559305616-3f99cd43e353?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -631,7 +633,7 @@
                     
                     <!-- Restaurant Card 10 -->
                     <div class="place-card" data-cuisine="italian" data-price="moderate" data-area="dorcol" data-rating="4.5">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1534040385115-33dcb3acba5b?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge popular">Popular</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -673,7 +675,7 @@
                     
                     <!-- Restaurant Card 11 -->
                     <div class="place-card" data-cuisine="serbian" data-price="budget" data-area="vracar" data-rating="4.4">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1543422328-9de0a31c7c62?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -714,7 +716,7 @@
                     
                     <!-- Restaurant Card 12 -->
                     <div class="place-card" data-cuisine="mediterranean" data-price="moderate" data-area="savamala" data-rating="4.6">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -755,7 +757,7 @@
                     
                     <!-- Restaurant Card 13 -->
                     <div class="place-card" data-cuisine="asian" data-price="budget" data-area="dorcol" data-rating="4.3">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1529417305485-480f359e7ac5?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge new">New</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -797,7 +799,7 @@
                     
                     <!-- Restaurant Card 14 -->
                     <div class="place-card" data-cuisine="international" data-price="fine-dining" data-area="stari-grad" data-rating="4.9">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge">Michelin Recommended</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -839,7 +841,7 @@
                     
                     <!-- Restaurant Card 15 -->
                     <div class="place-card" data-cuisine="serbian" data-price="moderate" data-area="skadarlija" data-rating="4.5">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__badge popular">Popular</div>
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
@@ -881,7 +883,7 @@
                     
                     <!-- Restaurant Card 16 -->
                     <div class="place-card" data-cuisine="international" data-price="upscale" data-area="vracar" data-rating="4.7">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1525610553991-2bede1a236e2?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -922,7 +924,7 @@
                     
                     <!-- Restaurant Card 17 -->
                     <div class="place-card" data-cuisine="italian" data-price="budget" data-area="savamala" data-rating="4.2">
-                        <div class="place-card__image">
+                        <div class="place-card__image" style="background-image:url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80');background-size:cover;background-position:center;">
                             <div class="place-card__heart">
                                 <i class="far fa-heart"></i>
                             </div>
@@ -1039,7 +1041,7 @@
                 <div class="footer__section">
                     <h4 class="footer__subtitle">Contact</h4>
                     <p class="footer__text">hello@feelbg.com</p>
-                    <p class="footer__text">+381 11 123 4567</p>
+                    <p class="footer__text">+381 65 331 5640</p>
                 </div>
             </div>
             
@@ -1090,6 +1092,8 @@
         </a>
     </nav>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="map.js"></script>
 </body>
 </html>
 

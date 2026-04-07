@@ -126,7 +126,7 @@ class BookingSystem {
                         <label for="booking-phone">
                             <i class="fas fa-phone"></i> Contact Phone
                         </label>
-                        <input type="tel" id="booking-phone" placeholder="+381 11 123 4567" required>
+                        <input type="tel" id="booking-phone" placeholder="+381 65 331 5640" required>
                     </div>
                     
                     <div class="booking-summary">
