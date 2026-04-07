@@ -1,0 +1,34 @@
+Role: You are an expert Full-Stack Developer and UI/UX Designer. Your task is to execute a complete overhaul of the Belgrade application based on the following 5-step plan. Prioritize clean architecture, responsiveness, and creative execution.
+
+1. 100% Comprehensive Localization
+Zero-Bias Translation: Implement a global language switch where every single string of text (UI, descriptions, metadata) is translated.
+
+Requirement: Ensure no hardcoded fragments remain in the original language. The transition must be seamless across the entire application.
+
+2. Asset Integration & Hero Restoration
+Folder Mapping: Integrate every image from the /slike folder into the application’s headers and placeholders.
+
+Hero Section: Restore the Belgrade background in the Hero section. Re-apply all original gradients, sophisticated animations, and CSS styles to ensure a premium visual entrance.
+
+3. Content Expansion: "Hidden Gems" & HD Mapping
+The Pivot: Replace the "Places" section with a curated "Hidden Gems" section. Focus on Belgrade’s nature, beautiful parks, and secret spots.
+
+Business Expansion: Add 15 to 20 new local venues (restaurants, cafes, etc.).
+
+Visual Standard: Fetch and integrate HD imagery for every single business card. Every local must have a high-quality, professional image placeholder.
+
+4. Structural Precision & Bug Fixing
+Architecture: Organize the project into strictly defined folders: /frontend (HTML/CSS/JS) and /backend.
+
+Code Quality: Audit the existing code. If you identify any inefficiency or "bad" code, fix it immediately.
+
+Responsiveness: Ensure the entire platform is 100% responsive, specifically optimizing for mobile devices and varied screen sizes.
+
+5. New Section: "Live Events & Belgrade News"
+Placement: Insert this section immediately after "Otkrijte Beograd".
+
+Functionality: Integrate a public API to fetch 4-5 live events (concerts, news, live music, stages) happening in Belgrade.
+
+UI Component: Use the specific Radio-Button CSS Carousel provided below.
+
+Technical Implementation: Ensure the carousel is responsive and handle the :has() selector support as defined.

@@ -54,9 +54,10 @@ class Preloader {
     }
 
     hide() {
+        if (!this.preloader) return;
         this.preloader.classList.add('hidden');
         setTimeout(() => {
-            this.preloader.style.display = 'none';
+            if (this.preloader) this.preloader.style.display = 'none';
         }, 500);
     }
 }
@@ -787,6 +788,34 @@ class HeroSlideshow {
 // INITIALIZATION
 // ============================================
 
+// ============================================
+// LIVE EVENTS DATE INITIALIZER
+// ============================================
+
+class LiveEventsInit {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        const today = new Date();
+        const fmt = (d) => d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+
+        const dates = [
+            fmt(today),
+            fmt(new Date(today.getTime() + 2 * 86400000)),
+            fmt(today),
+            fmt(new Date(today.getTime() + 4 * 86400000)),
+            fmt(new Date(today.getTime() + 86400000))
+        ];
+
+        dates.forEach((date, i) => {
+            const el = document.getElementById(`ev-date-${i + 1}`);
+            if (el) el.textContent = date;
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
     new Preloader();
@@ -806,6 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new MouseMoveEffects();
     new KeyboardNavigation();
     new HeroSlideshow();
+    new LiveEventsInit();
     
     // Initialize AOS
     initAOS();
