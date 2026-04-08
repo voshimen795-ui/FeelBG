@@ -61,6 +61,10 @@ en: {
 'cuisine.fineDining':'Fine Dining · French','cuisine.brunch':'Brunch · Café','cuisine.thai':'Thai Cuisine','cuisine.vietnamese':'Vietnamese · Fusion',
 'cuisine.steakhouse':'Steakhouse · Grill','cuisine.italianMed':'Italian · Mediterranean','cuisine.serbianGrill':'Serbian · Grill',
 'cuisine.sushi':'Japanese · Sushi','cuisine.fusion':'International · Fusion','cuisine.medModern':'Mediterranean · Modern',
+'popup.information':'Information','popup.open':'Open:','popup.avgBudget':'Avg. budget:','popup.perPerson':'per person','popup.reserve':'Reserve a Table','popup.close':'Close','popup.seeRoute':'See Route on Map',
+'chatbot.title':'FeelBG Reservations','chatbot.placeholder':'Type your answer...','chatbot.q1':'How many people?','chatbot.q2':'What time do you want a table?','chatbot.q3':'Any special requests (e.g., anniversary, window seat)?','chatbot.summary':'Reservation summary:','chatbot.people':'people','chatbot.sendWhatsApp':'Send via WhatsApp','chatbot.reservationFor':'Reservation for','chatbot.guests':'Guests','chatbot.time':'Time','chatbot.requests':'Requests',
+'map.title':'Belgrade Map','map.venues':'venues','map.venueList':'Venue List','map.all':'All','map.food':'Food','map.cafes':'Cafes','map.nightlife':'Nightlife','map.sights':'Sights','map.reserve':'Reserve a Table','map.restaurant':'Restaurant','map.cafeBar':'Cafe & Bar','map.nightlifeLabel':'Nightlife','map.attraction':'Attraction',
+'adventure.create':'Create my Adventure','adventure.whatToSee':'What do you want to explore?','adventure.food':'🍽️ Food','adventure.drinks':'🍸 Drinks','adventure.history':'🏛️ History','adventure.locating':'Locating you...','adventure.routeReady':'Your adventure route is ready!','adventure.walking':'Walking route','adventure.stop':'Stop','adventure.locationError':'Could not get your location. Please allow location access.','adventure.noVenues':'No venues found in this category nearby.',
 },
 
 sr: {
@@ -124,6 +128,10 @@ sr: {
 'cuisine.fineDining':'Visoka kuhinja · Francuska','cuisine.brunch':'Brunch · Kafić','cuisine.thai':'Tajlandska kuhinja','cuisine.vietnamese':'Vijetnamska · Fuzija',
 'cuisine.steakhouse':'Roštilj · Gril','cuisine.italianMed':'Italijanska · Mediteranska','cuisine.serbianGrill':'Srpska · Roštilj',
 'cuisine.sushi':'Japanska · Suši','cuisine.fusion':'Internacionalna · Fuzija','cuisine.medModern':'Mediteranska · Moderna',
+'popup.information':'Informacije','popup.open':'Radno vreme:','popup.avgBudget':'Prosečan budžet:','popup.perPerson':'po osobi','popup.reserve':'Rezervišite sto','popup.close':'Zatvori','popup.seeRoute':'Pogledaj rutu na mapi',
+'chatbot.title':'FeelBG Rezervacije','chatbot.placeholder':'Unesite odgovor...','chatbot.q1':'Koliko osoba?','chatbot.q2':'U koliko sati želite sto?','chatbot.q3':'Posebni zahtevi (npr. godišnjica, mesto pored prozora)?','chatbot.summary':'Pregled rezervacije:','chatbot.people':'osoba','chatbot.sendWhatsApp':'Pošalji preko WhatsApp-a','chatbot.reservationFor':'Rezervacija za','chatbot.guests':'Gosti','chatbot.time':'Vreme','chatbot.requests':'Zahtevi',
+'map.title':'Mapa Beograda','map.venues':'lokacija','map.venueList':'Lista lokacija','map.all':'Sve','map.food':'Hrana','map.cafes':'Kafići','map.nightlife':'Noćni život','map.sights':'Znamenitosti','map.reserve':'Rezervišite sto','map.restaurant':'Restoran','map.cafeBar':'Kafić i bar','map.nightlifeLabel':'Noćni život','map.attraction':'Atrakcija',
+'adventure.create':'Kreiraj svoju avanturu','adventure.whatToSee':'Šta želite da istražite?','adventure.food':'🍽️ Hrana','adventure.drinks':'🍸 Piće','adventure.history':'🏛️ Istorija','adventure.locating':'Lociramo vas...','adventure.routeReady':'Vaša ruta za avanturu je spremna!','adventure.walking':'Pešačka ruta','adventure.stop':'Stanica','adventure.locationError':'Nije moguće dobiti vašu lokaciju. Dozvolite pristup lokaciji.','adventure.noVenues':'Nema lokacija u ovoj kategoriji u blizini.',
 },
 
 tr: {
@@ -187,6 +195,10 @@ tr: {
 'cuisine.fineDining':'Üst Düzey · Fransız','cuisine.brunch':'Brunch · Kafe','cuisine.thai':'Tayland Mutfağı','cuisine.vietnamese':'Vietnam · Füzyon',
 'cuisine.steakhouse':'Steakhouse · Izgara','cuisine.italianMed':'İtalyan · Akdeniz','cuisine.serbianGrill':'Sırp · Izgara',
 'cuisine.sushi':'Japon · Suşi','cuisine.fusion':'Uluslararası · Füzyon','cuisine.medModern':'Akdeniz · Modern',
+'popup.information':'Bilgi','popup.open':'Açık:','popup.avgBudget':'Ort. bütçe:','popup.perPerson':'kişi başı','popup.reserve':'Masa Ayırt','popup.close':'Kapat','popup.seeRoute':'Haritada Rotayı Gör',
+'chatbot.title':'FeelBG Rezervasyonlar','chatbot.placeholder':'Cevabınızı yazın...','chatbot.q1':'Kaç kişi?','chatbot.q2':'Saat kaçta masa istersiniz?','chatbot.q3':'Özel istekleriniz var mı (ör. yıl dönümü, pencere kenarı)?','chatbot.summary':'Rezervasyon özeti:','chatbot.people':'kişi','chatbot.sendWhatsApp':'WhatsApp ile Gönder','chatbot.reservationFor':'Rezervasyon:','chatbot.guests':'Misafir','chatbot.time':'Saat','chatbot.requests':'İstekler',
+'map.title':'Belgrad Haritası','map.venues':'mekan','map.venueList':'Mekan Listesi','map.all':'Tümü','map.food':'Yemek','map.cafes':'Kafeler','map.nightlife':'Gece Hayatı','map.sights':'Görülecek Yerler','map.reserve':'Masa Ayırt','map.restaurant':'Restoran','map.cafeBar':'Kafe & Bar','map.nightlifeLabel':'Gece Hayatı','map.attraction':'Gezilecek Yer',
+'adventure.create':'Macerami Oluştur','adventure.whatToSee':'Ne keşfetmek istiyorsunuz?','adventure.food':'🍽️ Yemek','adventure.drinks':'🍸 İçecek','adventure.history':'🏛️ Tarih','adventure.locating':'Konumunuz bulunuyor...','adventure.routeReady':'Macera rotanız hazır!','adventure.walking':'Yürüyüş rotası','adventure.stop':'Durak','adventure.locationError':'Konumunuz alınamadı. Lütfen konum erişimine izin verin.','adventure.noVenues':'Bu kategoride yakın mekan bulunamadı.',
 },
 
 de: {
@@ -249,6 +261,10 @@ de: {
 'cuisine.fineDining':'Fine Dining · Französisch','cuisine.brunch':'Brunch · Café','cuisine.thai':'Thailändische Küche','cuisine.vietnamese':'Vietnamesisch · Fusion',
 'cuisine.steakhouse':'Steakhouse · Grill','cuisine.italianMed':'Italienisch · Mediterran','cuisine.serbianGrill':'Serbisch · Grill',
 'cuisine.sushi':'Japanisch · Sushi','cuisine.fusion':'International · Fusion','cuisine.medModern':'Mediterran · Modern',
+'popup.information':'Information','popup.open':'Geöffnet:','popup.avgBudget':'Durchschn. Budget:','popup.perPerson':'pro Person','popup.reserve':'Tisch reservieren','popup.close':'Schließen','popup.seeRoute':'Route auf Karte anzeigen',
+'chatbot.title':'FeelBG Reservierungen','chatbot.placeholder':'Antwort eingeben...','chatbot.q1':'Wie viele Personen?','chatbot.q2':'Um welche Uhrzeit möchten Sie einen Tisch?','chatbot.q3':'Besondere Wünsche (z.B. Jubiläum, Fensterplatz)?','chatbot.summary':'Reservierungsübersicht:','chatbot.people':'Personen','chatbot.sendWhatsApp':'Per WhatsApp senden','chatbot.reservationFor':'Reservierung für','chatbot.guests':'Gäste','chatbot.time':'Uhrzeit','chatbot.requests':'Wünsche',
+'map.title':'Belgrad Karte','map.venues':'Orte','map.venueList':'Ortsliste','map.all':'Alle','map.food':'Essen','map.cafes':'Cafés','map.nightlife':'Nachtleben','map.sights':'Sehensw.','map.reserve':'Tisch reservieren','map.restaurant':'Restaurant','map.cafeBar':'Café & Bar','map.nightlifeLabel':'Nachtleben','map.attraction':'Sehenswürdigkeit',
+'adventure.create':'Mein Abenteuer erstellen','adventure.whatToSee':'Was möchten Sie erkunden?','adventure.food':'🍽️ Essen','adventure.drinks':'🍸 Getränke','adventure.history':'🏛️ Geschichte','adventure.locating':'Standort wird ermittelt...','adventure.routeReady':'Ihre Abenteuerroute ist fertig!','adventure.walking':'Wanderroute','adventure.stop':'Halt','adventure.locationError':'Standort konnte nicht ermittelt werden. Bitte erlauben Sie den Standortzugriff.','adventure.noVenues':'Keine Orte in dieser Kategorie in der Nähe.',
 },
 
 fr: {
@@ -311,6 +327,10 @@ fr: {
 'cuisine.fineDining':'Gastronomique · Français','cuisine.brunch':'Brunch · Café','cuisine.thai':'Cuisine thaïlandaise','cuisine.vietnamese':'Vietnamien · Fusion',
 'cuisine.steakhouse':'Steakhouse · Grill','cuisine.italianMed':'Italien · Méditerranéen','cuisine.serbianGrill':'Serbe · Grill',
 'cuisine.sushi':'Japonais · Sushi','cuisine.fusion':'International · Fusion','cuisine.medModern':'Méditerranéen · Moderne',
+'popup.information':'Informations','popup.open':'Ouvert :','popup.avgBudget':'Budget moy. :','popup.perPerson':'par personne','popup.reserve':'Réserver une table','popup.close':'Fermer','popup.seeRoute':'Voir itinéraire sur la carte',
+'chatbot.title':'Réservations FeelBG','chatbot.placeholder':'Tapez votre réponse...','chatbot.q1':'Combien de personnes ?','chatbot.q2':'À quelle heure souhaitez-vous une table ?','chatbot.q3':'Demandes spéciales (ex. anniversaire, place fenêtre) ?','chatbot.summary':'Résumé de la réservation :','chatbot.people':'personnes','chatbot.sendWhatsApp':'Envoyer via WhatsApp','chatbot.reservationFor':'Réservation pour','chatbot.guests':'Convives','chatbot.time':'Heure','chatbot.requests':'Demandes',
+'map.title':'Carte de Belgrade','map.venues':'lieux','map.venueList':'Liste des lieux','map.all':'Tous','map.food':'Cuisine','map.cafes':'Cafés','map.nightlife':'Vie nocturne','map.sights':'Sites','map.reserve':'Réserver une table','map.restaurant':'Restaurant','map.cafeBar':'Café & Bar','map.nightlifeLabel':'Vie nocturne','map.attraction':'Attraction',
+'adventure.create':'Créer mon aventure','adventure.whatToSee':'Que voulez-vous explorer ?','adventure.food':'🍽️ Cuisine','adventure.drinks':'🍸 Boissons','adventure.history':'🏛️ Histoire','adventure.locating':'Localisation en cours...','adventure.routeReady':'Votre itinéraire aventure est prêt !','adventure.walking':'Itinéraire à pied','adventure.stop':'Étape','adventure.locationError':'Impossible de trouver votre position. Veuillez autoriser l\'accès à la localisation.','adventure.noVenues':'Aucun lieu dans cette catégorie à proximité.',
 },
 
 it: {
@@ -356,6 +376,10 @@ it: {
 'cuisine.fineDining':'Alta cucina · Francese','cuisine.brunch':'Brunch · Caffè','cuisine.thai':'Cucina thailandese','cuisine.vietnamese':'Vietnamita · Fusion',
 'cuisine.steakhouse':'Steakhouse · Grill','cuisine.italianMed':'Italiano · Mediterraneo','cuisine.serbianGrill':'Serbo · Grill',
 'cuisine.sushi':'Giapponese · Sushi','cuisine.fusion':'Internazionale · Fusion','cuisine.medModern':'Mediterraneo · Moderno',
+'popup.information':'Informazioni','popup.open':'Aperto:','popup.avgBudget':'Budget medio:','popup.perPerson':'a persona','popup.reserve':'Prenota un tavolo','popup.close':'Chiudi','popup.seeRoute':'Vedi percorso sulla mappa',
+'chatbot.title':'Prenotazioni FeelBG','chatbot.placeholder':'Scrivi la risposta...','chatbot.q1':'Quante persone?','chatbot.q2':'A che ora vuoi un tavolo?','chatbot.q3':'Richieste speciali (es. anniversario, posto vicino alla finestra)?','chatbot.summary':'Riepilogo prenotazione:','chatbot.people':'persone','chatbot.sendWhatsApp':'Invia tramite WhatsApp','chatbot.reservationFor':'Prenotazione per','chatbot.guests':'Ospiti','chatbot.time':'Ora','chatbot.requests':'Richieste',
+'map.title':'Mappa di Belgrado','map.venues':'luoghi','map.venueList':'Lista luoghi','map.all':'Tutti','map.food':'Cibo','map.cafes':'Caffè','map.nightlife':'Vita notturna','map.sights':'Attrazioni','map.reserve':'Prenota un tavolo','map.restaurant':'Ristorante','map.cafeBar':'Caffè & Bar','map.nightlifeLabel':'Vita notturna','map.attraction':'Attrazione',
+'adventure.create':'Crea la mia avventura','adventure.whatToSee':'Cosa vuoi esplorare?','adventure.food':'🍽️ Cibo','adventure.drinks':'🍸 Bevande','adventure.history':'🏛️ Storia','adventure.locating':'Localizzazione in corso...','adventure.routeReady':'Il tuo percorso avventura è pronto!','adventure.walking':'Percorso a piedi','adventure.stop':'Tappa','adventure.locationError':'Impossibile ottenere la posizione. Consenti l\'accesso alla posizione.','adventure.noVenues':'Nessun luogo in questa categoria nelle vicinanze.',
 },
 
 ru: {
@@ -401,6 +425,10 @@ ru: {
 'cuisine.fineDining':'Высокая кухня · Французская','cuisine.brunch':'Бранч · Кафе','cuisine.thai':'Тайская кухня','cuisine.vietnamese':'Вьетнамская · Фьюжн',
 'cuisine.steakhouse':'Стейкхаус · Гриль','cuisine.italianMed':'Итальянская · Средиземноморская','cuisine.serbianGrill':'Сербская · Гриль',
 'cuisine.sushi':'Японская · Суши','cuisine.fusion':'Международная · Фьюжн','cuisine.medModern':'Средиземноморская · Современная',
+'popup.information':'Информация','popup.open':'Открыто:','popup.avgBudget':'Ср. бюджет:','popup.perPerson':'на человека','popup.reserve':'Забронировать стол','popup.close':'Закрыть','popup.seeRoute':'Маршрут на карте',
+'chatbot.title':'Бронирование FeelBG','chatbot.placeholder':'Введите ответ...','chatbot.q1':'Сколько человек?','chatbot.q2':'На какое время вы хотите столик?','chatbot.q3':'Особые пожелания (напр., юбилей, место у окна)?','chatbot.summary':'Итоги бронирования:','chatbot.people':'человек','chatbot.sendWhatsApp':'Отправить через WhatsApp','chatbot.reservationFor':'Бронирование для','chatbot.guests':'Гости','chatbot.time':'Время','chatbot.requests':'Пожелания',
+'map.title':'Карта Белграда','map.venues':'мест','map.venueList':'Список мест','map.all':'Все','map.food':'Еда','map.cafes':'Кафе','map.nightlife':'Ночная жизнь','map.sights':'Достоприм.','map.reserve':'Забронировать стол','map.restaurant':'Ресторан','map.cafeBar':'Кафе & Бар','map.nightlifeLabel':'Ночная жизнь','map.attraction':'Достопримечательность',
+'adventure.create':'Создать моё приключение','adventure.whatToSee':'Что вы хотите исследовать?','adventure.food':'🍽️ Еда','adventure.drinks':'🍸 Напитки','adventure.history':'🏛️ История','adventure.locating':'Определяем местоположение...','adventure.routeReady':'Ваш маршрут приключения готов!','adventure.walking':'Пешеходный маршрут','adventure.stop':'Остановка','adventure.locationError':'Не удалось определить ваше местоположение. Разрешите доступ к геолокации.','adventure.noVenues':'В этой категории поблизости нет мест.',
 },
 
 el: {
@@ -433,6 +461,10 @@ el: {
 'badge.topRated':'Κορυφαίο','badge.popular':'Δημοφιλές','badge.new':'Νέο','badge.trending':'Τάση',
 'status.open':'Ανοιχτό','status.closed':'Κλειστό',
 'cuisine.serbian':'Παραδοσιακή σερβική','cuisine.international':'Διεθνής','cuisine.mediterranean':'Μεσογειακή','cuisine.italian':'Ιταλική κουζίνα',
+'popup.information':'Πληροφορίες','popup.open':'Ανοιχτό:','popup.avgBudget':'Μέσο κόστος:','popup.perPerson':'ανά άτομο','popup.reserve':'Κράτηση τραπεζιού','popup.close':'Κλείσιμο','popup.seeRoute':'Δες διαδρομή στον χάρτη',
+'chatbot.title':'Κρατήσεις FeelBG','chatbot.placeholder':'Πληκτρολογήστε...','chatbot.q1':'Πόσα άτομα;','chatbot.q2':'Τι ώρα θέλετε τραπέζι;','chatbot.q3':'Ειδικά αιτήματα (π.χ. επέτειος, θέση παράθυρο);','chatbot.summary':'Σύνοψη κράτησης:','chatbot.people':'άτομα','chatbot.sendWhatsApp':'Αποστολή μέσω WhatsApp','chatbot.reservationFor':'Κράτηση για','chatbot.guests':'Καλεσμένοι','chatbot.time':'Ώρα','chatbot.requests':'Αιτήματα',
+'map.title':'Χάρτης Βελιγραδίου','map.venues':'μέρη','map.venueList':'Λίστα μερών','map.all':'Όλα','map.food':'Φαγητό','map.cafes':'Καφέ','map.nightlife':'Νυχτερινή ζωή','map.sights':'Αξιοθέατα','map.reserve':'Κράτηση τραπεζιού','map.restaurant':'Εστιατόριο','map.cafeBar':'Καφέ & Μπαρ','map.nightlifeLabel':'Νυχτερινή ζωή','map.attraction':'Αξιοθέατο',
+'adventure.create':'Δημιούργησε την περιπέτειά μου','adventure.whatToSee':'Τι θέλετε να εξερευνήσετε;','adventure.food':'🍽️ Φαγητό','adventure.drinks':'🍸 Ποτά','adventure.history':'🏛️ Ιστορία','adventure.locating':'Εντοπισμός τοποθεσίας...','adventure.routeReady':'Η διαδρομή περιπέτειας είναι έτοιμη!','adventure.walking':'Πεζοπορική διαδρομή','adventure.stop':'Στάση','adventure.locationError':'Δεν ήταν δυνατός ο εντοπισμός. Επιτρέψτε πρόσβαση τοποθεσίας.','adventure.noVenues':'Δεν βρέθηκαν μέρη σε αυτή την κατηγορία κοντά σας.',
 },
 
 he: {
@@ -460,6 +492,10 @@ he: {
 'badge.topRated':'מדורג גבוה','badge.popular':'פופולרי','badge.new':'חדש','badge.trending':'במגמה',
 'status.open':'פתוח','status.closed':'סגור',
 'cuisine.serbian':'סרבי מסורתי','cuisine.international':'בינלאומי','cuisine.mediterranean':'ים תיכוני','cuisine.italian':'מטבח איטלקי',
+'popup.information':'מידע','popup.open':'פתוח:','popup.avgBudget':'תקציב ממוצע:','popup.perPerson':'לאדם','popup.reserve':'הזמן שולחן','popup.close':'סגור','popup.seeRoute':'הצג מסלול במפה',
+'chatbot.title':'הזמנות FeelBG','chatbot.placeholder':'הקלד תשובה...','chatbot.q1':'כמה אנשים?','chatbot.q2':'באיזו שעה אתה רוצה שולחן?','chatbot.q3':'בקשות מיוחדות (למשל יום נישואין, מקום ליד חלון)?','chatbot.summary':'סיכום הזמנה:','chatbot.people':'אנשים','chatbot.sendWhatsApp':'שלח דרך WhatsApp','chatbot.reservationFor':'הזמנה עבור','chatbot.guests':'אורחים','chatbot.time':'שעה','chatbot.requests':'בקשות',
+'map.title':'מפת בלגרד','map.venues':'מקומות','map.venueList':'רשימת מקומות','map.all':'הכל','map.food':'אוכל','map.cafes':'בתי קפה','map.nightlife':'חיי לילה','map.sights':'אתרים','map.reserve':'הזמן שולחן','map.restaurant':'מסעדה','map.cafeBar':'קפה ובר','map.nightlifeLabel':'חיי לילה','map.attraction':'אטרקציה',
+'adventure.create':'צור את ההרפתקה שלי','adventure.whatToSee':'מה אתה רוצה לחקור?','adventure.food':'🍽️ אוכל','adventure.drinks':'🍸 שתייה','adventure.history':'🏛️ היסטוריה','adventure.locating':'מאתר את מיקומך...','adventure.routeReady':'מסלול ההרפתקה שלך מוכן!','adventure.walking':'מסלול הליכה','adventure.stop':'תחנה','adventure.locationError':'לא ניתן לאתר את מיקומך. אנא אפשר גישה למיקום.','adventure.noVenues':'לא נמצאו מקומות בקטגוריה זו בקרבת מקום.',
 },
 };
 

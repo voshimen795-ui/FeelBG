@@ -8,6 +8,15 @@ class BookingChatbot {
         this.init();
     }
 
+    t(key) {
+        const translations = window.FEELBG_TRANSLATIONS || {};
+        const stored = localStorage.getItem('feelbg_language');
+        const langCode = stored ? JSON.parse(stored).code : 'en';
+        const lang = translations[langCode] || {};
+        const fallback = translations['en'] || {};
+        return lang[key] || fallback[key] || key;
+    }
+
     init() {
         this.injectStyles();
         document.addEventListener('click', (e) => {
@@ -43,7 +52,7 @@ class BookingChatbot {
                     <div class="bcb-header-info">
                         <div class="bcb-avatar"><i class="fas fa-concierge-bell"></i></div>
                         <div>
-                            <div class="bcb-title">FeelBG Reservations</div>
+                            <div class="bcb-title">${this.t('chatbot.title')}</div>
                             <div class="bcb-subtitle">${this.answers.venue}</div>
                         </div>
                     </div>
@@ -51,7 +60,7 @@ class BookingChatbot {
                 </div>
                 <div class="bcb-messages" id="bcb-messages"></div>
                 <div class="bcb-input-area" id="bcb-input-area">
-                    <input type="text" class="bcb-input" id="bcb-input" placeholder="Type your answer..." autocomplete="off">
+                    <input type="text" class="bcb-input" id="bcb-input" placeholder="${this.t('chatbot.placeholder')}" autocomplete="off">
                     <button class="bcb-send" id="bcb-send"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>`;
@@ -84,9 +93,9 @@ class BookingChatbot {
 
     askNext() {
         const questions = [
-            "How many people?",
-            "What time do you want a table?",
-            "Any special requests (e.g., anniversary, window seat)?"
+            this.t('chatbot.q1'),
+            this.t('chatbot.q2'),
+            this.t('chatbot.q3')
         ];
         setTimeout(() => {
             this.addMessage(questions[this.step], 'bot');
@@ -119,21 +128,21 @@ class BookingChatbot {
         const inputArea = document.getElementById('bcb-input-area');
         inputArea.style.display = 'none';
 
-        const msg = `Reservation for ${this.answers.venue}\nGuests: ${this.answers.guests}\nTime: ${this.answers.time}\nRequests: ${this.answers.requests}`;
+        const msg = `${this.t('chatbot.reservationFor')} ${this.answers.venue}\n${this.t('chatbot.guests')}: ${this.answers.guests}\n${this.t('chatbot.time')}: ${this.answers.time}\n${this.t('chatbot.requests')}: ${this.answers.requests}`;
         const encoded = encodeURIComponent(msg);
         const waUrl = `https://wa.me/${this.whatsappNumber}?text=${encoded}`;
 
         setTimeout(() => {
             this.addMessage(
-                `Reservation summary:<br><br>` +
+                `${this.t('chatbot.summary')}<br><br>` +
                 `<div class="bcb-summary">` +
                 `<div class="bcb-summary-row"><i class="fas fa-map-marker-alt"></i> ${this.answers.venue}</div>` +
-                `<div class="bcb-summary-row"><i class="fas fa-users"></i> ${this.answers.guests} people</div>` +
+                `<div class="bcb-summary-row"><i class="fas fa-users"></i> ${this.answers.guests} ${this.t('chatbot.people')}</div>` +
                 `<div class="bcb-summary-row"><i class="fas fa-clock"></i> ${this.answers.time}</div>` +
                 `<div class="bcb-summary-row"><i class="fas fa-comment"></i> ${this.answers.requests}</div>` +
                 `</div>` +
                 `<a href="${waUrl}" target="_blank" rel="noopener" class="bcb-whatsapp-btn">` +
-                `<i class="fab fa-whatsapp"></i> Send via WhatsApp</a>`,
+                `<i class="fab fa-whatsapp"></i> ${this.t('chatbot.sendWhatsApp')}</a>`,
                 'bot'
             );
         }, 500);
