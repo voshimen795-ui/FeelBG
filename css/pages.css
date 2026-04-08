@@ -15,13 +15,23 @@
     overflow: hidden;
 }
 
+.page-hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
 .page-hero__background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--gradient-overlay);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.72) 0%, rgba(15, 23, 42, 0.6) 50%, rgba(184, 134, 11, 0.35) 100%);
     z-index: -1;
 }
 

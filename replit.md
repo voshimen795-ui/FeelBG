@@ -18,7 +18,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 ├── attractions.html        — Attraction listings (10 venues, dynamic rendering)
 ├── css/
 │   ├── styles.css          — Main stylesheet (Royal Blue #1e3a8a & Bronze Gold #b8860b)
-│   ├── pages.css           — Listing page styles
+│   ├── pages.css           — Listing page styles (includes .page-hero__video CSS for video heroes)
 │   ├── mobile-optimized.css — Mobile responsive styles
 │   ├── mobile-nav-fixed.css — Mobile bottom nav styles
 │   ├── header-layout.css   — Header component styles

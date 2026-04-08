@@ -539,7 +539,7 @@ window.FEELBG_VENUES = {
             badge: 'topRated',
             description: 'One of the largest Orthodox churches in the world with stunning gold mosaics',
             lat: 44.7993, lng: 20.4671,
-            image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80'
+            image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Hram_Svetog_Save_2019.jpg/1280px-Hram_Svetog_Save_2019.jpg'
         },
         {
             name: 'Nikola Tesla Museum',
