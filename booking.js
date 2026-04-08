@@ -84,9 +84,9 @@ class BookingChatbot {
 
     askNext() {
         const questions = [
-            "Hi! I'd love to help you reserve a table. <strong>How many people?</strong>",
-            "Great! <strong>What time would you like your table?</strong> (e.g. 7:30 PM)",
-            "Almost done! <strong>Any special requests?</strong> (e.g. anniversary, window seat, dietary needs — or type 'none')"
+            "How many people?",
+            "What time do you want a table?",
+            "Any special requests (e.g., anniversary, window seat)?"
         ];
         setTimeout(() => {
             this.addMessage(questions[this.step], 'bot');
@@ -119,13 +119,13 @@ class BookingChatbot {
         const inputArea = document.getElementById('bcb-input-area');
         inputArea.style.display = 'none';
 
-        const msg = `📍 *${this.answers.venue}*\n👥 Guests: ${this.answers.guests}\n🕐 Time: ${this.answers.time}\n📝 Requests: ${this.answers.requests}`;
+        const msg = `Reservation for ${this.answers.venue}\nGuests: ${this.answers.guests}\nTime: ${this.answers.time}\nRequests: ${this.answers.requests}`;
         const encoded = encodeURIComponent(msg);
         const waUrl = `https://wa.me/${this.whatsappNumber}?text=${encoded}`;
 
         setTimeout(() => {
             this.addMessage(
-                `Perfect! Here's your reservation summary:<br><br>` +
+                `Reservation summary:<br><br>` +
                 `<div class="bcb-summary">` +
                 `<div class="bcb-summary-row"><i class="fas fa-map-marker-alt"></i> ${this.answers.venue}</div>` +
                 `<div class="bcb-summary-row"><i class="fas fa-users"></i> ${this.answers.guests} people</div>` +
@@ -175,6 +175,7 @@ class BookingChatbot {
 @media(max-width:480px){.bcb-container{width:100%;max-width:100%;height:100%;max-height:100%;border-radius:0}}
 .btn-reserve{color:#25d366!important;border-color:#25d366!important}
 .btn-reserve:hover{background:#25d366!important;color:#fff!important}
+.btn-details{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .footer-reserve-btn,.contact-reserve-btn{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'Poppins',sans-serif;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
 .footer-reserve-btn:hover,.contact-reserve-btn:hover{background:linear-gradient(135deg,#128c7e,#075e54);transform:translateY(-1px)}
 .footer-reserve-btn i,.contact-reserve-btn i{font-size:16px}

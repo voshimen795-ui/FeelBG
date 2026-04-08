@@ -203,11 +203,8 @@ class BelgradeMap {
             <div class="map-popup">
                 <div class="map-popup__type" style="background:${venue.color}">${typeLabel}</div>
                 <h3 class="map-popup__name">${venue.name}</h3>
-                <p class="map-popup__desc">${venue.desc}</p>
                 <div class="map-popup__meta">
-                    <span class="map-popup__rating"><i class="fas fa-star"></i> ${venue.rating}</span>
                     <span class="map-popup__price">${venue.price}</span>
-                    <span class="map-popup__area"><i class="fas fa-map-marker-alt"></i> ${venue.area}</span>
                 </div>
                 <button class="map-popup__call" data-booking="${venue.name}">
                     <i class="fas fa-calendar-check"></i> Reserve a Table

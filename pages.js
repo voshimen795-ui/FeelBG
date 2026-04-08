@@ -191,8 +191,7 @@ class PlaceFiltering {
         const visibleCount = count !== undefined ? count : 
             Array.from(this.cards).filter(card => card.style.display !== 'none').length;
         
-        const noun = visibleCount === 1 ? 'place' : 'places';
-        this.resultsCount.textContent = `Showing ${visibleCount} ${noun}`;
+        this.resultsCount.textContent = `Showing ${visibleCount}`;
     }
 
     toggleView(view) {
