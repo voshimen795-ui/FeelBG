@@ -209,9 +209,9 @@ class BelgradeMap {
                     <span class="map-popup__price">${venue.price}</span>
                     <span class="map-popup__area"><i class="fas fa-map-marker-alt"></i> ${venue.area}</span>
                 </div>
-                <a href="tel:+381653315640" class="map-popup__call">
-                    <i class="fas fa-phone"></i> +381 65 331 5640
-                </a>
+                <button class="map-popup__call" data-booking="${venue.name}">
+                    <i class="fas fa-calendar-check"></i> Reserve a Table
+                </button>
             </div>
         `;
     }
@@ -524,17 +524,19 @@ class BelgradeMap {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
-                background: #1e3a8a;
+                background: linear-gradient(135deg,#25d366,#128c7e);
                 color: white;
-                text-decoration: none;
+                border: none;
                 padding: 0.5rem 1rem;
                 border-radius: 8px;
                 font-size: 0.82rem;
                 font-weight: 600;
                 justify-content: center;
                 transition: background 0.2s;
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
             }
-            .map-popup__call:hover { background: #b8860b; }
+            .map-popup__call:hover { background: linear-gradient(135deg,#128c7e,#075e54); }
             .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
             .leaflet-popup-content { margin: 14px 16px; }
             @media (max-width: 768px) {

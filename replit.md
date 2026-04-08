@@ -40,7 +40,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 - **10 languages**: English (UK), English (US), Serbian, Turkish, German, French, Italian, Russian, Greek, Hebrew
 - **Architecture**: `translations.js` defines `window.FEELBG_TRANSLATIONS` → `language-selector.js` reads from it. `translatePage()` iterates `[data-i18n]` elements, always falling back to English for missing keys.
 - **Coverage**: All UI chrome (nav, hero, filters, sort, badges, statuses, buttons, footers, mobile nav) has `data-i18n` attributes. Venue names and addresses are proper nouns and remain untranslated. Venue descriptions remain in English.
-- **Phone**: +381 65 331 5640 used everywhere (contact sections, footers, booking placeholders, map popups).
+- **Booking**: WhatsApp chatbot modal (booking.js) replaces all phone numbers. A 3-step chatbot (How many people? → What time? → Special requests?) compiles answers into a WhatsApp message to +381653315640. All "Call" buttons replaced with green "Reserve" buttons using `data-booking` attribute. No phone numbers displayed anywhere on the site.
 
 ## Bug Fixes Applied
 - Fixed `Preloader.hide()` crash (null check added) — was crashing on sub-pages that don't have `#preloader`
