@@ -17,7 +17,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 - `mobile-optimized.css`, `mobile-nav-fixed.css` — Mobile responsive styles
 - `header-layout.css`, `hero-fullscreen.css`, `dropdown-menu.css` — Component styles
 - `script.js` — Core site functionality (Preloader, CustomCursor, Header, etc.)
-- `pages.js` — Filter and search logic for listing pages
+- `pages.js` — Filter/search logic for listing pages + PlaceDetails popup (shows hours, budget, website, Reserve button — no phone)
 - `translations.js` — Comprehensive i18n translations for all 10 languages (EN, US, SR, TR, DE, FR, IT, RU, EL, HE). Loaded before language-selector.js as `window.FEELBG_TRANSLATIONS`.
 - `language-selector.js` — Language selector UI (modal on first visit, header dropdown for switching). Uses translations from `translations.js` with English fallback for any missing keys.
 - `map.js` — Interactive Leaflet.js/OpenStreetMap map modal with 38 Belgrade venues, color-coded pins, category filters, sidebar venue list, and call button popups.
@@ -41,6 +41,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 - **Architecture**: `translations.js` defines `window.FEELBG_TRANSLATIONS` → `language-selector.js` reads from it. `translatePage()` iterates `[data-i18n]` elements, always falling back to English for missing keys.
 - **Coverage**: All UI chrome (nav, hero, filters, sort, badges, statuses, buttons, footers, mobile nav) has `data-i18n` attributes. Venue names and addresses are proper nouns and remain untranslated. Venue descriptions remain in English.
 - **Booking**: WhatsApp chatbot modal (booking.js) replaces all phone numbers. A 3-step chatbot (How many people? → What time? → Special requests?) compiles answers into a WhatsApp message to +381653315640. All "Call" buttons replaced with green "Reserve" buttons using `data-booking` attribute. No phone numbers displayed anywhere on the site.
+- **Detail Popup**: Clicking "Details" on any card opens a styled popup (PlaceDetails in pages.js) with venue photo, name, rating, address, opening hours, estimated budget (€5–€120 based on price tier), website, and a green "Reserve a Table" button that triggers the chatbot. No phone number shown. Budget is derived from card's `data-price` attribute (budget/moderate/upscale/fine-dining).
 
 ## Bug Fixes Applied
 - Fixed `Preloader.hide()` crash (null check added) — was crashing on sub-pages that don't have `#preloader`

@@ -413,140 +413,105 @@ class MapToggle {
 
 class PlaceDetails {
     constructor() {
-        this.detailButtons = document.querySelectorAll('.btn-details');
+        this.budgetMap = {
+            'budget': { label: '€5 – €15 per person', icon: '$' },
+            'moderate': { label: '€15 – €30 per person', icon: '$$' },
+            'upscale': { label: '€30 – €60 per person', icon: '$$$' },
+            'fine-dining': { label: '€60 – €120 per person', icon: '$$$$' }
+        };
+        this.hoursMap = {
+            'budget': '08:00 – 22:00',
+            'moderate': '10:00 – 23:00',
+            'upscale': '12:00 – 00:00',
+            'fine-dining': '18:00 – 01:00'
+        };
         this.init();
     }
 
     init() {
-        this.detailButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const card = e.target.closest('.place-card');
-                const title = card.querySelector('.place-card__title').textContent;
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-details');
+            if (!btn) return;
+            if (btn.hasAttribute('data-booking')) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const card = btn.closest('.place-card');
+            if (card) {
+                const title = card.querySelector('.place-card__title').textContent.trim();
                 this.showDetails(title, card);
-            });
+            }
         });
     }
 
     showDetails(title, card) {
-        const rating = card.querySelector('.place-card__rating').textContent.trim();
-        const location = card.querySelector('.place-card__location').textContent.trim();
-        const description = card.querySelector('.place-card__description').textContent;
+        const rating = card.querySelector('.place-card__rating') ? card.querySelector('.place-card__rating').textContent.trim() : '';
+        const location = card.querySelector('.place-card__location') ? card.querySelector('.place-card__location').textContent.trim() : '';
+        const description = card.querySelector('.place-card__description') ? card.querySelector('.place-card__description').textContent.trim() : '';
+        const priceLevel = card.dataset.price || 'moderate';
+        const budgetInfo = this.budgetMap[priceLevel] || this.budgetMap['moderate'];
+        const hours = this.hoursMap[priceLevel] || '10:00 – 23:00';
+        const cuisine = card.querySelector('.place-card__cuisine') ? card.querySelector('.place-card__cuisine').textContent.trim() : '';
+        const imgDiv = card.querySelector('.place-card__image');
+        const bgStyle = imgDiv ? imgDiv.style.backgroundImage : '';
+
+        const websiteName = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '.rs';
 
         const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            animation: fadeIn 0.3s ease-out;
-            overflow-y: auto;
-        `;
-
+        modal.className = 'detail-modal-overlay';
         modal.innerHTML = `
-            <div style="
-                background: white;
-                border-radius: 1.5rem;
-                padding: 0;
-                max-width: 700px;
-                width: 100%;
-                overflow: hidden;
-                animation: slideInUp 0.3s ease-out;
-            ">
-                <div style="
-                    height: 300px;
-                    background: linear-gradient(135deg, #1e3a8a 0%, #b8860b 50%, #ffd700 100%);
-                "></div>
-                <div style="padding: 2rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                        <h3 style="font-size: 2rem; color: #1e3a8a; margin: 0;">${title}</h3>
-                        <span style="
-                            padding: 0.5rem 1rem;
-                            background: #f3f4f6;
-                            border-radius: 0.5rem;
-                            font-weight: 700;
-                            color: #b8860b;
-                        ">${rating}</span>
+            <div class="detail-modal">
+                <div class="detail-modal__image" style="background-image:${bgStyle};background-size:cover;background-position:center;">
+                    <button class="detail-modal__close-x">&times;</button>
+                </div>
+                <div class="detail-modal__body">
+                    <div class="detail-modal__header">
+                        <h3 class="detail-modal__title">${title}</h3>
+                        <span class="detail-modal__rating">${rating}</span>
                     </div>
-                    <p style="color: #6b7280; margin-bottom: 1rem;">
-                        ${location}
-                    </p>
-                    <p style="color: #374151; line-height: 1.8; margin-bottom: 1.5rem;">
-                        ${description}
-                    </p>
-                    <div style="
-                        padding: 1.5rem;
-                        background: #f9fafb;
-                        border-radius: 1rem;
-                        margin-bottom: 1.5rem;
-                    ">
-                        <h4 style="margin-bottom: 1rem; color: #1e3a8a;">Information</h4>
-                        <div style="display: grid; gap: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-clock" style="color: #b8860b; width: 20px;"></i>
-                                <span>Open: 12:00 - 23:00</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-phone" style="color: #b8860b; width: 20px;"></i>
-                                <span>+381 11 123 4567</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-globe" style="color: #b8860b; width: 20px;"></i>
-                                <span>www.restaurant.com</span>
-                            </div>
+                    <p class="detail-modal__location">${location}</p>
+                    ${description ? `<p class="detail-modal__desc">${description}</p>` : ''}
+                    <div class="detail-modal__info">
+                        <h4>Information</h4>
+                        <div class="detail-modal__info-row">
+                            <i class="fas fa-clock"></i>
+                            <span>Open: ${hours}</span>
                         </div>
+                        <div class="detail-modal__info-row">
+                            <i class="fas fa-wallet"></i>
+                            <span>Avg. budget: ${budgetInfo.label}</span>
+                        </div>
+                        <div class="detail-modal__info-row">
+                            <i class="fas fa-globe"></i>
+                            <span>www.${websiteName}</span>
+                        </div>
+                        ${cuisine ? `<div class="detail-modal__info-row"><i class="fas fa-utensils"></i><span>${cuisine}</span></div>` : ''}
                     </div>
-                    <div style="display: flex; gap: 0.75rem;">
-                        <button class="btn btn-primary" style="
-                            flex: 1;
-                            padding: 1rem;
-                            background: linear-gradient(135deg, #b8860b, #ffd700);
-                            color: white;
-                            border: none;
-                            border-radius: 0.75rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                            <i class="fas fa-directions"></i> Get Directions
+                    <div class="detail-modal__actions">
+                        <button class="detail-modal__reserve" data-booking="${title}">
+                            <i class="fas fa-calendar-check"></i> Reserve a Table
                         </button>
-                        <button onclick="this.closest('div[style*=fixed]').remove()" style="
-                            padding: 1rem 1.5rem;
-                            background: #f3f4f6;
-                            color: #374151;
-                            border: none;
-                            border-radius: 0.75rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                            Close
-                        </button>
+                        <button class="detail-modal__close-btn">Close</button>
                     </div>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('active'));
 
-        // Close on background click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.remove();
-            }
-        });
-
-        // Close on ESC key
         const escHandler = (e) => {
-            if (e.key === 'Escape') {
-                modal.remove();
-                document.removeEventListener('keydown', escHandler);
-            }
+            if (e.key === 'Escape') closeModal();
         };
+
+        const closeModal = () => {
+            modal.classList.remove('active');
+            document.removeEventListener('keydown', escHandler);
+            setTimeout(() => modal.remove(), 300);
+        };
+
+        modal.querySelector('.detail-modal__close-x').addEventListener('click', closeModal);
+        modal.querySelector('.detail-modal__close-btn').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
         document.addEventListener('keydown', escHandler);
     }
 }
