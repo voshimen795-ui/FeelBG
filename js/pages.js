@@ -19,7 +19,6 @@ class PlaceFiltering {
         this.sortFilter = document.getElementById('filter-sort');
         this.viewBtns = document.querySelectorAll('.view-btn');
         this.resultsCount = document.getElementById('results-count');
-        this.cards = document.querySelectorAll('.place-card');
         this.currentFilters = { search: '', cuisine: 'all', price: 'all', area: 'all', sort: 'rating' };
         this.init();
     }
@@ -69,9 +68,14 @@ class PlaceFiltering {
         this.updateResultsCount();
     }
 
+    refreshCards() {
+        return this.grid ? this.grid.querySelectorAll('.place-card') : [];
+    }
+
     applyFilters() {
         let visibleCount = 0;
-        this.cards.forEach(card => {
+        const cards = this.refreshCards();
+        cards.forEach(card => {
             const cardData = {
                 title: card.querySelector('.place-card__title').textContent.toLowerCase(),
                 description: card.querySelector('.place-card__description').textContent.toLowerCase(),
@@ -99,7 +103,7 @@ class PlaceFiltering {
     }
 
     sortPlaces() {
-        const cardsArray = Array.from(this.cards);
+        const cardsArray = Array.from(this.refreshCards());
         const visibleCards = cardsArray.filter(card => card.style.display !== 'none');
         visibleCards.sort((a, b) => {
             switch (this.currentFilters.sort) {
@@ -123,7 +127,7 @@ class PlaceFiltering {
 
     updateResultsCount(count) {
         if (!this.resultsCount) return;
-        const visibleCount = count !== undefined ? count : Array.from(this.cards).filter(card => card.style.display !== 'none').length;
+        const visibleCount = count !== undefined ? count : Array.from(this.refreshCards()).filter(card => card.style.display !== 'none').length;
         this.resultsCount.textContent = `Showing ${visibleCount}`;
     }
 
@@ -300,6 +304,15 @@ class PlaceDetails {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('restaurants-grid') || document.getElementById('places-grid');
+    if (grid && window.CardRenderer && window.FEELBG_VENUES) {
+        const path = window.location.pathname;
+        if (path.includes('restaurants')) CardRenderer.renderByType('restaurants', grid.id);
+        else if (path.includes('cafes')) CardRenderer.renderByType('cafes', grid.id);
+        else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
+        else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
+        else CardRenderer.renderAll(grid.id);
+    }
     new PlaceFiltering();
     new LoadMoreFeature();
     new MapToggle();

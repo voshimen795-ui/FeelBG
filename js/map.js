@@ -7,46 +7,28 @@ class BelgradeMap {
         this.routeLayer = null;
         this.routeMarkers = [];
         this.userMarker = null;
-        this.venues = [
-            { name: 'Salon 1905', type: 'restaurant', area: 'Stari Grad', lat: 44.8196, lng: 20.4601, rating: 4.9, price: '$$$', icon: '🍽️', color: '#b8860b', desc: 'Elegant Serbian cuisine with live music' },
-            { name: 'Znak Pitanja', type: 'restaurant', area: 'Stari Grad', lat: 44.8202, lng: 20.4589, rating: 4.8, price: '$$', icon: '🍽️', color: '#b8860b', desc: 'The Question Mark — Belgrades oldest restaurant (1823)' },
-            { name: 'Skadarlija House', type: 'restaurant', area: 'Skadarlija', lat: 44.8185, lng: 20.4632, rating: 4.7, price: '$$', icon: '🍽️', color: '#b8860b', desc: 'Bohemian quarter dining' },
-            { name: 'Mala Fabrika Ukusa', type: 'restaurant', area: 'Vračar', lat: 44.8073, lng: 20.4701, rating: 4.8, price: '$$', icon: '🍽️', color: '#b8860b', desc: 'Small Factory of Taste — artisan Serbian' },
-            { name: 'Topola Restaurant', type: 'restaurant', area: 'Dedinje', lat: 44.7834, lng: 20.4512, rating: 4.6, price: '$$$', icon: '🍽️', color: '#b8860b', desc: 'Garden dining in tranquil Dedinje' },
-            { name: 'Lorenzo & Kakalamba', type: 'restaurant', area: 'Stari Grad', lat: 44.8210, lng: 20.4561, rating: 4.9, price: '$$$$', icon: '🍽️', color: '#b8860b', desc: 'Fine dining with a theatrical twist' },
-            { name: 'Trattoria Mamma Mia', type: 'restaurant', area: 'Savamala', lat: 44.8135, lng: 20.4528, rating: 4.7, price: '$$', icon: '🍕', color: '#b8860b', desc: 'Authentic Italian in Savamala district' },
-            { name: 'Sushi Bar Fuji', type: 'restaurant', area: 'Novi Beograd', lat: 44.8065, lng: 20.4230, rating: 4.6, price: '$$$', icon: '🍱', color: '#b8860b', desc: 'Premium Japanese cuisine' },
-            { name: 'Manufaktura', type: 'restaurant', area: 'Dorćol', lat: 44.8226, lng: 20.4638, rating: 4.5, price: '$$', icon: '🍽️', color: '#b8860b', desc: 'Modern Serbian craft gastronomy' },
-            { name: 'Tajna Baste', type: 'restaurant', area: 'Zemun', lat: 44.8397, lng: 20.4011, rating: 4.8, price: '$$$', icon: '🌿', color: '#b8860b', desc: 'Secret garden restaurant by the Danube' },
-            { name: 'Đulagino Vrelo', type: 'restaurant', area: 'Topčider', lat: 44.7812, lng: 20.4478, rating: 4.7, price: '$$', icon: '🍖', color: '#b8860b', desc: 'Traditional Serbian grill in nature' },
-            { name: 'Pekara Trpković', type: 'restaurant', area: 'Zemun', lat: 44.8378, lng: 20.4023, rating: 4.5, price: '$', icon: '🥐', color: '#b8860b', desc: 'Classic Belgrade bakery since 1935' },
-            { name: 'Green Mood Vegan', type: 'restaurant', area: 'Vračar', lat: 44.8081, lng: 20.4685, rating: 4.6, price: '$$', icon: '🥗', color: '#2d8a4e', desc: 'Plant-based cuisine in the heart of Belgrade' },
-            { name: 'Little Bay', type: 'restaurant', area: 'Stari Grad', lat: 44.8199, lng: 20.4594, rating: 4.8, price: '$$$', icon: '🎭', color: '#b8860b', desc: 'Opera-themed bistro with nightly performances' },
-            { name: 'Brunch & Beyond', type: 'restaurant', area: 'Savamala', lat: 44.8124, lng: 20.4539, rating: 4.5, price: '$$', icon: '🥞', color: '#b8860b', desc: 'All-day brunch spot beloved by locals' },
-            { name: 'Kafana Dva Jelena', type: 'cafe', area: 'Skadarlija', lat: 44.8180, lng: 20.4640, rating: 4.8, price: '$$', icon: '☕', color: '#1e3a8a', desc: 'Classic kafana with live tamburitza music' },
-            { name: 'Supermarket Bar', type: 'cafe', area: 'Savamala', lat: 44.8141, lng: 20.4521, rating: 4.7, price: '$$', icon: '🍸', color: '#1e3a8a', desc: 'Trendy rooftop cocktail bar in Savamala' },
-            { name: 'Stara Čukara', type: 'cafe', area: 'Stari Grad', lat: 44.8208, lng: 20.4572, rating: 4.6, price: '$', icon: '☕', color: '#1e3a8a', desc: 'Old Belgrade coffee house with live music' },
-            { name: 'Cantina del Gusto', type: 'cafe', area: 'Vračar', lat: 44.8067, lng: 20.4690, rating: 4.7, price: '$$', icon: '🍷', color: '#1e3a8a', desc: 'Wine bar with premium Serbian vintages' },
-            { name: 'Mint Rooftop Bar', type: 'cafe', area: 'Novi Beograd', lat: 44.8058, lng: 20.4198, rating: 4.9, price: '$$$', icon: '🍹', color: '#1e3a8a', desc: 'Sky-high cocktails with panoramic views' },
-            { name: 'Caffe Imperiale', type: 'cafe', area: 'Stari Grad', lat: 44.8214, lng: 20.4555, rating: 4.5, price: '$$', icon: '☕', color: '#1e3a8a', desc: 'European-style cafe in a grand setting' },
-            { name: 'Rekord Bar', type: 'cafe', area: 'Dorćol', lat: 44.8231, lng: 20.4647, rating: 4.6, price: '$', icon: '🎵', color: '#1e3a8a', desc: 'Vinyl bar with craft beer selection' },
-            { name: 'Balkan Brew', type: 'cafe', area: 'Savamala', lat: 44.8130, lng: 20.4533, rating: 4.7, price: '$$', icon: '🍺', color: '#1e3a8a', desc: 'Craft brewery with 20+ local beers on tap' },
-            { name: 'Klub 20/44', type: 'nightlife', area: 'Savamala', lat: 44.8138, lng: 20.4516, rating: 4.8, price: '$$$', icon: '🎶', color: '#7c3aed', desc: 'Premier club for electronic music on the Sava' },
-            { name: 'Freestyler Boat Club', type: 'nightlife', area: 'Sava', lat: 44.8148, lng: 20.4490, rating: 4.7, price: '$$$', icon: '🚢', color: '#7c3aed', desc: 'Legendary floating club on the Sava river' },
-            { name: 'Ksenija Jazz Club', type: 'nightlife', area: 'Stari Grad', lat: 44.8204, lng: 20.4583, rating: 4.9, price: '$$', icon: '🎺', color: '#7c3aed', desc: 'Intimate jazz venue with world-class acts' },
-            { name: 'Ben Akiba Stand-Up', type: 'nightlife', area: 'Stari Grad', lat: 44.8197, lng: 20.4592, rating: 4.6, price: '$$', icon: '🎤', color: '#7c3aed', desc: 'Comedy club with local and international acts' },
-            { name: 'Lasta Club', type: 'nightlife', area: 'Zemun', lat: 44.8390, lng: 20.4006, rating: 4.5, price: '$$', icon: '🌙', color: '#7c3aed', desc: 'Riverside party venue in old Zemun' },
-            { name: 'Drugstore Club', type: 'nightlife', area: 'Savamala', lat: 44.8145, lng: 20.4502, rating: 4.7, price: '$$$', icon: '💊', color: '#7c3aed', desc: 'Open-air electronic music venue near Beton Hala' },
-            { name: 'Kalemegdan Fortress', type: 'attraction', area: 'Stari Grad', lat: 44.8227, lng: 20.4513, rating: 4.9, price: 'Free', icon: '🏰', color: '#dc2626', desc: 'Ancient fortress at the confluence of two rivers' },
-            { name: 'Skadarlija Bohemian Quarter', type: 'attraction', area: 'Skadarlija', lat: 44.8183, lng: 20.4638, rating: 4.8, price: 'Free', icon: '🎨', color: '#dc2626', desc: 'Cobblestone street lined with kafanas and art' },
-            { name: 'Ada Ciganlija Beach', type: 'attraction', area: 'Čukarica', lat: 44.7955, lng: 20.4210, rating: 4.9, price: '€1', icon: '🏖️', color: '#dc2626', desc: 'Belgrades beach — river island paradise' },
-            { name: 'Topčider Park', type: 'attraction', area: 'Topčider', lat: 44.7837, lng: 20.4460, rating: 4.7, price: 'Free', icon: '🌳', color: '#dc2626', desc: 'Royal park with 200-year-old plane trees' },
-            { name: 'Nikola Tesla Museum', type: 'attraction', area: 'Vračar', lat: 44.8085, lng: 20.4660, rating: 4.8, price: '€3', icon: '⚡', color: '#dc2626', desc: 'World\'s only museum dedicated to Tesla' },
-            { name: 'Saint Sava Temple', type: 'attraction', area: 'Vračar', lat: 44.7993, lng: 20.4671, rating: 4.9, price: 'Free', icon: '⛪', color: '#dc2626', desc: 'One of the world\'s largest Orthodox churches' },
-            { name: 'Gardoš Tower, Zemun', type: 'attraction', area: 'Zemun', lat: 44.8427, lng: 20.3974, rating: 4.7, price: 'Free', icon: '🗼', color: '#dc2626', desc: 'Millennium Tower with panoramic Danube views' },
-            { name: 'National Museum Belgrade', type: 'attraction', area: 'Stari Grad', lat: 44.8184, lng: 20.4577, rating: 4.6, price: '€3', icon: '🏛️', color: '#dc2626', desc: '3,000-year collection spanning Serbia\'s history' },
-        ];
+        this.venues = this.buildVenuesFromDB();
         this.init();
+    }
+
+    buildVenuesFromDB() {
+        const db = window.FEELBG_VENUES;
+        if (!db) return [];
+        const icons = { restaurants: '🍽️', cafes: '☕', nightlife: '🎶', attractions: '🏰' };
+        const colors = { restaurants: '#b8860b', cafes: '#1e3a8a', nightlife: '#7c3aed', attractions: '#dc2626' };
+        const types = { restaurants: 'restaurant', cafes: 'cafe', nightlife: 'nightlife', attractions: 'attraction' };
+        const result = [];
+        for (const [cat, list] of Object.entries(db)) {
+            list.forEach(v => {
+                result.push({
+                    name: v.name, type: types[cat], area: v.area,
+                    lat: v.lat, lng: v.lng, rating: v.rating,
+                    price: v.priceLabel, icon: icons[cat], color: colors[cat],
+                    desc: v.description, image: v.image
+                });
+            });
+        }
+        return result;
     }
 
     t(key) {
