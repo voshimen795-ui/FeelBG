@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -56,7 +57,6 @@
                         <button class="language-option" data-code="he" data-flag="il" title="עברית"><img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img"><span class="lang-code">HE</span></button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
@@ -95,19 +95,19 @@
                     </div>
                     <div class="filter-pills">
                         <button class="filter-pill active" data-filter="all"><i class="fas fa-th"></i> <span data-i18n="filter.all">All</span></button>
-                        <button class="filter-pill" data-filter="serbian"><span>🇷🇸 Serbian</span></button>
-                        <button class="filter-pill" data-filter="italian"><span>🇮🇹 Italian</span></button>
-                        <button class="filter-pill" data-filter="japanese"><span>🇯🇵 Japanese</span></button>
-                        <button class="filter-pill" data-filter="mediterranean"><span>🌊 Mediterranean</span></button>
-                        <button class="filter-pill" data-filter="fineDining"><span>⭐ Fine Dining</span></button>
+                        <button class="filter-pill" data-filter="serbian"><span>Serbian</span></button>
+                        <button class="filter-pill" data-filter="italian"><span>Italian</span></button>
+                        <button class="filter-pill" data-filter="japanese"><span>Japanese</span></button>
+                        <button class="filter-pill" data-filter="mediterranean"><span>Mediterranean</span></button>
+                        <button class="filter-pill" data-filter="fineDining"><span>Fine Dining</span></button>
                     </div>
                     <div class="filter-advanced">
                         <select id="filter-price" class="filter-select">
                             <option value="all" data-i18n="filter.allPrices">All Prices</option>
-                            <option value="budget">$ Budget</option>
-                            <option value="moderate">$$ Moderate</option>
-                            <option value="upscale">$$$ Upscale</option>
-                            <option value="fine-dining">$$$$ Fine Dining</option>
+                            <option value="budget">Budget</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="upscale">Upscale</option>
+                            <option value="fine-dining">Fine Dining</option>
                         </select>
                         <select id="filter-area" class="filter-select">
                             <option value="all" data-i18n="filter.allAreas">All Areas</option>
@@ -179,6 +179,7 @@
     <script src="js/venues.js"></script>
     <script src="js/card-renderer.js"></script>
     <script src="js/pages.js"></script>
+    <script src="js/insider-tips.js"></script>
 
     <nav class="mobile-bottom-nav">
         <a href="index.html" class="mobile-nav-item"><i class="fas fa-home"></i><span data-i18n="nav.home">Home</span></a>

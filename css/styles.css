@@ -68,15 +68,6 @@
     --z-modal: 1000;
 }
 
-/* Dark Theme */
-[data-theme="dark"] {
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-light: #9ca3af;
-    --bg-primary: #111827;
-    --bg-secondary: #1f2937;
-    --bg-dark: #000000;
-}
 
 /* ============================================
    RESET & BASE STYLES
@@ -379,10 +370,6 @@ input, textarea {
     box-shadow: var(--shadow-lg);
 }
 
-/* Keep header blue in dark mode */
-[data-theme="dark"] .header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
-}
 
 .nav {
     display: flex;
@@ -462,15 +449,6 @@ input, textarea {
     }
 }
 
-/* Keep logo white in dark mode */
-/* Logo remains same in dark mode */
-[data-theme="dark"] .nav__logo-img {
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-}
-
-[data-theme="dark"] .nav__logo-text {
-    color: var(--white);
-}
 
 /* Language Dropdown */
 .language-dropdown {
@@ -570,10 +548,6 @@ input, textarea {
     background: rgba(184, 134, 11, 0.3);
 }
 
-/* Keep nav links white in dark mode */
-[data-theme="dark"] .nav__link {
-    color: rgba(255, 255, 255, 0.9);
-}
 
 .nav__actions {
     display: flex;
@@ -581,32 +555,6 @@ input, textarea {
     gap: var(--spacing-sm);
 }
 
-.theme-toggle {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    transition: all var(--transition-normal);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.theme-toggle:hover {
-    transform: rotate(20deg) scale(1.1);
-    background: var(--gradient-secondary);
-    border-color: var(--secondary-light);
-}
-
-/* Keep theme toggle visible in dark mode */
-[data-theme="dark"] .theme-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--white);
-    border-color: rgba(255, 255, 255, 0.3);
-}
 
 .nav__toggle,
 .nav__close {
@@ -630,10 +578,6 @@ input, textarea {
     transform: scale(1.1);
 }
 
-[data-theme="dark"] .nav__toggle,
-[data-theme="dark"] .nav__close {
-    color: var(--white);
-}
 
 /* ============================================
    HERO SECTION
@@ -2178,9 +2122,6 @@ input, textarea {
     padding: var(--spacing-xl) 0;
 }
 
-[data-theme="dark"] .hidden-gems {
-    background: #0d1521;
-}
 
 .gems__grid {
     display: grid;
@@ -2279,9 +2220,6 @@ input, textarea {
     overflow: hidden;
 }
 
-[data-theme="dark"] .events-section {
-    background: #0a1020;
-}
 
 /* Hide all radio inputs */
 .events-carousel-wrapper input[type="radio"] {
@@ -2336,9 +2274,6 @@ input, textarea {
     border: 1px solid rgba(184, 134, 11, 0.15);
 }
 
-[data-theme="dark"] .event-slide__inner {
-    background: #111c30;
-}
 
 .event-slide__image {
     position: relative;
@@ -2405,9 +2340,6 @@ input, textarea {
     gap: 0.5rem;
 }
 
-[data-theme="dark"] .event-venue {
-    color: var(--primary-light);
-}
 
 .event-desc {
     font-size: 0.95rem;
@@ -2452,10 +2384,6 @@ input, textarea {
     border: 1px solid rgba(30, 58, 138, 0.3);
 }
 
-[data-theme="dark"] .event-status.upcoming {
-    color: var(--primary-light);
-    border-color: rgba(59, 130, 246, 0.3);
-}
 
 .event-status.news {
     background: rgba(184, 134, 11, 0.1);

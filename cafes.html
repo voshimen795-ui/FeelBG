@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -56,7 +57,6 @@
                         <button class="language-option" data-code="he" data-flag="il" title="עברית"><img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img"><span class="lang-code">HE</span></button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
@@ -64,8 +64,8 @@
 
     <main class="main">
         <section class="page-hero">
-            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1200&q=80">
-                <source src="https://videos.pexels.com/video-files/2795173/2795173-hd_1920_1080_25fps.mp4" type="video/mp4">
+            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&q=80">
+                <source src="https://videos.pexels.com/video-files/2795173/2795173-hd_1920_1080_30fps.mp4" type="video/mp4">
             </video>
             <div class="page-hero__background"></div>
             <div class="container">
@@ -76,11 +76,11 @@
                         <span data-i18n="nav.cafes">Cafes</span>
                     </div>
                     <h1 class="page-hero__title" data-i18n="cafes.hero.title">Belgrade Cafes & Bars</h1>
-                    <p class="page-hero__description">From cozy coffee houses to trendy rooftop cocktail bars — discover Belgrade's cafe culture</p>
+                    <p class="page-hero__description" data-i18n="cafes.hero.desc">From artisan coffee to craft cocktails — discover Belgrade's best cafes and bars</p>
                     <div class="page-hero__stats">
-                        <div class="stat-item"><i class="fas fa-coffee"></i><span>10+ Cafes & Bars</span></div>
-                        <div class="stat-item"><i class="fas fa-star"></i><span>4.7 Avg Rating</span></div>
-                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span>All Districts</span></div>
+                        <div class="stat-item"><i class="fas fa-coffee"></i><span data-i18n="cafes.hero.stat1">11+ Cafes</span></div>
+                        <div class="stat-item"><i class="fas fa-star"></i><span data-i18n="cafes.hero.stat2">4.6 Avg Rating</span></div>
+                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span data-i18n="cafes.hero.stat3">All Districts</span></div>
                     </div>
                 </div>
             </div>
@@ -91,21 +91,21 @@
                 <div class="filters-container" data-aos="fade-up">
                     <div class="filter-search">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="search-input" placeholder="Search cafes and bars...">
+                        <input type="text" id="search-input" placeholder="Search cafes by name or type..." data-i18n="cafes.search">
                     </div>
                     <div class="filter-pills">
                         <button class="filter-pill active" data-filter="all"><i class="fas fa-th"></i> <span data-i18n="filter.all">All</span></button>
-                        <button class="filter-pill" data-filter="coffee"><span>☕ Coffee</span></button>
-                        <button class="filter-pill" data-filter="cocktail"><span>🍸 Cocktails</span></button>
-                        <button class="filter-pill" data-filter="wine"><span>🍷 Wine</span></button>
-                        <button class="filter-pill" data-filter="craft"><span>🍺 Craft Beer</span></button>
+                        <button class="filter-pill" data-filter="coffee"><span>Coffee</span></button>
+                        <button class="filter-pill" data-filter="cocktail"><span>Cocktails</span></button>
+                        <button class="filter-pill" data-filter="wine"><span>Wine</span></button>
+                        <button class="filter-pill" data-filter="craft"><span>Craft Beer</span></button>
                     </div>
                     <div class="filter-advanced">
                         <select id="filter-price" class="filter-select">
                             <option value="all">All Prices</option>
-                            <option value="budget">$ Budget</option>
-                            <option value="moderate">$$ Moderate</option>
-                            <option value="upscale">$$$ Upscale</option>
+                            <option value="budget">Budget</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="upscale">Upscale</option>
                         </select>
                         <select id="filter-area" class="filter-select">
                             <option value="all">All Areas</option>
@@ -127,7 +127,7 @@
         <section class="results-section section">
             <div class="container">
                 <div class="results-header">
-                    <h2 class="results-count" id="results-count">Showing 10 cafes & bars</h2>
+                    <h2 class="results-count" id="results-count">Showing 11 cafes & bars</h2>
                     <div class="view-toggle">
                         <button class="view-btn active" data-view="grid"><i class="fas fa-th"></i></button>
                         <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
@@ -176,6 +176,7 @@
     <script src="js/venues.js"></script>
     <script src="js/card-renderer.js"></script>
     <script src="js/pages.js"></script>
+    <script src="js/insider-tips.js"></script>
 
     <nav class="mobile-bottom-nav">
         <a href="index.html" class="mobile-nav-item"><i class="fas fa-home"></i><span data-i18n="nav.home">Home</span></a>

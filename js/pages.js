@@ -235,7 +235,8 @@ class PlaceDetails {
             }
         }
 
-        const budgetLabel = `€${budgetInfo.min} – €${budgetInfo.max} ${t('popup.perPerson')}`;
+        const isAttraction = window.location.pathname.includes('attractions') || priceLevel === 'none';
+        const budgetLabel = isAttraction ? '' : `€${budgetInfo.min} – €${budgetInfo.max} ${t('popup.perPerson')}`;
         const websiteName = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '.rs';
 
         const lat = card.dataset.lat;
@@ -259,12 +260,12 @@ class PlaceDetails {
                     <div class="detail-modal__info">
                         <h4>${t('popup.information')}</h4>
                         <div class="detail-modal__info-row"><i class="fas fa-clock"></i><span>${t('popup.open')} ${hours}</span></div>
-                        <div class="detail-modal__info-row"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>
+                        ${isAttraction ? '' : `<div class="detail-modal__info-row"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>`}
                         <div class="detail-modal__info-row"><i class="fas fa-globe"></i><span>www.${websiteName}</span></div>
                         ${cuisine ? `<div class="detail-modal__info-row"><i class="fas fa-utensils"></i><span>${cuisine}</span></div>` : ''}
                     </div>
                     <div class="detail-modal__actions">
-                        <button class="detail-modal__reserve" data-booking="${title}"><i class="fas fa-calendar-check"></i> ${t('popup.reserve')}</button>
+                        ${isAttraction ? '' : `<button class="detail-modal__reserve" data-booking="${title}"><i class="fas fa-calendar-check"></i> ${t('popup.reserve')}</button>`}
                         ${hasCoords ? `<button class="detail-modal__route-btn" data-route-lat="${lat}" data-route-lng="${lng}" data-route-name="${title}"><i class="fas fa-route"></i> ${t('popup.seeRoute')}</button>` : ''}
                         <button class="detail-modal__close-btn">${t('popup.close')}</button>
                     </div>

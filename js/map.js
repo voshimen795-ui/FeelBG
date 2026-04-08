@@ -23,7 +23,7 @@ class BelgradeMap {
                 result.push({
                     name: v.name, type: types[cat], area: v.area,
                     lat: v.lat, lng: v.lng, rating: v.rating,
-                    price: v.priceLabel, icon: icons[cat], color: colors[cat],
+                    price: v.priceLabel || '', icon: icons[cat], color: colors[cat],
                     desc: v.description, image: v.image
                 });
             });
@@ -151,11 +151,11 @@ class BelgradeMap {
                 <h3 class="map-popup__name">${venue.name}</h3>
                 <div class="map-popup__meta">
                     <span class="map-popup__rating">⭐ ${venue.rating}</span>
-                    <span class="map-popup__price">${venue.price}</span>
+                    ${venue.price ? `<span class="map-popup__price">${venue.price}</span>` : ''}
                     <span class="map-popup__area">${venue.area}</span>
                 </div>
                 <p class="map-popup__desc">${venue.desc}</p>
-                <button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>
+                ${venue.type === 'attraction' ? '' : `<button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>`}
             </div>
         `;
     }

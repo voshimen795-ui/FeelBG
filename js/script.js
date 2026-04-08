@@ -201,41 +201,6 @@ class Header {
     }
 }
 
-// ============================================
-// THEME TOGGLE
-// ============================================
-
-class ThemeToggle {
-    constructor() {
-        this.themeButton = $('#theme-toggle');
-        this.currentTheme = localStorage.getItem('theme') || 'light';
-        
-        this.init();
-    }
-
-    init() {
-        this.setTheme(this.currentTheme);
-        
-        this.themeButton.addEventListener('click', () => {
-            const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            this.setTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    }
-
-    setTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
-        const icon = this.themeButton.querySelector('i');
-        
-        if (theme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    }
-}
 
 // ============================================
 // ANIMATED COUNTER
@@ -821,7 +786,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new Preloader();
     new CustomCursor();
     new Header();
-    new ThemeToggle();
     new AnimatedCounter();
     new ParticlesAnimation();
     new SmoothScroll();

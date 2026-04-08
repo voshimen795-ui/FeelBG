@@ -24,7 +24,8 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 │   ├── header-layout.css   — Header component styles
 │   ├── hero-fullscreen.css — Hero section styles
 │   ├── dropdown-menu.css   — Dropdown menu styles
-│   └── remove-blank-space.css — Layout fix styles
+│   ├── remove-blank-space.css — Layout fix styles
+│   └── insider-tips.css    — Floating insider tips widget styles
 ├── js/
 │   ├── venues.js           — Centralized venue database (window.FEELBG_VENUES)
 │   ├── card-renderer.js    — Dynamic card rendering (CardRenderer class)
@@ -34,7 +35,8 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 │   ├── language-selector.js — Language selector UI
 │   ├── map.js              — Interactive Leaflet.js map modal (uses venues.js data)
 │   ├── booking.js          — WhatsApp chatbot booking system
-│   └── mobile-interactions.js — Mobile touch interactions
+│   ├── mobile-interactions.js — Mobile touch interactions
+│   └── insider-tips.js     — Floating Belgrade insider tips widget (12 tips)
 ├── assets/images/
 │   ├── logo/               — Logo variants (headerlogo.png, high-res, grayscale, transparent)
 │   ├── kalemegdan-fortress.jpg
@@ -50,11 +52,11 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 ### Centralized Venue Database (js/venues.js)
 All venue data lives in `window.FEELBG_VENUES` with 4 categories:
 - `restaurants` (15 venues) — Serbian, Italian, Japanese, Mediterranean, Fine Dining, Seafood
-- `cafes` (10 venues) — Coffee, Cocktails, Wine, Craft Beer
+- `cafes` (11 venues) — Hotel Moskva Café, Coffee, Cocktails, Wine, Craft Beer
 - `nightlife` (10 venues) — Electronic, Pop/Dance, Jazz, Alternative, Comedy
 - `attractions` (10 venues) — Historic, Museums, Nature, Cultural, Religious
 
-Each venue has: name, cuisine, cuisineLabel, price, priceLabel, area, address, rating, badge, description, lat, lng, image (Unsplash URLs or local paths).
+Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), area, address, rating, badge, description, lat, lng, image. Attractions have NO price/priceLabel fields (free hidden gems).
 
 ### Dynamic Card Rendering (js/card-renderer.js)
 `CardRenderer` class generates venue cards from the centralized database:
@@ -71,10 +73,15 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel, area, address, r
 ## Key Features
 - **10-Language i18n**: EN, US, SR, TR, DE, FR, IT, RU, EL, HE — all UI content translated
 - **WhatsApp Booking**: Chatbot at +381653315640 (3-step: guests → time → requests)
-- **Interactive Map**: 45 venues, color-coded pins, walking route generation
+- **Interactive Map**: 46 venues, color-coded pins, walking route generation
 - **Adventure Route**: Geolocation-based "Create my Adventure" finds 3 closest venues
 - **Detail Popup**: Photo, rating, hours, budget, Reserve button, "See Route on Map"
-- **Responsive Design**: Mobile bottom nav, touch interactions, FAB menu
+- **Responsive Design**: Mobile bottom nav, touch interactions
+- **Euro Pricing**: All restaurants, cafes, and nightlife show precise € price ranges
+- **Attractions = Free Hidden Gems**: No prices, no reserve buttons on attraction cards
+- **Insider Tips Widget**: Floating lightbulb button with 12 rotating local tips for tourists
+- **Video Hero Sections**: Each category page has a fullscreen looping background video
+- **Light Mode Only**: Dark mode removed for consistent brand experience
 
 ## Running the Project
 - **Development**: `npm start` — starts live-server on port 5000 (0.0.0.0)

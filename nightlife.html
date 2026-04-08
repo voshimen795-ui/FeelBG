@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -56,7 +57,6 @@
                         <button class="language-option" data-code="he" data-flag="il" title="עברית"><img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img"><span class="lang-code">HE</span></button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
@@ -64,8 +64,8 @@
 
     <main class="main">
         <section class="page-hero">
-            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&q=80">
-                <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=1200&q=80">
+                <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_24fps.mp4" type="video/mp4">
             </video>
             <div class="page-hero__background"></div>
             <div class="container">
@@ -76,11 +76,11 @@
                         <span data-i18n="nav.nightlife">Nightlife</span>
                     </div>
                     <h1 class="page-hero__title" data-i18n="nightlife.hero.title">Belgrade Nightlife</h1>
-                    <p class="page-hero__description">From legendary river clubs to underground techno — experience Belgrade's world-famous nightlife</p>
+                    <p class="page-hero__description" data-i18n="nightlife.hero.desc">Experience one of Europe's most legendary nightlife scenes</p>
                     <div class="page-hero__stats">
-                        <div class="stat-item"><i class="fas fa-glass-cheers"></i><span>10+ Clubs & Venues</span></div>
-                        <div class="stat-item"><i class="fas fa-star"></i><span>4.6 Avg Rating</span></div>
-                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span>All Districts</span></div>
+                        <div class="stat-item"><i class="fas fa-music"></i><span data-i18n="nightlife.hero.stat1">10+ Venues</span></div>
+                        <div class="stat-item"><i class="fas fa-star"></i><span data-i18n="nightlife.hero.stat2">4.5 Avg Rating</span></div>
+                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span data-i18n="nightlife.hero.stat3">All Districts</span></div>
                     </div>
                 </div>
             </div>
@@ -91,20 +91,20 @@
                 <div class="filters-container" data-aos="fade-up">
                     <div class="filter-search">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="search-input" placeholder="Search clubs and venues...">
+                        <input type="text" id="search-input" placeholder="Search clubs and venues..." data-i18n="nightlife.search">
                     </div>
                     <div class="filter-pills">
                         <button class="filter-pill active" data-filter="all"><i class="fas fa-th"></i> <span data-i18n="filter.all">All</span></button>
-                        <button class="filter-pill" data-filter="electronic"><span>🎧 Electronic</span></button>
-                        <button class="filter-pill" data-filter="mainstream"><span>🎵 Pop & Dance</span></button>
-                        <button class="filter-pill" data-filter="jazz"><span>🎷 Jazz</span></button>
-                        <button class="filter-pill" data-filter="alternative"><span>🎸 Alternative</span></button>
+                        <button class="filter-pill" data-filter="electronic"><span>Electronic</span></button>
+                        <button class="filter-pill" data-filter="mainstream"><span>Pop & Dance</span></button>
+                        <button class="filter-pill" data-filter="jazz"><span>Jazz</span></button>
+                        <button class="filter-pill" data-filter="alternative"><span>Alternative</span></button>
                     </div>
                     <div class="filter-advanced">
                         <select id="filter-price" class="filter-select">
                             <option value="all">All Prices</option>
-                            <option value="moderate">$$ Moderate</option>
-                            <option value="upscale">$$$ Upscale</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="upscale">Upscale</option>
                         </select>
                         <select id="filter-area" class="filter-select">
                             <option value="all">All Areas</option>
@@ -175,6 +175,7 @@
     <script src="js/venues.js"></script>
     <script src="js/card-renderer.js"></script>
     <script src="js/pages.js"></script>
+    <script src="js/insider-tips.js"></script>
 
     <nav class="mobile-bottom-nav">
         <a href="index.html" class="mobile-nav-item"><i class="fas fa-home"></i><span data-i18n="nav.home">Home</span></a>

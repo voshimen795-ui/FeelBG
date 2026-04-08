@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -56,7 +57,6 @@
                         <button class="language-option" data-code="he" data-flag="il" title="עברית"><img src="https://flagcdn.com/w80/il.png" alt="IL" class="flag-img"><span class="lang-code">HE</span></button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
             </div>
         </nav>
@@ -64,8 +64,8 @@
 
     <main class="main">
         <section class="page-hero">
-            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80">
-                <source src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4" type="video/mp4">
+            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1580896571539-68e6c1e0e5a5?w=1200&q=80">
+                <source src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_30fps.mp4" type="video/mp4">
             </video>
             <div class="page-hero__background"></div>
             <div class="container">
@@ -76,11 +76,11 @@
                         <span data-i18n="nav.attractions">Attractions</span>
                     </div>
                     <h1 class="page-hero__title" data-i18n="attractions.hero.title">Belgrade Attractions</h1>
-                    <p class="page-hero__description">Ancient fortresses, world-class museums, and stunning parks — explore Belgrade's must-see attractions</p>
+                    <p class="page-hero__description" data-i18n="attractions.hero.desc">Explore Belgrade's historic landmarks, museums, parks and hidden gems</p>
                     <div class="page-hero__stats">
-                        <div class="stat-item"><i class="fas fa-landmark"></i><span>10+ Attractions</span></div>
-                        <div class="stat-item"><i class="fas fa-star"></i><span>4.8 Avg Rating</span></div>
-                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span>All Districts</span></div>
+                        <div class="stat-item"><i class="fas fa-landmark"></i><span data-i18n="attractions.hero.stat1">10+ Attractions</span></div>
+                        <div class="stat-item"><i class="fas fa-star"></i><span data-i18n="attractions.hero.stat2">4.8 Avg Rating</span></div>
+                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i><span data-i18n="attractions.hero.stat3">All Districts</span></div>
                     </div>
                 </div>
             </div>
@@ -91,21 +91,19 @@
                 <div class="filters-container" data-aos="fade-up">
                     <div class="filter-search">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="search-input" placeholder="Search attractions...">
+                        <input type="text" id="search-input" placeholder="Search attractions..." data-i18n="attractions.search">
                     </div>
                     <div class="filter-pills">
                         <button class="filter-pill active" data-filter="all"><i class="fas fa-th"></i> <span data-i18n="filter.all">All</span></button>
-                        <button class="filter-pill" data-filter="historic"><span>🏰 Historic</span></button>
-                        <button class="filter-pill" data-filter="museum"><span>🏛️ Museums</span></button>
-                        <button class="filter-pill" data-filter="nature"><span>🌳 Nature</span></button>
-                        <button class="filter-pill" data-filter="cultural"><span>🎭 Cultural</span></button>
-                        <button class="filter-pill" data-filter="religious"><span>⛪ Religious</span></button>
+                        <button class="filter-pill" data-filter="historic"><span>Historic</span></button>
+                        <button class="filter-pill" data-filter="museum"><span>Museums</span></button>
+                        <button class="filter-pill" data-filter="nature"><span>Nature</span></button>
+                        <button class="filter-pill" data-filter="cultural"><span>Cultural</span></button>
+                        <button class="filter-pill" data-filter="religious"><span>Religious</span></button>
                     </div>
                     <div class="filter-advanced">
-                        <select id="filter-price" class="filter-select">
-                            <option value="all">All Prices</option>
-                            <option value="free">Free</option>
-                            <option value="budget">$ Budget</option>
+                        <select id="filter-price" class="filter-select" style="display:none">
+                            <option value="all">All</option>
                         </select>
                         <select id="filter-area" class="filter-select">
                             <option value="all">All Areas</option>
@@ -157,7 +155,7 @@
                 <div class="footer__section">
                     <h4 class="footer__subtitle" data-i18n="footer.contact">Contact</h4>
                     <p class="footer__text">hello@feelbg.com</p>
-                    <p class="footer__text"><button class="footer-reserve-btn" data-booking="FeelBG"><i class="fas fa-calendar-check"></i> Reserve a Table</button></p>
+                    <p class="footer__text"><a href="https://wa.me/381653315640" class="footer-reserve-btn" target="_blank"><i class="fab fa-whatsapp"></i> Chat with us</a></p>
                 </div>
             </div>
             <div class="footer__bottom">
@@ -176,6 +174,7 @@
     <script src="js/venues.js"></script>
     <script src="js/card-renderer.js"></script>
     <script src="js/pages.js"></script>
+    <script src="js/insider-tips.js"></script>
 
     <nav class="mobile-bottom-nav">
         <a href="index.html" class="mobile-nav-item"><i class="fas fa-home"></i><span data-i18n="nav.home">Home</span></a>
