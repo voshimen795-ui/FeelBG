@@ -158,7 +158,7 @@ class BelgradeMap {
     createPopup(venue) {
         const typeLabels = { restaurant: this.t('map.restaurant'), cafe: this.t('map.cafeBar'), nightlife: this.t('map.nightlifeLabel'), attraction: this.t('map.attraction') };
         var translatedDesc = this.getTranslatedVenue(venue, 'desc');
-        var translatedPrice = venue.price ? venue.price.replace(/per person/i, this.t('venue.price.perPerson')) : '';
+        var translatedPrice = venue.price ? venue.price.replace(/per person/i, this.t('venue.price.perPerson')).replace(/\bentry\b/i, this.t('venue.price.entry')) : '';
         return `
             <div class="map-popup">
                 <div class="map-popup__type" style="background:${venue.color}">${typeLabels[venue.type]}</div>

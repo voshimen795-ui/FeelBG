@@ -31,7 +31,9 @@ class CardRenderer {
         var isAttraction = this.isAttractionsPage() || !venue.priceLabel;
         var translatedPrice = '';
         if (!isAttraction && venue.priceLabel) {
-            translatedPrice = venue.priceLabel.replace(/per person/i, this.t('venue.price.perPerson'));
+            translatedPrice = venue.priceLabel
+                .replace(/per person/i, this.t('venue.price.perPerson'))
+                .replace(/\bentry\b/i, this.t('venue.price.entry'));
         }
         var priceHtml = isAttraction ? '' : '<div class="place-card__meta"><span class="price-range">' + translatedPrice + '</span></div>';
         var reserveHtml = isAttraction ? '' : '<button class="btn-icon btn-reserve" title="' + this.t('popup.reserve') + '" data-booking=""><i class="fas fa-calendar-check"></i></button>';
