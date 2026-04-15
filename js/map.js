@@ -64,11 +64,34 @@ class BelgradeMap {
     }
 
     refreshMapUI() {
+        if (!this.markers) return;
         Object.values(this.markers).forEach(({ marker, venue }) => {
             marker.setPopupContent(this.createPopup(venue));
         });
         const filtered = this._lastFilteredVenues || this.venues;
         if (filtered) this.renderSidebar(filtered);
+        this.retranslateModalChrome();
+    }
+
+    retranslateModalChrome() {
+        const modal = document.getElementById('map-modal');
+        if (!modal) return;
+        const titleSpan = modal.querySelector('.map-modal__title > span:first-of-type');
+        if (titleSpan) titleSpan.textContent = this.t('map.title');
+        const venueCount = modal.querySelector('.map-venue-count');
+        if (venueCount) venueCount.textContent = this.venues.length + ' ' + this.t('map.venues');
+        const sidebarHeader = modal.querySelector('.map-sidebar__header');
+        if (sidebarHeader) sidebarHeader.innerHTML = `<i class="fas fa-list-ul"></i> ${this.t('map.venueList')}`;
+        const adventureBtn = modal.querySelector('#adventure-btn');
+        if (adventureBtn) adventureBtn.innerHTML = `<i class="fas fa-hiking"></i> ${this.t('adventure.create')}`;
+        modal.querySelectorAll('.map-filter[data-type]').forEach(btn => {
+            const type = btn.dataset.type;
+            const keyMap = { all: 'map.all', restaurant: 'map.food', cafe: 'map.cafes', nightlife: 'map.nightlife', attraction: 'map.sights' };
+            const iconMap = { restaurant: '<i class="fas fa-utensils"></i> ', cafe: '<i class="fas fa-coffee"></i> ', nightlife: '<i class="fas fa-music"></i> ', attraction: '<i class="fas fa-landmark"></i> ' };
+            if (keyMap[type]) btn.innerHTML = (iconMap[type] || '') + this.t(keyMap[type]);
+        });
+        const searchInput = modal.querySelector('#map-search');
+        if (searchInput) searchInput.placeholder = this.t('map.search');
     }
 
     createModal() {
