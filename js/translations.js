@@ -35,6 +35,7 @@ en: {
 'footer.aboutFeelbg':'About FeelBG','footer.forBusiness':'For Business','footer.travelTips':'Travel Tips',
 'footer.copyright':'© 2025 FeelBG. All rights reserved.','footer.privacy':'Privacy Policy','footer.terms':'Terms of Service','footer.reserveTable':'Reserve a Table','footer.verified':'Verified Places','footer.avgRating':'4.8 Average Rating',
 'footer.quickLinks':'Quick Links',
+'area.stariGrad':'Stari Grad','area.skadarlija':'Skadarlija','area.dorcol':'Dorćol','area.vracar':'Vračar','area.savamala':'Savamala','area.zemun':'Zemun','area.noviBeograd':'Novi Beograd','area.cukarica':'Čukarica','area.topcider':'Topčider','area.sava':'Sava',
 'restaurants.hero.title':'Belgrade Restaurants','restaurants.hero.desc':'From traditional Serbian cuisine to international flavors — discover over 250 amazing restaurants',
 'restaurants.hero.stat1':'250+ Restaurants','restaurants.hero.stat2':'4.7 Avg Rating','restaurants.hero.stat3':'All Districts',
 'restaurants.search':'Search restaurants by name or cuisine...','restaurants.results':'Showing 33 restaurants','restaurants.loadMore':'Load More Restaurants',

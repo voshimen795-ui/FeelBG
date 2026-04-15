@@ -125,10 +125,25 @@ class PlaceFiltering {
         visibleCards.forEach(card => this.grid.appendChild(card));
     }
 
+    t(key) {
+        var translations = window.FEELBG_TRANSLATIONS || {};
+        var stored = localStorage.getItem('feelbg_language');
+        var langCode = stored ? JSON.parse(stored).code : 'en';
+        var lang = translations[langCode] || {};
+        var fallback = translations['en'] || {};
+        return lang[key] || fallback[key] || key;
+    }
+
     updateResultsCount(count) {
         if (!this.resultsCount) return;
         const visibleCount = count !== undefined ? count : Array.from(this.refreshCards()).filter(card => card.style.display !== 'none').length;
-        this.resultsCount.textContent = `Showing ${visibleCount}`;
+        var key = this.resultsCount.getAttribute('data-i18n') || '';
+        var template = key ? this.t(key) : '';
+        if (template) {
+            this.resultsCount.textContent = template.replace(/\d+/, visibleCount);
+        } else {
+            this.resultsCount.textContent = visibleCount;
+        }
     }
 
     toggleView(view) {
