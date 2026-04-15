@@ -11,6 +11,18 @@ class BelgradeMap {
         this.init();
     }
 
+    static venueSlug(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    }
+
+    getTranslatedVenue(venue, field) {
+        var slug = BelgradeMap.venueSlug(venue.name);
+        var key = 'venue.' + slug + '.' + field;
+        var val = this.t(key);
+        if (val !== key) return val;
+        return field === 'desc' ? (venue.desc || venue.description || '') : (venue.cuisineLabel || '');
+    }
+
     buildVenuesFromDB() {
         const db = window.FEELBG_VENUES;
         if (!db) return [];
@@ -145,16 +157,18 @@ class BelgradeMap {
 
     createPopup(venue) {
         const typeLabels = { restaurant: this.t('map.restaurant'), cafe: this.t('map.cafeBar'), nightlife: this.t('map.nightlifeLabel'), attraction: this.t('map.attraction') };
+        var translatedDesc = this.getTranslatedVenue(venue, 'desc');
+        var translatedPrice = venue.price ? venue.price.replace(/per person/i, this.t('venue.price.perPerson')) : '';
         return `
             <div class="map-popup">
                 <div class="map-popup__type" style="background:${venue.color}">${typeLabels[venue.type]}</div>
                 <h3 class="map-popup__name">${venue.name}</h3>
                 <div class="map-popup__meta">
                     <span class="map-popup__rating">⭐ ${venue.rating}</span>
-                    ${venue.price ? `<span class="map-popup__price">${venue.price}</span>` : ''}
+                    ${translatedPrice ? `<span class="map-popup__price">${translatedPrice}</span>` : ''}
                     <span class="map-popup__area">${venue.area}</span>
                 </div>
-                <p class="map-popup__desc">${venue.desc}</p>
+                <p class="map-popup__desc">${translatedDesc}</p>
                 ${venue.type === 'attraction' ? '' : `<button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>`}
             </div>
         `;

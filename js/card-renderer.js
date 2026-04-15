@@ -29,8 +29,12 @@ class CardRenderer {
     static renderCard(venue) {
         var badgeHtml = venue.badge ? '<div class="place-card__badge ' + (venue.badge === 'popular' ? 'popular' : '') + ' ' + (venue.badge === 'trending' ? 'trending' : '') + '" data-i18n="badge.' + venue.badge + '">' + this.t('badge.' + venue.badge) + '</div>' : '';
         var isAttraction = this.isAttractionsPage() || !venue.priceLabel;
-        var priceHtml = isAttraction ? '' : '<div class="place-card__meta"><span class="price-range">' + venue.priceLabel + '</span></div>';
-        var reserveHtml = isAttraction ? '' : '<button class="btn-icon btn-reserve" title="Reserve" data-booking=""><i class="fas fa-calendar-check"></i></button>';
+        var translatedPrice = '';
+        if (!isAttraction && venue.priceLabel) {
+            translatedPrice = venue.priceLabel.replace(/per person/i, this.t('venue.price.perPerson'));
+        }
+        var priceHtml = isAttraction ? '' : '<div class="place-card__meta"><span class="price-range">' + translatedPrice + '</span></div>';
+        var reserveHtml = isAttraction ? '' : '<button class="btn-icon btn-reserve" title="' + this.t('popup.reserve') + '" data-booking=""><i class="fas fa-calendar-check"></i></button>';
 
         var desc = this.getTranslated(venue, 'desc');
         var cuisineLabel = this.getTranslated(venue, 'cuisine');
@@ -51,7 +55,7 @@ class CardRenderer {
                     <p class="place-card__description">' + desc + '</p>\
                     ' + priceHtml + '\
                     <div class="place-card__footer">\
-                        <button class="btn-icon" title="Get Directions"><i class="fas fa-directions"></i></button>\
+                        <button class="btn-icon" title="' + this.t('ui.directions') + '"><i class="fas fa-directions"></i></button>\
                         ' + reserveHtml + '\
                         <button class="btn-details">' + this.t('ui.details') + ' <i class="fas fa-arrow-right"></i></button>\
                     </div>\
