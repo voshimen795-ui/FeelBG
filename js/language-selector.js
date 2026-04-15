@@ -93,8 +93,8 @@ class LanguageSelector {
             <div class="language-modal__overlay"></div>
             <div class="language-modal__content">
                 <div class="language-modal__header">
-                    <h2>🌍 Welcome to Belgrade!</h2>
-                    <p>Choose your language / Изаберите језик / Dil seçin</p>
+                    <h2>🌍 <span data-i18n="lang.welcome">Welcome to Belgrade!</span></h2>
+                    <p data-i18n="lang.choose">Choose your language / Изаберите језик / Dil seçin</p>
                 </div>
                 
                 <div class="language-grid">
@@ -109,7 +109,7 @@ class LanguageSelector {
                 
                 <p class="language-note">
                     <i class="fas fa-info-circle"></i>
-                    You can change this later in settings
+                    <span data-i18n="lang.changeLater">You can change this later in settings</span>
                 </p>
             </div>
         `;
@@ -223,18 +223,10 @@ class LanguageSelector {
     }
 
     showWelcomeToast(language) {
-        const welcomeMessages = {
-            'en': 'Welcome to FeelBG!',
-            'tr': 'FeelBG\'ye Hoş Geldiniz!',
-            'de': 'Willkommen bei FeelBG!',
-            'fr': 'Bienvenue chez FeelBG!',
-            'it': 'Benvenuto a FeelBG!',
-            'ru': 'Добро пожаловать в FeelBG!',
-            'el': 'Καλώς ήρθατε στο FeelBG!',
-            'us': 'Welcome to FeelBG!'
-        };
-
-        const message = welcomeMessages[language.code] || welcomeMessages['en'];
+        const translations = window.FEELBG_TRANSLATIONS || {};
+        const lang = translations[language.code] || {};
+        const fallback = translations['en'] || {};
+        const message = lang['lang.welcomeToast'] || fallback['lang.welcomeToast'] || 'Welcome to FeelBG!';
         
         const toast = document.createElement('div');
         toast.style.cssText = `

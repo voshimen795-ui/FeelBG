@@ -60,6 +60,15 @@ class BelgradeMap {
     init() {
         this.createModal();
         this.bindTriggers();
+        document.addEventListener('feelbg:languageChanged', () => this.refreshMapUI());
+    }
+
+    refreshMapUI() {
+        Object.values(this.markers).forEach(({ marker, venue }) => {
+            marker.setPopupContent(this.createPopup(venue));
+        });
+        const filtered = this._lastFilteredVenues || this.venues;
+        if (filtered) this.renderSidebar(filtered);
     }
 
     createModal() {
@@ -142,6 +151,7 @@ class BelgradeMap {
             const marker = this.createMarker(venue);
             this.markers[venue.name] = { marker, venue };
         });
+        this._lastFilteredVenues = this.venues;
         this.renderSidebar(this.venues);
     }
 
@@ -219,6 +229,7 @@ class BelgradeMap {
             if (type === 'all' || venue.type === type) marker.addTo(this.map);
             else this.map.removeLayer(marker);
         });
+        this._lastFilteredVenues = filtered;
         this.renderSidebar(filtered);
     }
 
