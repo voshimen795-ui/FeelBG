@@ -64,7 +64,7 @@ window.FEELBG_VENUES = {
                 "Theatrical fine dining with a multi-course tasting menu experience",
             lat: 44.821,
             lng: 20.4561,
-            image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80",
+            image: "assets/images/restorani/dekstop.jpg",
         },
         {
             name: "Znak Pitanja",
@@ -95,7 +95,7 @@ window.FEELBG_VENUES = {
                 "Opera-themed bistro with nightly classical performances",
             lat: 44.8199,
             lng: 20.4594,
-            image: "https://images.unsplash.com/photo-1550966871-3ed3cdb51f3a?w=600&q=80",
+            image: "assets/images/restorani/bay.jpg",
         },
         {
             name: "Manufaktura",
@@ -565,7 +565,7 @@ window.FEELBG_VENUES = {
                 "Ancient fortress at the confluence of the Sava and Danube rivers",
             lat: 44.8227,
             lng: 20.4513,
-            image: "assets/images/kalemegdan-fortress.jpg",
+            image: "assets/atractions/kalis.jfif",
         },
         {
             name: "Skadarlija Bohemian Quarter",
@@ -579,7 +579,7 @@ window.FEELBG_VENUES = {
                 "Cobblestone street lined with kafanas, art galleries and street musicians",
             lat: 44.8183,
             lng: 20.4638,
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80",
+            image: "assets/atractions/skadarl.jpg",
         },
         {
             name: "Ada Ciganlija",
@@ -607,7 +607,7 @@ window.FEELBG_VENUES = {
                 "One of the largest Orthodox churches in the world with stunning gold mosaics",
             lat: 44.7993,
             lng: 20.4671,
-            image: "https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=600&q=80",
+            image: "assets/atractions/sveti.jpg",
         },
         {
             name: "Nikola Tesla Museum",
@@ -621,7 +621,7 @@ window.FEELBG_VENUES = {
                 "The world's only museum dedicated to inventor Nikola Tesla with interactive exhibits",
             lat: 44.8085,
             lng: 20.466,
-            image: "https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=600&q=80",
+            image: "assets/atractions/nidza.jpg",
         },
         {
             name: "Topčider Park",
@@ -648,7 +648,7 @@ window.FEELBG_VENUES = {
                 "Millennium Tower with panoramic views of the Danube and old Zemun",
             lat: 44.8427,
             lng: 20.3974,
-            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+            image: "assets/atractions/gardos.jpg",
         },
         {
             name: "National Museum",
@@ -661,7 +661,7 @@ window.FEELBG_VENUES = {
                 "Serbia's largest museum with 400,000+ artifacts spanning 3,000 years",
             lat: 44.8184,
             lng: 20.4577,
-            image: "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=600&q=80",
+            image: "assets/atractions/muzej nac.jpg",
         },
         {
             name: "Zemun Quay",
@@ -675,7 +675,7 @@ window.FEELBG_VENUES = {
                 "Charming riverside promenade with cafés, swans and Danube sunsets",
             lat: 44.8397,
             lng: 20.4011,
-            image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
+            image: "assets/atractions/zemun.jpeg",
         },
         {
             name: "Belgrade Fortress Military Museum",
@@ -688,7 +688,7 @@ window.FEELBG_VENUES = {
                 "Outdoor tanks and artillery plus indoor exhibits tracing Serbia's military history",
             lat: 44.823,
             lng: 20.4518,
-            image: "https://images.unsplash.com/photo-1569587112025-0d460e81a126?w=600&q=80",
+            image: "assets/atractions/miltary.jfif",
         },
     ],
 };
