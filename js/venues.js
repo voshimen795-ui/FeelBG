@@ -312,7 +312,7 @@ window.FEELBG_VENUES = {
                 "Premium Serbian wine selection with antipasti platters",
             lat: 44.8067,
             lng: 20.469,
-            image: ,
+            image: "slike/logo/viadelgusto-ezgif.com-webp-to-jpg-converter.jpg"
         },
         {
             name: "Mint Rooftop Bar",
