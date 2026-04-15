@@ -155,8 +155,29 @@ class LanguageSelector {
         localStorage.setItem('feelbg_language', JSON.stringify(language));
         this.addLanguageIndicator();
         this.translatePage(language.code);
+        this.reRenderCards();
+        document.dispatchEvent(new CustomEvent('feelbg:languageChanged'));
         
         console.log(`Language selected: ${language.name} (${language.code})`);
+    }
+
+    reRenderCards() {
+        var grid = document.getElementById('restaurants-grid') || document.getElementById('places-grid');
+        if (!grid || !window.CardRenderer || !window.FEELBG_VENUES) return;
+        var path = window.location.pathname;
+        if (path.includes('restaurants')) CardRenderer.renderByType('restaurants', grid.id);
+        else if (path.includes('cafes')) CardRenderer.renderByType('cafes', grid.id);
+        else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
+        else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
+        else CardRenderer.renderAll(grid.id);
+        if (!this._placeFiltering) {
+            this._placeFiltering = new PlaceFiltering();
+        } else {
+            this._placeFiltering.grid = grid;
+            this._placeFiltering.filterPills = document.querySelectorAll('.filter-pill');
+            this._placeFiltering.initHeartButtons();
+            this._placeFiltering.applyFilters();
+        }
     }
 
     translatePage(langCode) {

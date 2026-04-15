@@ -28,15 +28,16 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 │   └── insider-tips.css    — Floating insider tips widget styles
 ├── js/
 │   ├── venues.js           — Centralized venue database (window.FEELBG_VENUES)
-│   ├── card-renderer.js    — Dynamic card rendering (CardRenderer class)
+│   ├── card-renderer.js    — Dynamic card rendering with i18n (venueSlug + getTranslated)
 │   ├── script.js           — Core site functionality (Preloader, CustomCursor, Header)
 │   ├── pages.js            — Filter/search + PlaceDetails popup
-│   ├── translations.js     — i18n translations (10 languages, window.FEELBG_TRANSLATIONS)
-│   ├── language-selector.js — Language selector UI
+│   ├── translations.js     — i18n UI string translations (10 languages, window.FEELBG_TRANSLATIONS)
+│   ├── venue-translations.js — Venue content translations (45 venues × 9 langs, insider tips, filter labels)
+│   ├── language-selector.js — Language selector UI + card re-render on switch
 │   ├── map.js              — Interactive Leaflet.js map modal (uses venues.js data)
 │   ├── booking.js          — WhatsApp chatbot booking system
 │   ├── mobile-interactions.js — Mobile touch interactions
-│   └── insider-tips.js     — Floating Belgrade insider tips widget (12 tips)
+│   └── insider-tips.js     — Floating insider tips widget (12 tips, i18n via translation keys)
 ├── assets/images/
 │   ├── logo/               — Logo variants (headerlogo.png, high-res, grayscale, transparent)
 │   ├── kalemegdan-fortress.jpg
@@ -71,7 +72,7 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), are
 - Features: OSRM walking routes, "Create my Adventure" geolocation routing, category filters
 
 ## Key Features
-- **10-Language i18n**: EN, US, SR, TR, DE, FR, IT, RU, EL, HE — all UI content translated
+- **10-Language i18n**: EN, US, SR, TR, DE, FR, IT, RU, EL, HE — all UI + venue content translated
 - **WhatsApp Booking**: Chatbot at +381653315640 (3-step: guests → time → requests)
 - **Interactive Map**: 46 venues, color-coded pins, walking route generation
 - **Adventure Route**: Geolocation-based "Create my Adventure" finds 3 closest venues
@@ -93,8 +94,17 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), are
 - No build step needed
 
 ## Script Load Order (critical)
-1. translations.js → language-selector.js (i18n must load first)
+1. translations.js → venue-translations.js → language-selector.js (i18n must load first, venue translations merge into FEELBG_TRANSLATIONS before page translates)
 2. booking.js (WhatsApp chatbot)
 3. script.js (core functionality)
 4. venues.js → card-renderer.js → pages.js (venue data → renderer → filters)
-5. Leaflet.js → map.js (map library → map component)
+5. insider-tips.js (listens for feelbg:languageChanged event)
+6. Leaflet.js → map.js (map library → map component)
+
+## i18n Architecture
+- **UI strings**: translations.js defines all UI keys per language (nav, hero, filters, badges, popups, chatbot, map, adventure)
+- **Venue content**: venue-translations.js adds venue.{slug}.desc and venue.{slug}.cuisine keys per language, plus insider.tip1–12, filter category labels
+- **Slug generation**: `name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')`
+- **Language switch flow**: selectLanguage() → translatePage() → reRenderCards() → dispatch feelbg:languageChanged
+- **Card rendering**: CardRenderer.getTranslated(venue, 'desc'|'cuisine') looks up venue.{slug}.{field} via t(), falls back to English venue data
+- **Event-driven**: insider-tips.js and other widgets listen to feelbg:languageChanged for live refresh
