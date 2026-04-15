@@ -170,13 +170,12 @@ class LanguageSelector {
         else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
         else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
         else CardRenderer.renderAll(grid.id);
-        if (!this._placeFiltering) {
-            this._placeFiltering = new PlaceFiltering();
-        } else {
-            this._placeFiltering.grid = grid;
-            this._placeFiltering.filterPills = document.querySelectorAll('.filter-pill');
-            this._placeFiltering.initHeartButtons();
-            this._placeFiltering.applyFilters();
+        var pf = window._placeFilteringInstance;
+        if (pf) {
+            pf.grid = grid;
+            pf.filterPills = document.querySelectorAll('.filter-pill');
+            pf.initHeartButtons();
+            pf.applyFilters();
         }
     }
 

@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
         else CardRenderer.renderAll(grid.id);
     }
-    new PlaceFiltering();
+    window._placeFilteringInstance = new PlaceFiltering();
     new LoadMoreFeature();
     new MapToggle();
     new PlaceDetails();
