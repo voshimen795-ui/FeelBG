@@ -16,7 +16,7 @@ window.FEELBG_VENUES = {
                 "Award-winning Balkan cuisine with unlimited small plates and Sava river views",
             lat: 44.8135,
             lng: 20.4528,
-            image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80",
+            image: "slike/logo/ambar.jpg",
         },
         {
             name: "Tri Šešira",
@@ -32,7 +32,7 @@ window.FEELBG_VENUES = {
                 "Iconic Skadarlija kafana serving traditional Serbian dishes since 1864",
             lat: 44.8185,
             lng: 20.4632,
-            image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80",
+            image: "slike/logo/tri sesira.jpg",
         },
         {
             name: "Salon 1905",
@@ -48,7 +48,7 @@ window.FEELBG_VENUES = {
                 "Elegant Serbian cuisine with live orchestra in a Belle Époque salon",
             lat: 44.8196,
             lng: 20.4601,
-            image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",
+            image: "slike/logo/salon.jpg",
         },
         {
             name: "Lorenzo & Kakalamba",
@@ -80,7 +80,7 @@ window.FEELBG_VENUES = {
                 "Belgrade's oldest restaurant (1823) — The Question Mark kafana",
             lat: 44.8202,
             lng: 20.4589,
-            image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80",
+            image: "slike/logo/znak pitanja.jpg",
         },
         {
             name: "Little Bay",
@@ -110,7 +110,7 @@ window.FEELBG_VENUES = {
                 "Modern Serbian craft gastronomy in a hip industrial setting",
             lat: 44.8226,
             lng: 20.4638,
-            image: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&q=80",
+            image: "slike/logo/manufaktura.jpg",
         },
         {
             name: "Mala Fabrika Ukusa",
@@ -126,7 +126,7 @@ window.FEELBG_VENUES = {
                 "Small Factory of Taste — artisan Serbian plates with creative twists",
             lat: 44.8073,
             lng: 20.4701,
-            image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
+            image: "slike/logo/mala fabrika ukusa.webp",
         },
         {
             name: "Comunale Caffè e Cucina",
@@ -141,7 +141,7 @@ window.FEELBG_VENUES = {
                 "Authentic Italian in the heart of Belgrade's main pedestrian street",
             lat: 44.8184,
             lng: 20.4577,
-            image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&q=80",
+            image: "slike/logo/comunale.jpg",
         },
         {
             name: "Bella Napoli",
@@ -156,7 +156,7 @@ window.FEELBG_VENUES = {
                 "Wood-fired Neapolitan pizza and fresh pasta in a lively trattoria",
             lat: 44.8208,
             lng: 20.4572,
-            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
+            image: "slike/logo/bella napoli.webp",
         },
         {
             name: "Sakura",
@@ -172,7 +172,7 @@ window.FEELBG_VENUES = {
                 "Premium Japanese sushi and sashimi with sake pairing menu",
             lat: 44.8214,
             lng: 20.4555,
-            image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&q=80",
+            image: "slike/logo/sakura.jpg",
         },
         {
             name: "Dva Jelena",
@@ -188,7 +188,7 @@ window.FEELBG_VENUES = {
                 "Two Deer — legendary Skadarlija kafana with tamburitza music",
             lat: 44.818,
             lng: 20.464,
-            image: "https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80",
+            image: "slike/logo/dva jelena.jpg",
         },
         {
             name: "Franš",
@@ -203,7 +203,7 @@ window.FEELBG_VENUES = {
                 "Refined French-Mediterranean cuisine in a charming courtyard",
             lat: 44.8231,
             lng: 20.4647,
-            image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80",
+            image: "slike/logo/frans.jpg",
         },
         {
             name: "Langouste",
@@ -217,12 +217,12 @@ window.FEELBG_VENUES = {
             description: "Fresh Adriatic seafood and Mediterranean specialties",
             lat: 44.822,
             lng: 20.4648,
-            image: "https://images.unsplash.com/photo-1515669097368-22e68427d265?w=600&q=80",
+            image: "slike/logo/langouste.jpg",
         },
         {
             name: "Bela Reka",
             cuisine: "serbian",
-            cuisineLabel: "Serbian · Grill",
+            cuisineLabel: "Serbian  � Grill",
             price: "budget",
             priceLabel: "€5–10 per person",
             area: "Stari Grad",
@@ -232,7 +232,7 @@ window.FEELBG_VENUES = {
                 "Hearty Serbian grill and traditional comfort food at local prices",
             lat: 44.8197,
             lng: 20.4592,
-            image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=600&q=80",
+            image: "slike/bela reka.jpg",
         },
     ],
 
@@ -251,7 +251,7 @@ window.FEELBG_VENUES = {
                 "Belgrade's most iconic café since 1908 — legendary Moskva cake and Art Nouveau interiors",
             lat: 44.8143,
             lng: 20.4602,
-            image: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=600&q=80",
+            image: "slike/logo/hotel moskva.jpg",
         },
         {
             name: "Supermarket Bar",
@@ -267,7 +267,7 @@ window.FEELBG_VENUES = {
                 "Trendy rooftop cocktail bar in the heart of Savamala district",
             lat: 44.8141,
             lng: 20.4521,
-            image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80",
+            image: "slike/logo/supermarket.jpg",
         },
         {
             name: "Smokvica",
@@ -282,14 +282,14 @@ window.FEELBG_VENUES = {
             description: "Chic Mediterranean wine bar with a lush garden patio",
             lat: 44.8226,
             lng: 20.4638,
-            image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80",
+            image: "slike/logo/smokvica.jpg",
         },
         {
-            name: "Stara Čukara",
+            name: "Stara Konoba",
             cuisine: "coffee",
             cuisineLabel: "Traditional Coffee",
             price: "budget",
-            priceLabel: "€2–5 per person",
+            priceLabel: "€10-30 per person",
             area: "Stari Grad",
             address: "Cara Uroša 16, Stari Grad",
             rating: 4.6,
@@ -297,10 +297,10 @@ window.FEELBG_VENUES = {
                 "Old Belgrade coffee house with live acoustic music and Turkish coffee",
             lat: 44.8208,
             lng: 20.4572,
-            image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80",
+            image: "slike/logo/stara konoba.jpg",
         },
         {
-            name: "Cantina del Gusto",
+            name: "Via del Gusto",
             cuisine: "wine",
             cuisineLabel: "Wine Bar",
             price: "moderate",
@@ -312,7 +312,7 @@ window.FEELBG_VENUES = {
                 "Premium Serbian wine selection with antipasti platters",
             lat: 44.8067,
             lng: 20.469,
-            image: "https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600&q=80",
+            image: ,
         },
         {
             name: "Mint Rooftop Bar",
