@@ -9,6 +9,16 @@ class CardRenderer {
         return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     }
 
+    static areaKey(area) {
+        var map = {'Stari Grad':'area.stariGrad','Skadarlija':'area.skadarlija','Dorćol':'area.dorcol','Vračar':'area.vracar','Savamala':'area.savamala','Zemun':'area.zemun','Novi Beograd':'area.noviBeograd','Čukarica':'area.cukarica','Topčider':'area.topcider','Sava':'area.sava'};
+        return map[area] || '';
+    }
+
+    static translateArea(area) {
+        var key = this.areaKey(area);
+        return key ? this.t(key) : area;
+    }
+
     static t(key) {
         var translations = window.FEELBG_TRANSLATIONS || {};
         var stored = localStorage.getItem('feelbg_language');
@@ -53,7 +63,7 @@ class CardRenderer {
                         <div class="place-card__rating"><i class="fas fa-star"></i> ' + venue.rating + '</div>\
                     </div>\
                     <p class="place-card__cuisine"><i class="fas fa-tag"></i> ' + cuisineLabel + '</p>\
-                    <p class="place-card__location"><i class="fas fa-map-marker-alt"></i> ' + venue.address + '</p>\
+                    <p class="place-card__location"><i class="fas fa-map-marker-alt"></i> ' + this.translateArea(venue.area) + '</p>\
                     <p class="place-card__description">' + desc + '</p>\
                     ' + priceHtml + '\
                     <div class="place-card__footer">\

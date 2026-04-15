@@ -15,6 +15,11 @@ class BelgradeMap {
         return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     }
 
+    static areaKey(area) {
+        var map = {'Stari Grad':'area.stariGrad','Skadarlija':'area.skadarlija','Dorćol':'area.dorcol','Vračar':'area.vracar','Savamala':'area.savamala','Zemun':'area.zemun','Novi Beograd':'area.noviBeograd','Čukarica':'area.cukarica','Topčider':'area.topcider','Sava':'area.sava'};
+        return map[area] || '';
+    }
+
     getTranslatedVenue(venue, field) {
         var slug = BelgradeMap.venueSlug(venue.name);
         var key = 'venue.' + slug + '.' + field;
@@ -159,6 +164,8 @@ class BelgradeMap {
         const typeLabels = { restaurant: this.t('map.restaurant'), cafe: this.t('map.cafeBar'), nightlife: this.t('map.nightlifeLabel'), attraction: this.t('map.attraction') };
         var translatedDesc = this.getTranslatedVenue(venue, 'desc');
         var translatedPrice = venue.price ? venue.price.replace(/per person/i, this.t('venue.price.perPerson')).replace(/\bentry\b/i, this.t('venue.price.entry')) : '';
+        var areaK = BelgradeMap.areaKey(venue.area);
+        var translatedArea = areaK ? this.t(areaK) : venue.area;
         return `
             <div class="map-popup">
                 <div class="map-popup__type" style="background:${venue.color}">${typeLabels[venue.type]}</div>
@@ -166,7 +173,7 @@ class BelgradeMap {
                 <div class="map-popup__meta">
                     <span class="map-popup__rating">⭐ ${venue.rating}</span>
                     ${translatedPrice ? `<span class="map-popup__price">${translatedPrice}</span>` : ''}
-                    <span class="map-popup__area">${venue.area}</span>
+                    <span class="map-popup__area">${translatedArea}</span>
                 </div>
                 <p class="map-popup__desc">${translatedDesc}</p>
                 ${venue.type === 'attraction' ? '' : `<button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>`}
@@ -177,16 +184,19 @@ class BelgradeMap {
     renderSidebar(venues) {
         const list = document.getElementById('sidebar-list');
         if (!list) return;
-        list.innerHTML = venues.map(v => `
+        list.innerHTML = venues.map(v => {
+            var ak = BelgradeMap.areaKey(v.area);
+            var ta = ak ? this.t(ak) : v.area;
+            return `
             <div class="sidebar-item" data-venue="${v.name}" data-lat="${v.lat}" data-lng="${v.lng}">
                 <div class="sidebar-item__icon" style="background:${v.color}">${v.icon}</div>
                 <div class="sidebar-item__info">
                     <div class="sidebar-item__name">${v.name}</div>
-                    <div class="sidebar-item__area">${v.area}</div>
+                    <div class="sidebar-item__area">${ta}</div>
                 </div>
                 <div class="sidebar-item__rating">⭐ ${v.rating}</div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
         list.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', () => {
                 const name = item.dataset.venue;
