@@ -238,6 +238,7 @@ class PlaceDetails {
         const hours = this.hoursMap[priceLevel] || '10:00 – 23:00';
         const cuisine = card.querySelector('.place-card__cuisine')?.textContent.trim() || '';
 
+        // Extract image from card's background image
         const imgDiv = card.querySelector('.place-card__image');
         let bgImage = '';
         if (imgDiv) {
@@ -262,7 +263,7 @@ class PlaceDetails {
         modal.className = 'detail-modal-overlay';
         modal.innerHTML = `
             <div class="detail-modal">
-                <div class="detail-modal__image" style="background-image:${bgImage || 'linear-gradient(135deg,#1e3a8a,#b8860b)'};background-size:cover;background-position:center;">
+                <div class="detail-modal__image" style="background-image:${bgImage || 'linear-gradient(135deg,#1e3a8a,#b8860b)'};background-size:cover;background-position:center;background-repeat:no-repeat;">
                     <button class="detail-modal__close-x">&times;</button>
                 </div>
                 <div class="detail-modal__body">
