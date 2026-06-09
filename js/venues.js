@@ -297,7 +297,7 @@ window.FEELBG_VENUES = {
             cuisine: "museum",
             cuisineLabel: "Art & History Museum",
             area: "Stari Grad",
-            address: "Trg republike 1a, Stari Grad",
+            address: "Trg Republike 1a, Stari Grad",
             rating: 4.6,
             description:
                 "Serbia's largest museum with 400,000+ artifacts spanning 3,000 years",
