@@ -242,7 +242,43 @@
         }, 1500);
     }
 
+    /* ============================================
+       HERO FLAG-LETTER WORD (SERBIA / SRBIJE)
+       Only Serbian swaps the animated flag-colored word to
+       "SRBIJE" — every other language keeps "SERBIA". This
+       doesn't touch GSAP, so it runs even if the GSAP CDN fails.
+       ============================================ */
+    function initHeroAccent() {
+        var el = document.querySelector('.hero__title-serbia');
+        if (!el) return;
+
+        function currentLangCode() {
+            try {
+                var stored = localStorage.getItem('feelbg_language');
+                return stored ? JSON.parse(stored).code : 'en';
+            } catch (e) {
+                return 'en';
+            }
+        }
+
+        function render() {
+            var word = currentLangCode() === 'sr' ? 'SRBIJE' : 'SERBIA';
+            el.innerHTML = word.split('').map(function (ch, i) {
+                return '<span class="letter" style="animation-delay: ' + (i * 0.1) + 's">' + ch + '</span>';
+            }).join('');
+        }
+
+        render();
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.language-option') || e.target.closest('.language-card')) {
+                setTimeout(render, 0);
+            }
+        });
+    }
+
     ready(function () {
+        initHeroAccent();
+
         if (!window.gsap || !window.ScrollTrigger) return;
         gsap.registerPlugin(ScrollTrigger);
 
