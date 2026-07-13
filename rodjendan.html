@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Srećan rođendan!</title>
+<style>
+  :root{
+    --pink:#ff6fa5;
+    --purple:#7b5cff;
+    --gold:#ffd166;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow:hidden;
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    background:linear-gradient(135deg,#2b1055,#7b5cff,#ff6fa5,#ffd166);
+    background-size:400% 400%;
+    animation:bgShift 12s ease infinite;
+  }
+  @keyframes bgShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  /* ---------- Editable name ---------- */
+  .name{color:var(--gold);}
+
+  /* ---------- Main content ---------- */
+  .stage{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#fff;
+    z-index:5;
+  }
+  h1{
+    font-size:clamp(2rem, 6vw, 4rem);
+    margin:0 0 10px;
+    text-shadow:0 0 20px rgba(255,255,255,.6), 0 4px 12px rgba(0,0,0,.35);
+    opacity:0;
+    animation:pop 1.2s .3s ease forwards;
+  }
+  p.sub{
+    font-size:clamp(1rem,2.4vw,1.4rem);
+    max-width:640px;
+    line-height:1.5;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+    opacity:0;
+    animation:fadeUp 1.2s 1s ease forwards;
+  }
+  @keyframes pop{
+    0%{transform:scale(.4) translateY(40px);opacity:0;}
+    70%{transform:scale(1.08) translateY(-6px);opacity:1;}
+    100%{transform:scale(1) translateY(0);opacity:1;}
+  }
+  @keyframes fadeUp{
+    0%{opacity:0;transform:translateY(20px);}
+    100%{opacity:1;transform:translateY(0);}
+  }
+
+  /* ---------- Cake ---------- */
+  .cake-wrap{
+    margin-top:30px;
+    opacity:0;
+    animation:fadeUp 1.2s 1.6s ease forwards;
+  }
+  .cake{
+    font-size:5rem;
+    cursor:pointer;
+    user-select:none;
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,.4));
+    transition:transform .2s;
+  }
+  .cake:active{transform:scale(.9);}
+  .hint{
+    margin-top:8px;
+    font-size:.9rem;
+    opacity:.85;
+  }
+
+  /* ---------- Balloons ---------- */
+  .balloon{
+    position:absolute;
+    bottom:-160px;
+    font-size:3.2rem;
+    animation-name:rise;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    filter:drop-shadow(0 6px 6px rgba(0,0,0,.25));
+    z-index:2;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0) rotate(0deg);}
+    50%{transform:translateY(-55vh) translateX(30px) rotate(8deg);}
+    100%{transform:translateY(-115vh) translateX(-20px) rotate(-6deg);}
+  }
+
+  /* ---------- Hearts ---------- */
+  .heart{
+    position:absolute;
+    bottom:-60px;
+    color:#ff8fb3;
+    font-size:1.6rem;
+    animation-name:floatUp;
+    animation-timing-function:ease-in;
+    animation-iteration-count:infinite;
+    opacity:.9;
+    z-index:1;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) scale(.8);opacity:0;}
+    10%{opacity:1;}
+    100%{transform:translateY(-110vh) scale(1.1);opacity:0;}
+  }
+
+  /* ---------- Confetti ---------- */
+  .confetti{
+    position:absolute;
+    top:-20px;
+    width:10px;
+    height:16px;
+    opacity:.95;
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    z-index:3;
+  }
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0deg);}
+    100%{transform:translateY(110vh) rotate(360deg);}
+  }
+
+  footer{
+    position:absolute;
+    bottom:14px;
+    width:100%;
+    text-align:center;
+    color:rgba(255,255,255,.7);
+    font-size:.8rem;
+    z-index:5;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <h1>🎉 Srećan rođendan, <span class="name">Ljubavi</span>! 🎂</h1>
+  <p class="sub">
+    Svaki dan pored tebe je poklon, a danas slavimo tebe — najlepšu, najdražu
+    i najposebniju osobu na svetu. Volim te više nego što reči mogu da kažu. ❤️
+  </p>
+
+  <div class="cake-wrap">
+    <div class="cake" id="cake" title="Klikni da ugasiš svećice">🎂🕯️</div>
+    <div class="hint" id="hint">(klikni na tortu za iznenađenje)</div>
+  </div>
+</div>
+
+<footer>napravljeno sa ❤️ za tebe</footer>
+
+<script>
+  const stage = document.body;
+
+  // ---- Balloons ----
+  const balloonEmojis = ['🎈','🎈','🎈'];
+  const balloonColors = ['#ff6fa5','#7b5cff','#ffd166','#4dd0e1','#ff8a65'];
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement('div');
+    b.className = 'balloon';
+    b.textContent = balloonEmojis[i % balloonEmojis.length];
+    b.style.left = Math.random() * 100 + 'vw';
+    b.style.animationDuration = (9 + Math.random() * 8) + 's';
+    b.style.animationDelay = (Math.random() * 10) + 's';
+    b.style.filter += ` hue-rotate(${Math.floor(Math.random()*360)}deg)`;
+    stage.appendChild(b);
+  }
+
+  // ---- Hearts ----
+  for (let i = 0; i < 20; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = '❤';
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.animationDuration = (6 + Math.random() * 6) + 's';
+    h.style.animationDelay = (Math.random() * 8) + 's';
+    h.style.fontSize = (1 + Math.random()*1.4) + 'rem';
+    stage.appendChild(h);
+  }
+
+  // ---- Confetti ----
+  const confettiColors = ['#ff6fa5','#7b5cff','#ffd166','#4dd0e1','#ff8a65','#ffffff'];
+  function spawnConfettiBatch(count){
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      c.style.animationDuration = (3 + Math.random() * 4) + 's';
+      c.style.animationDelay = (Math.random() * 5) + 's';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      stage.appendChild(c);
+      setTimeout(() => c.remove(), 12000);
+    }
+  }
+  spawnConfettiBatch(60);
+  setInterval(() => spawnConfettiBatch(15), 4000);
+
+  // ---- Cake interaction ----
+  const cake = document.getElementById('cake');
+  const hint = document.getElementById('hint');
+  let blown = false;
+  cake.addEventListener('click', () => {
+    if (!blown) {
+      cake.textContent = '🎂✨';
+      hint.textContent = 'Zaželi želju! ✨';
+      spawnConfettiBatch(80);
+      blown = true;
+    } else {
+      cake.textContent = '🎂🕯️';
+      hint.textContent = '(klikni na tortu za iznenađenje)';
+      blown = false;
+    }
+  });
+</script>
+
+</body>
+</html>
