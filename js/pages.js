@@ -214,30 +214,26 @@ class PlaceDetails {
             'upscale': '12:00 – 00:00',
             'fine-dining': '18:00 – 01:00'
         };
+        // Extra "vibe" gallery slides pulled from images already hosted on
+        // this site (not external stock) — generic ambience shots with no
+        // identifying signage, so they never misrepresent a specific
+        // competitor's business as belonging to a different venue.
         this.galleryPools = {
             restaurants: [
-                'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80',
-                'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=900&q=80',
-                'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80',
-                'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&q=80'
+                'assets/images/restorani/bay.jpg',
+                'assets/images/restorani/dekstop.jpg'
             ],
             cafes: [
-                'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&q=80',
-                'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&q=80',
-                'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=900&q=80',
-                'https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900&q=80'
+                'assets/images/restorani/bay.jpg',
+                'assets/images/restorani/dekstop.jpg'
             ],
             nightlife: [
-                'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=900&q=80',
-                'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=900&q=80',
-                'https://images.unsplash.com/photo-1571266028243-d220c9c3b31d?w=900&q=80',
-                'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=900&q=80'
+                'assets/images/belgrade-by-night-4576220_1280.jpg'
             ],
             attractions: [
-                'https://images.unsplash.com/photo-1580896571539-68e6c1e0e5a5?w=900&q=80',
-                'https://images.unsplash.com/photo-1541849546-216549ae216d?w=900&q=80',
-                'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=900&q=80',
-                'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=900&q=80'
+                'assets/images/kalemegdan-fortress.jpg',
+                'assets/images/topcider-park.jpg',
+                'assets/images/ada-ciganlija.jpg'
             ]
         };
         this.init();

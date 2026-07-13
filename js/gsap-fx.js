@@ -15,22 +15,22 @@
 
     /* ============================================
        PHASE 1 — KINETIC HERO TITLE -> NAVBAR LOGO
+       The header logo and the "Discover the Heart of
+       Serbia" tagline are always visible (no opacity
+       hiding) — only the giant duplicate title moves
+       and fades away as it shrinks toward the logo.
        ============================================ */
     function initKineticHero() {
         var wrap = document.getElementById('hero-kinetic');
         var title = document.getElementById('hero-kinetic-title');
         var hero = document.querySelector('.hero');
         var navLogo = document.querySelector('.nav__logo-link');
-        var heroText = document.querySelector('.hero__text');
         if (!wrap || !title || !hero || !navLogo) return;
 
         if (prefersReducedMotion) {
             wrap.style.display = 'none';
             return;
         }
-
-        gsap.set(navLogo, { opacity: 0 });
-        if (heroText) gsap.set(heroText, { opacity: 0, y: 30 });
 
         function getDelta() {
             var t = title.getBoundingClientRect();
@@ -60,9 +60,7 @@
             scale: function () { return getDelta().scale; },
             ease: 'power4.inOut'
         }, 0);
-        tl.to(wrap, { opacity: 0, ease: 'power1.in' }, 0.7);
-        tl.to(navLogo, { opacity: 1, ease: 'power1.in' }, 0.72);
-        if (heroText) tl.to(heroText, { opacity: 1, y: 0, ease: 'power2.out' }, 0.2);
+        tl.to(wrap, { opacity: 0, ease: 'power1.in' }, 0.65);
     }
 
     /* ============================================
@@ -213,6 +211,37 @@
         });
     }
 
+    /* Safety net: split headings must never stay permanently invisible.
+       Late-loading images/fonts can shift the page after ScrollTrigger
+       measures its start positions, which can make a trigger miss its
+       window entirely. Re-measure once everything has settled, and as a
+       last resort force-reveal anything still hidden once it's already
+       on screen. */
+    function refreshAfterLoad() {
+        window.addEventListener('load', function () {
+            setTimeout(function () { ScrollTrigger.refresh(); }, 50);
+        });
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+        }
+    }
+
+    function forceRevealStuckText() {
+        setInterval(function () {
+            document.querySelectorAll('.split-char, .split-word').forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                var onScreen = rect.top < window.innerHeight && rect.bottom > 0;
+                if (!onScreen) return;
+                var hidden = el.querySelectorAll('.char, .word');
+                hidden.forEach(function (span) {
+                    if (getComputedStyle(span).opacity === '0' && rect.top < window.innerHeight * 0.6) {
+                        gsap.to(span, { opacity: 1, rotateX: 0, y: 0, duration: 0.5, ease: 'power2.out' });
+                    }
+                });
+            });
+        }, 1500);
+    }
+
     ready(function () {
         if (!window.gsap || !window.ScrollTrigger) return;
         gsap.registerPlugin(ScrollTrigger);
@@ -221,5 +250,7 @@
         initCardScatter();
         initMaskReveal();
         initTextScrub();
+        refreshAfterLoad();
+        forceRevealStuckText();
     });
 })();

@@ -15,14 +15,189 @@
 }
 
 /* ============================================
+   LUXURY DARK-NAVY + GOLD THEME
+   Page chrome only — component cards (place-card,
+   gem-card, event-slide, forms) keep their light
+   theme from styles.css for contrast.
+   ============================================ */
+body {
+    background-color: var(--page-bg);
+    color: var(--page-text);
+}
+
+.categories,
+.neighborhoods,
+.events-section {
+    background: var(--page-bg);
+}
+
+.hidden-gems,
+.contact,
+.featured,
+.filters-section {
+    background: var(--page-bg-alt) !important;
+}
+
+.filters-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Gold shimmer sweep for section titles (index.html only) */
+.section__title {
+    background: linear-gradient(120deg, #ffe9a8 0%, #ffd700 25%, #b8860b 45%, #ffd700 65%, #ffe9a8 85%, #ffd700 100%);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: goldTextShimmer 6s linear infinite;
+}
+
+.section__description {
+    color: var(--page-text-secondary) !important;
+}
+
+/* .section__title uses background-clip:text + transparent text-fill-color
+   for its gradient. That transparent fill inherits down into the .char
+   spans the char-split reveal creates, which have no background of their
+   own to clip — leaving every letter invisible. Give the split chars an
+   explicit solid color so they're never see-through. */
+.section__title.split-char .char {
+    -webkit-text-fill-color: #ffd700;
+    color: #ffd700;
+}
+
+.mask-reveal__base-inner h2,
+.mask-reveal__panel-inner h2 {
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+}
+
+@keyframes goldTextShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: -250% center; }
+}
+
+/* Gold shimmer utility for buttons/dividers */
+.gold-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.gold-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.45) 45%, transparent 70%);
+    background-size: 200% 100%;
+    animation: goldSweep 3.2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes goldSweep {
+    0% { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+}
+
+/* Header + footer become the FeelBG gold gradient on every page */
+.header,
+.header.scroll-header {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%) !important;
+}
+
+.nav__actions .nav__toggle,
+.language-indicator {
+    background: rgba(10, 17, 40, 0.18) !important;
+    color: var(--primary-dark) !important;
+    border-color: rgba(10, 17, 40, 0.25) !important;
+}
+
+.nav__actions .nav__toggle:hover,
+.language-indicator:hover {
+    background: rgba(10, 17, 40, 0.3) !important;
+}
+
+.nav__logo-text {
+    color: var(--primary-dark) !important;
+}
+
+/* The FeelBG logo artwork is gold-on-transparent — give it a navy plate
+   so it stays legible against the new gold header/footer bars */
+.nav__logo-link {
+    background: rgba(10, 17, 40, 0.85);
+    padding: 0.4rem 0.9rem;
+    border-radius: 0.85rem;
+}
+
+.footer-main-logo {
+    display: inline-block;
+    background: rgba(10, 17, 40, 0.9);
+    padding: 1.25rem 1.75rem;
+    border-radius: 1.25rem;
+}
+
+.footer {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 55%, #b8860b 100%) !important;
+    color: #14204a !important;
+}
+
+.footer__title {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: #0f1e4d !important;
+}
+
+.footer__subtitle {
+    color: #14204a !important;
+}
+
+.footer__text,
+.footer__trust span {
+    color: rgba(15, 30, 77, 0.8) !important;
+}
+
+.footer__links a {
+    color: rgba(15, 30, 77, 0.75) !important;
+}
+
+.footer__links a:hover {
+    color: #0f1e4d !important;
+}
+
+.footer__trust i,
+.footer-logo-section .logo-accent {
+    color: #0f1e4d !important;
+}
+
+.footer__bottom {
+    border-top-color: rgba(15, 30, 77, 0.2) !important;
+    color: rgba(15, 30, 77, 0.65) !important;
+}
+
+.footer__bottom-links a {
+    color: rgba(15, 30, 77, 0.65) !important;
+}
+
+.footer__bottom-links a:hover {
+    color: #0f1e4d !important;
+}
+
+.social__link {
+    background: rgba(15, 30, 77, 0.12) !important;
+    color: #14204a !important;
+}
+
+/* ============================================
    PHASE 1 — KINETIC HERO TITLE
+   FeelBG shrinks into the navbar logo while the
+   "Discover the Heart of Serbia" tagline stays put
+   underneath — both are always visible, no overlap.
    ============================================ */
 .hero-kinetic {
     position: fixed;
     inset: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 14vh;
     pointer-events: none;
     z-index: 90;
     opacity: 1;
@@ -30,19 +205,51 @@
 
 .hero-kinetic__title {
     margin: 0;
-    font-size: clamp(3.5rem, 15vw, 13rem);
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+    font-size: clamp(3rem, 13vw, 11rem);
+    color: #ffffff;
     text-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     transform-origin: 50% 50%;
     white-space: nowrap;
+}
+
+/* Fallback colors in case the Tailwind CDN script fails to load
+   (network hiccup / ad-blocker) — matches the Tailwind utility values
+   so the two never disagree when Tailwind does load. */
+.mask-reveal__base-inner h2,
+.mask-reveal__base-inner p {
+    color: #ffffff;
+}
+
+.mask-reveal__panel-inner h2 {
+    color: var(--primary-color);
+}
+
+.mask-reveal__panel-inner p {
+    color: var(--text-secondary);
+}
+
+.detail-modal__category-tag {
+    color: #ffffff;
 }
 
 body.hero-kinetic-done .hero-kinetic {
     visibility: hidden;
 }
 
+.hero__container {
+    margin-top: 32vh;
+}
+
 @media (max-width: 767px) {
+    .hero-kinetic {
+        padding-top: 10vh;
+    }
     .hero-kinetic__title {
-        font-size: clamp(2.75rem, 20vw, 6rem);
+        font-size: clamp(2.5rem, 18vw, 5rem);
+    }
+    .hero__container {
+        margin-top: 24vh;
     }
 }
 
@@ -96,7 +303,7 @@ body.hero-kinetic-done .hero-kinetic {
     position: relative;
     min-height: 100vh;
     overflow: hidden;
-    background: #0a0f1f;
+    background: #05081a;
 }
 
 .mask-reveal__base {
@@ -105,7 +312,7 @@ body.hero-kinetic-done .hero-kinetic {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 50% 40%, rgba(30, 58, 138, 0.55), #05070f 75%);
+    background: radial-gradient(circle at 50% 40%, rgba(30, 58, 138, 0.55), #05081a 75%);
 }
 
 .mask-reveal__panel {
@@ -276,7 +483,9 @@ body.hero-kinetic-done .hero-kinetic {
     .split-word .word,
     .mask-reveal__panel,
     .place-card,
-    .place-card__image {
+    .place-card__image,
+    .section__title,
+    .gold-shimmer::after {
         transition: none !important;
         animation: none !important;
     }

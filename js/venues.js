@@ -31,7 +31,7 @@ window.FEELBG_VENUES = {
                 "Exclusive boutique restaurant in the heart of Belgrade's center",
             lat: 44.8190,
             lng: 20.4600,
-            image: "slike/butik3.jpg",
+            image: "assets/images/restorani/dekstop.jpg",
         },
         {
             name: "Zlatni Bokal",
@@ -47,7 +47,7 @@ window.FEELBG_VENUES = {
                 "Golden Goblet - authentic Skadarlija kafana with traditional Serbian cuisine",
             lat: 44.8185,
             lng: 20.4632,
-            image: "slike/zlatni_bokal.jpg",
+            image: "slike/Zlatni Bokal.jpg",
         },
         {
             name: "Bottega",
@@ -63,7 +63,7 @@ window.FEELBG_VENUES = {
                 "Gallery restaurant with Mediterranean cuisine at Belgrade Waterfront",
             lat: 44.8148,
             lng: 20.4480,
-            image: "slike/bottega.jpg",
+            image: "slike/bottega.webp",
         },
         {
             name: "Le Petit Bistro NBG",
@@ -93,7 +93,7 @@ window.FEELBG_VENUES = {
                 "Wine-focused restaurant with contemporary Serbian dishes",
             lat: 44.8065,
             lng: 20.423,
-            image: "slike/suvinjon.jpg",
+            image: "assets/images/restorani/bay.jpg",
         },
         {
             name: "Dva Jelena",
@@ -109,7 +109,7 @@ window.FEELBG_VENUES = {
                 "Two Deer — legendary Skadarlija kafana with tamburitza music",
             lat: 44.818,
             lng: 20.464,
-            image: "slike/dva_jelena.jpg",
+            image: "slike/logo/dva jelena.jpg",
         },
         {
             name: "Sport",
@@ -155,7 +155,7 @@ window.FEELBG_VENUES = {
                 "Summer-inspired restaurant with fresh, modern Serbian cuisine",
             lat: 44.8070,
             lng: 20.4200,
-            image: "slike/leto.jpg",
+            image: "slike/logo/salon.jpg",
         },
     ],
 
@@ -174,7 +174,7 @@ window.FEELBG_VENUES = {
                 "Premier nightclub at Belgrade Waterfront with top electronic DJs",
             lat: 44.8148,
             lng: 20.4480,
-            image: "slike/money.jpg",
+            image: "assets/images/belgrade-by-night-4576220_1280.jpg",
         },
         {
             name: "Lasta",
@@ -207,7 +207,7 @@ window.FEELBG_VENUES = {
                 "Ancient fortress at the confluence of the Sava and Danube rivers",
             lat: 44.8227,
             lng: 20.4513,
-            image: "slike/kalemegdan.jpg",
+            image: "assets/atractions/kalis.jfif",
         },
         {
             name: "Skadarlija Bohemian Quarter",
@@ -221,7 +221,7 @@ window.FEELBG_VENUES = {
                 "Cobblestone street lined with kafanas, art galleries and street musicians",
             lat: 44.8183,
             lng: 20.4638,
-            image: "slike/skadarlija.jpg",
+            image: "assets/atractions/skadarl.jpg",
         },
         {
             name: "Ada Ciganlija",
@@ -235,7 +235,7 @@ window.FEELBG_VENUES = {
                 "Belgrade's Sea — river island paradise with beaches, sports and cafés",
             lat: 44.7955,
             lng: 20.421,
-            image: "slike/ada_ciganlija.jpg",
+            image: "assets/images/ada-ciganlija.jpg",
         },
         {
             name: "Saint Sava Temple",
@@ -249,7 +249,7 @@ window.FEELBG_VENUES = {
                 "One of the largest Orthodox churches in the world with stunning gold mosaics",
             lat: 44.7993,
             lng: 20.4671,
-            image: "slike/sveti_sava.jpg",
+            image: "assets/atractions/sveti.jpg",
         },
         {
             name: "Nikola Tesla Museum",
@@ -263,7 +263,7 @@ window.FEELBG_VENUES = {
                 "The world's only museum dedicated to inventor Nikola Tesla with interactive exhibits",
             lat: 44.8085,
             lng: 20.466,
-            image: "slike/tesla_museum.jpg",
+            image: "assets/atractions/nidza.jpg",
         },
         {
             name: "Topčider Park",
@@ -276,7 +276,7 @@ window.FEELBG_VENUES = {
                 "Royal park with 200-year-old plane trees and elegant pavilions",
             lat: 44.7837,
             lng: 20.446,
-            image: "slike/topcider.jpg",
+            image: "assets/images/topcider-park.jpg",
         },
         {
             name: "Gardoš Tower",
@@ -290,7 +290,7 @@ window.FEELBG_VENUES = {
                 "Millennium Tower with panoramic views of the Danube and old Zemun",
             lat: 44.8427,
             lng: 20.3974,
-            image: "slike/gardos.jpg",
+            image: "assets/atractions/gardos.jpg",
         },
         {
             name: "National Museum",
@@ -303,7 +303,7 @@ window.FEELBG_VENUES = {
                 "Serbia's largest museum with 400,000+ artifacts spanning 3,000 years",
             lat: 44.8184,
             lng: 20.4577,
-            image: "slike/muzej_nacional.jpg",
+            image: "assets/atractions/muzej nac.jpg",
         },
         {
             name: "Zemun Quay",
@@ -317,7 +317,7 @@ window.FEELBG_VENUES = {
                 "Charming riverside promenade with cafés, swans and Danube sunsets",
             lat: 44.8397,
             lng: 20.4011,
-            image: "slike/zemun_quay.jpg",
+            image: "assets/atractions/zemun.jpeg",
         },
         {
             name: "Belgrade Fortress Military Museum",
@@ -330,7 +330,7 @@ window.FEELBG_VENUES = {
                 "Outdoor tanks and artillery plus indoor exhibits tracing Serbia's military history",
             lat: 44.823,
             lng: 20.4518,
-            image: "slike/military_museum.jpg",
+            image: "assets/atractions/miltary.jfif",
         },
     ],
 };

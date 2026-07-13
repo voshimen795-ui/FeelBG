@@ -24,6 +24,14 @@
     --bg-primary: #ffffff;
     --bg-secondary: #f9fafb;
     --bg-dark: #111827;
+
+    /* Luxury dark-navy page chrome (body/sections/header/footer only —
+       component cards keep the light theme above for contrast) */
+    --page-bg: #0a1128;
+    --page-bg-alt: #0d1a3d;
+    --page-text: #f4efe2;
+    --page-text-secondary: #b9c2de;
+    --gold-shimmer: linear-gradient(120deg, #b8860b 0%, #ffe08a 22%, #ffd700 45%, #b8860b 68%, #ffe08a 85%, #b8860b 100%);
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
