@@ -214,6 +214,32 @@ class PlaceDetails {
             'upscale': '12:00 – 00:00',
             'fine-dining': '18:00 – 01:00'
         };
+        this.galleryPools = {
+            restaurants: [
+                'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80',
+                'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=900&q=80',
+                'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80',
+                'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&q=80'
+            ],
+            cafes: [
+                'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&q=80',
+                'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&q=80',
+                'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=900&q=80',
+                'https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900&q=80'
+            ],
+            nightlife: [
+                'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=900&q=80',
+                'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=900&q=80',
+                'https://images.unsplash.com/photo-1571266028243-d220c9c3b31d?w=900&q=80',
+                'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=900&q=80'
+            ],
+            attractions: [
+                'https://images.unsplash.com/photo-1580896571539-68e6c1e0e5a5?w=900&q=80',
+                'https://images.unsplash.com/photo-1541849546-216549ae216d?w=900&q=80',
+                'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=900&q=80',
+                'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=900&q=80'
+            ]
+        };
         this.init();
     }
 
@@ -229,6 +255,36 @@ class PlaceDetails {
         });
     }
 
+    getPageType() {
+        const path = window.location.pathname;
+        if (path.includes('cafes')) return 'cafes';
+        if (path.includes('nightlife')) return 'nightlife';
+        if (path.includes('attractions')) return 'attractions';
+        return 'restaurants';
+    }
+
+    findVenue(title) {
+        const venues = window.FEELBG_VENUES;
+        if (!venues) return null;
+        const all = [].concat(venues.restaurants || [], venues.cafes || [], venues.nightlife || [], venues.attractions || []);
+        return all.find(v => v.name === title) || null;
+    }
+
+    fakePhone(title) {
+        let hash = 0;
+        for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) >>> 0;
+        const num = String(hash).padStart(7, '0').slice(0, 7);
+        return `+381 11 ${num.slice(0, 3)} ${num.slice(3)}`;
+    }
+
+    buildGallery(pageType, primaryImage) {
+        const pool = this.galleryPools[pageType] || this.galleryPools.restaurants;
+        const images = [];
+        if (primaryImage) images.push(primaryImage);
+        pool.forEach(src => { if (images.indexOf(src) === -1) images.push(src); });
+        return images.slice(0, 5);
+    }
+
     showDetails(title, card) {
         const rating = card.querySelector('.place-card__rating')?.textContent.trim() || '';
         const location = card.querySelector('.place-card__location')?.textContent.trim() || '';
@@ -238,48 +294,68 @@ class PlaceDetails {
         const hours = this.hoursMap[priceLevel] || '10:00 – 23:00';
         const cuisine = card.querySelector('.place-card__cuisine')?.textContent.trim() || '';
 
-        // Extract image from card's background image
+        const pageType = this.getPageType();
+        const venue = this.findVenue(title);
+
+        // Extract the venue's own image from the card's background image
+        let primaryImage = '';
         const imgDiv = card.querySelector('.place-card__image');
-        let bgImage = '';
         if (imgDiv) {
             const inlineStyle = imgDiv.style.backgroundImage;
-            if (inlineStyle && inlineStyle !== 'none' && inlineStyle !== '') {
-                bgImage = inlineStyle;
-            } else {
-                const computed = window.getComputedStyle(imgDiv).backgroundImage;
-                if (computed && computed !== 'none') bgImage = computed;
-            }
+            const match = /url\((['"]?)(.*?)\1\)/.exec(inlineStyle || '');
+            if (match) primaryImage = match[2];
         }
+        if (!primaryImage && venue) primaryImage = venue.image;
 
-        const isAttraction = window.location.pathname.includes('attractions') || priceLevel === 'none';
+        const galleryImages = this.buildGallery(pageType, primaryImage);
+
+        const isAttraction = pageType === 'attractions' || priceLevel === 'none';
         const budgetLabel = isAttraction ? '' : `€${budgetInfo.min} – €${budgetInfo.max} ${t('popup.perPerson')}`;
         const websiteName = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '.rs';
+        const phone = this.fakePhone(title);
+        const categoryTag = (venue && venue.cuisineLabel) || cuisine.replace(/^\s*\S+\s+/, '') || pageType;
 
         const lat = card.dataset.lat;
         const lng = card.dataset.lng;
         const hasCoords = lat && lng;
 
+        const slidesHtml = galleryImages.map(src =>
+            `<div class="modal-gallery__slide" style="background-image:url('${src}')"></div>`
+        ).join('');
+        const dotsHtml = galleryImages.length > 1 ? galleryImages.map((_, i) =>
+            `<button class="modal-gallery__dot${i === 0 ? ' active' : ''}" data-slide="${i}" aria-label="Photo ${i + 1}"></button>`
+        ).join('') : '';
+        const arrowsHtml = galleryImages.length > 1 ? `
+                    <button class="modal-gallery__arrow modal-gallery__arrow--prev" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
+                    <button class="modal-gallery__arrow modal-gallery__arrow--next" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>` : '';
+
         const modal = document.createElement('div');
         modal.className = 'detail-modal-overlay';
         modal.innerHTML = `
-            <div class="detail-modal">
-                <div class="detail-modal__image" style="background-image:${bgImage || 'linear-gradient(135deg,#1e3a8a,#b8860b)'};background-size:cover;background-position:center;background-repeat:no-repeat;">
-                    <button class="detail-modal__close-x">&times;</button>
+            <div class="detail-modal detail-modal--premium">
+                <div class="modal-gallery" id="modal-gallery">
+                    <div class="modal-gallery__track" id="modal-gallery-track">${slidesHtml}</div>
+                    <button class="modal-gallery__close" aria-label="Close">&times;</button>
+                    ${arrowsHtml}
+                    ${dotsHtml ? `<div class="modal-gallery__dots">${dotsHtml}</div>` : ''}
                 </div>
                 <div class="detail-modal__body">
+                    <span class="detail-modal__category-tag inline-block px-3.5 py-1 rounded-full bg-gradient-to-br from-royal to-royal-light text-white text-[11px] font-bold uppercase tracking-wider mb-2">${categoryTag}</span>
                     <div class="detail-modal__header">
                         <h3 class="detail-modal__title">${title}</h3>
                         <span class="detail-modal__rating">${rating}</span>
                     </div>
-                    <p class="detail-modal__location">${location}</p>
+                    <p class="detail-modal__location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
                     ${description ? `<p class="detail-modal__desc">${description}</p>` : ''}
+
+                    <h4 class="detail-modal__section-title font-display text-base text-royal mt-5 mb-2 flex items-center gap-2"><i class="fas fa-circle-info"></i> ${t('popup.information')}</h4>
                     <div class="detail-modal__info">
-                        <h4>${t('popup.information')}</h4>
-                        <div class="detail-modal__info-row"><i class="fas fa-clock"></i><span>${t('popup.open')} ${hours}</span></div>
-                        ${isAttraction ? '' : `<div class="detail-modal__info-row"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>`}
-                        <div class="detail-modal__info-row"><i class="fas fa-globe"></i><span>www.${websiteName}</span></div>
-                        ${cuisine ? `<div class="detail-modal__info-row"><i class="fas fa-utensils"></i><span>${cuisine}</span></div>` : ''}
+                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-clock"></i><span>${t('popup.open')} ${hours}</span></div>
+                        ${isAttraction ? '' : `<div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>`}
+                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-phone"></i><span>${phone}</span></div>
+                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-globe"></i><span>www.${websiteName}</span></div>
                     </div>
+
                     <div class="detail-modal__actions">
                         ${isAttraction ? '' : `<button class="detail-modal__reserve" data-booking="${title}"><i class="fas fa-calendar-check"></i> ${t('popup.reserve')}</button>`}
                         ${hasCoords ? `<button class="detail-modal__route-btn" data-route-lat="${lat}" data-route-lng="${lng}" data-route-name="${title}"><i class="fas fa-route"></i> ${t('popup.seeRoute')}</button>` : ''}
@@ -290,19 +366,36 @@ class PlaceDetails {
         `;
 
         document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
         requestAnimationFrame(() => modal.classList.add('active'));
 
         const escHandler = (e) => { if (e.key === 'Escape') closeModal(); };
         const closeModal = () => {
             modal.classList.remove('active');
             document.removeEventListener('keydown', escHandler);
-            setTimeout(() => modal.remove(), 300);
+            document.body.style.overflow = '';
+            setTimeout(() => modal.remove(), 400);
         };
 
-        modal.querySelector('.detail-modal__close-x').addEventListener('click', closeModal);
+        modal.querySelector('.modal-gallery__close').addEventListener('click', closeModal);
         modal.querySelector('.detail-modal__close-btn').addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
         document.addEventListener('keydown', escHandler);
+
+        // Gallery carousel
+        if (galleryImages.length > 1) {
+            let current = 0;
+            const track = modal.querySelector('#modal-gallery-track');
+            const dots = modal.querySelectorAll('.modal-gallery__dot');
+            const goTo = (index) => {
+                current = (index + galleryImages.length) % galleryImages.length;
+                track.style.transform = `translateX(-${current * 100}%)`;
+                dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            };
+            modal.querySelector('.modal-gallery__arrow--prev').addEventListener('click', () => goTo(current - 1));
+            modal.querySelector('.modal-gallery__arrow--next').addEventListener('click', () => goTo(current + 1));
+            dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.slide, 10))));
+        }
 
         const routeBtn = modal.querySelector('.detail-modal__route-btn');
         if (routeBtn) {

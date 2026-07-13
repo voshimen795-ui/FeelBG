@@ -34,7 +34,28 @@
     
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
+    <!-- Tailwind CSS (premium design system utilities) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.tailwind) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            royal: { DEFAULT: '#1e3a8a', dark: '#0f1e4d', light: '#3b82f6' },
+                            bronze: { DEFAULT: '#b8860b', dark: '#996515', light: '#ffd700' }
+                        },
+                        fontFamily: {
+                            display: ['"Playfair Display"', 'serif'],
+                            body: ['Poppins', 'sans-serif']
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/mobile-optimized.css">
@@ -44,6 +65,7 @@
     <link rel="stylesheet" href="css/remove-blank-space.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
     <link rel="stylesheet" href="css/insider-tips.css">
+    <link rel="stylesheet" href="css/premium-fx.css">
     <!-- Leaflet Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -51,7 +73,12 @@
     <!-- Cursor Effect Container -->
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
-    
+
+    <!-- Kinetic Hero Title (Phase 1 — migrates into navbar logo on scroll) -->
+    <div class="hero-kinetic" id="hero-kinetic" aria-hidden="true">
+        <h2 class="hero-kinetic__title font-display font-black leading-none tracking-tight text-white" id="hero-kinetic-title">Feel<span class="accent bg-gradient-to-br from-bronze-light to-bronze bg-clip-text text-transparent">BG</span></h2>
+    </div>
+
     <!-- Preloader -->
     <div class="preloader" id="preloader">
         <div class="preloader-content">
@@ -205,8 +232,8 @@
             <div class="container">
                 <div class="section__header belgrade-accent scroll-reveal">
                     <span class="section__subtitle" data-i18n="categories.subtitle">What to Explore</span>
-                    <h2 class="section__title" data-i18n="categories.title">Discover Belgrade</h2>
-                    <p class="section__description" data-i18n="categories.description">
+                    <h2 class="section__title js-split-chars" data-i18n="categories.title">Discover Belgrade</h2>
+                    <p class="section__description js-split-words" data-i18n="categories.description">
                         From world-class dining to vibrant nightlife - explore everything Belgrade has to offer
                     </p>
                 </div>
@@ -262,14 +289,34 @@
                 </div>
             </div>
         </section>
-        
+
+        <!-- Mask Reveal Transition (Phase 3 — clip-path circle reveal, dark to light) -->
+        <section class="mask-reveal" id="mask-reveal">
+            <div class="mask-reveal__base px-6 py-24">
+                <div class="mask-reveal__base-inner max-w-3xl mx-auto text-center">
+                    <h2 class="font-display font-extrabold leading-tight text-white text-[clamp(2rem,6vw,4.5rem)] mb-4">
+                        <span class="accent bg-gradient-to-br from-bronze-light to-bronze bg-clip-text text-transparent">Curated.</span> Verified. Loved by locals.
+                    </h2>
+                    <p class="text-white/70 text-lg md:text-xl">Every restaurant, café and club on FeelBG is hand-checked so you never waste a night in Belgrade.</p>
+                </div>
+            </div>
+            <div class="mask-reveal__panel px-6 py-24" id="mask-reveal-panel">
+                <div class="mask-reveal__panel-inner max-w-3xl mx-auto text-center">
+                    <h2 class="font-display font-extrabold leading-tight text-royal text-[clamp(2rem,6vw,4.5rem)] mb-4">
+                        Now, go find your <span class="accent text-bronze">hidden gem</span>.
+                    </h2>
+                    <p class="text-gray-500 text-lg md:text-xl">Scroll on to discover the parks, viewpoints and secret corners locals actually love.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Hidden Gems Section -->
         <section class="section hidden-gems" id="hidden-gems">
             <div class="container">
                 <div class="section__header scroll-reveal" data-aos="fade-up">
                     <span class="section__subtitle" data-i18n="gems.subtitle">Off the Beaten Path</span>
-                    <h2 class="section__title" data-i18n="gems.title">Belgrade's Hidden Gems</h2>
-                    <p class="section__description" data-i18n="gems.description">
+                    <h2 class="section__title js-split-chars" data-i18n="gems.title">Belgrade's Hidden Gems</h2>
+                    <p class="section__description js-split-words" data-i18n="gems.description">
                         Secret parks, quiet viewpoints, and nature escapes the guidebooks never mention
                     </p>
                 </div>
@@ -361,7 +408,7 @@
             <div class="container">
                 <div class="section__header" data-aos="fade-up">
                     <span class="section__subtitle" data-i18n="events.subtitle">What's Happening Now</span>
-                    <h2 class="section__title" data-i18n="events.title">Live Events & Belgrade News</h2>
+                    <h2 class="section__title js-split-chars" data-i18n="events.title">Live Events & Belgrade News</h2>
                     <p class="section__description" data-i18n="events.description">
                         Concerts, festivals, live music and the latest from the city that never stops
                     </p>
@@ -509,7 +556,7 @@
             <div class="container">
                 <div class="section__header" data-aos="fade-up">
                     <span class="section__subtitle">Get In Touch</span>
-                    <h2 class="section__title">Have Questions?</h2>
+                    <h2 class="section__title js-split-chars">Have Questions?</h2>
                     <p class="section__description">
                         We're here to help you plan the perfect Belgrade experience
                     </p>
@@ -709,6 +756,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/venues.js"></script>
     <script src="js/map.js"></script>
+
+    <!-- GSAP + ScrollTrigger (premium scroll animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="js/gsap-fx.js"></script>
 </body>
 </html>
 

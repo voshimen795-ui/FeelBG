@@ -10,10 +10,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind CSS (premium design system utilities) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.tailwind) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            royal: { DEFAULT: '#1e3a8a', dark: '#0f1e4d', light: '#3b82f6' },
+                            bronze: { DEFAULT: '#b8860b', dark: '#996515', light: '#ffd700' }
+                        },
+                        fontFamily: {
+                            display: ['"Playfair Display"', 'serif'],
+                            body: ['Poppins', 'sans-serif']
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
     <link rel="stylesheet" href="css/insider-tips.css">
+    <link rel="stylesheet" href="css/premium-fx.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -75,8 +98,8 @@
                         <span>/</span>
                         <span data-i18n="nav.nightlife">Nightlife</span>
                     </div>
-                    <h1 class="page-hero__title" data-i18n="nightlife.hero.title">Belgrade Nightlife</h1>
-                    <p class="page-hero__description" data-i18n="nightlife.hero.desc">Experience one of Europe's most legendary nightlife scenes</p>
+                    <h1 class="page-hero__title js-split-chars" data-i18n="nightlife.hero.title">Belgrade Nightlife</h1>
+                    <p class="page-hero__description js-split-words" data-i18n="nightlife.hero.desc">Experience one of Europe's most legendary nightlife scenes</p>
                     <div class="page-hero__stats">
                         <div class="stat-item"><i class="fas fa-music"></i><span data-i18n="nightlife.hero.stat1">10+ Venues</span></div>
                         <div class="stat-item"><i class="fas fa-star"></i><span data-i18n="nightlife.hero.stat2">4.5 Avg Rating</span></div>
@@ -132,7 +155,9 @@
                         <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
                     </div>
                 </div>
-                <div class="places-grid" id="restaurants-grid"></div>
+                <div class="card-scatter-stage">
+                    <div class="places-grid" id="restaurants-grid"></div>
+                </div>
             </div>
         </section>
     </main>
@@ -188,5 +213,10 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/map.js"></script>
+
+    <!-- GSAP + ScrollTrigger (premium scroll animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="js/gsap-fx.js"></script>
 </body>
 </html>
