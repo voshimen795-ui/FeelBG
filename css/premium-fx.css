@@ -134,6 +134,15 @@ body {
     border-radius: 1.25rem;
 }
 
+/* Home page only: no static logo in the header — the kinetic FeelBG
+   title (Phase 1) already carries the branding there. opacity (not
+   display:none) keeps the element's layout box intact so the kinetic
+   title's scroll animation can still measure it as its landing target. */
+.page-home .nav__logo-link {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .footer {
     background: linear-gradient(135deg, #b8860b 0%, #ffd700 55%, #b8860b 100%) !important;
     color: #14204a !important;
@@ -272,11 +281,101 @@ body.hero-kinetic-done .hero-kinetic {
 
 /* Premium hover refinements for business cards */
 .place-card {
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-position 0.6s ease;
 }
 
 .place-card:hover {
     box-shadow: 0 30px 70px -20px rgba(30, 58, 138, 0.4), 0 10px 30px -10px rgba(184, 134, 11, 0.3);
+}
+
+/* Gold texture for business cards + their detail popup — same family as
+   the header/footer gold, with dark-navy text for contrast. */
+.place-card,
+.detail-modal {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%);
+    background-size: 220% 220%;
+}
+
+.place-card:hover {
+    background-position: 100% 0;
+}
+
+.place-card__title,
+.detail-modal__title {
+    color: #14204a;
+}
+
+.place-card__cuisine,
+.place-card__location,
+.place-card__description,
+.detail-modal__location,
+.detail-modal__desc {
+    color: rgba(20, 32, 74, 0.8);
+}
+
+.place-card__cuisine i,
+.place-card__location i {
+    color: #14204a;
+}
+
+.place-card__rating,
+.detail-modal__rating {
+    background: rgba(255, 255, 255, 0.4);
+    color: #14204a;
+}
+
+.place-card__meta {
+    border-top-color: rgba(20, 32, 74, 0.2);
+    border-bottom-color: rgba(20, 32, 74, 0.2);
+}
+
+.price-range {
+    color: #14204a;
+}
+
+.place-card__heart {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.btn-icon {
+    background: rgba(255, 255, 255, 0.4);
+    color: #14204a;
+}
+
+.btn-icon:hover {
+    background: #14204a;
+    color: #ffd700;
+}
+
+.btn-details {
+    background: linear-gradient(135deg, #14204a 0%, #1e3a8a 100%);
+    color: #ffd700;
+}
+
+.detail-modal__section-title {
+    color: #14204a !important;
+}
+
+.detail-modal__info {
+    background: rgba(10, 17, 40, 0.88);
+    border-color: transparent;
+}
+
+.detail-modal__info-row {
+    color: #f4efe2 !important;
+}
+
+.detail-modal__info-row i {
+    color: #ffd700;
+}
+
+.detail-modal__close-btn {
+    background: rgba(10, 17, 40, 0.15);
+    color: #14204a;
+}
+
+.detail-modal__close-btn:hover {
+    background: rgba(10, 17, 40, 0.28);
 }
 
 .place-card__image {
