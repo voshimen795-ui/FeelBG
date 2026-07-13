@@ -1,0 +1,283 @@
+/* ============================================
+   PREMIUM FX
+   GSAP-driven scroll animation support styles
+   ============================================ */
+
+/* Reduce layout thrash on animated elements */
+.hero-kinetic,
+.hero-kinetic__title,
+.card-scatter-stage .place-card,
+.split-char .char,
+.split-word .word,
+.mask-reveal__panel,
+.mask-reveal__circle {
+    will-change: transform, opacity;
+}
+
+/* ============================================
+   PHASE 1 — KINETIC HERO TITLE
+   ============================================ */
+.hero-kinetic {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 90;
+    opacity: 1;
+}
+
+.hero-kinetic__title {
+    margin: 0;
+    font-size: clamp(3.5rem, 15vw, 13rem);
+    text-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transform-origin: 50% 50%;
+    white-space: nowrap;
+}
+
+body.hero-kinetic-done .hero-kinetic {
+    visibility: hidden;
+}
+
+@media (max-width: 767px) {
+    .hero-kinetic__title {
+        font-size: clamp(2.75rem, 20vw, 6rem);
+    }
+}
+
+/* ============================================
+   PHASE 2 — 3D PERSPECTIVE CARD SCATTER
+   ============================================ */
+.card-scatter-stage {
+    perspective: 1200px;
+    perspective-origin: 50% 50%;
+}
+
+.card-scatter-stage .places-grid {
+    transform-style: preserve-3d;
+}
+
+.card-scatter-stage .place-card {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Premium hover refinements for business cards */
+.place-card {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.place-card:hover {
+    box-shadow: 0 30px 70px -20px rgba(30, 58, 138, 0.4), 0 10px 30px -10px rgba(184, 134, 11, 0.3);
+}
+
+.place-card__image {
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.place-card:hover .place-card__image {
+    transform: scale(1.08);
+}
+
+.place-card__footer .btn-details,
+.place-card__footer .btn-icon {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, background 0.35s ease;
+}
+
+.place-card:hover .btn-details {
+    box-shadow: var(--shadow-gold);
+}
+
+/* ============================================
+   PHASE 3 — CLIP-PATH MASK REVEAL
+   ============================================ */
+.mask-reveal {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #0a0f1f;
+}
+
+.mask-reveal__base {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 40%, rgba(30, 58, 138, 0.55), #05070f 75%);
+}
+
+.mask-reveal__panel {
+    position: absolute;
+    inset: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fdf6e3 0%, #ffffff 55%, #fff8e1 100%);
+    clip-path: circle(0% at 50% 50%);
+}
+
+/* ============================================
+   PHASE 4 — CHAR / WORD SPLIT SCRUB REVEAL
+   ============================================ */
+.split-char,
+.split-word {
+    display: inline-block;
+    perspective: 600px;
+}
+
+.split-char .char {
+    display: inline-block;
+    opacity: 0;
+    transform: rotateX(-90deg) translateY(0.2em);
+    transform-origin: 50% 100%;
+}
+
+.split-word .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.6em) rotateX(-40deg);
+    transform-origin: 50% 100%;
+}
+
+/* ============================================
+   PREMIUM MODAL — GALLERY + RICH DETAILS
+   ============================================ */
+.detail-modal-overlay {
+    backdrop-filter: blur(6px);
+}
+
+.detail-modal.detail-modal--premium {
+    max-width: 640px;
+    border-radius: 1.5rem;
+    clip-path: circle(0% at 50% 50%);
+    transform: none;
+    transition: clip-path 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.detail-modal-overlay.active .detail-modal.detail-modal--premium {
+    clip-path: circle(150% at 50% 50%);
+}
+
+.modal-gallery {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    background: #111;
+}
+
+.modal-gallery__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-gallery__slide {
+    flex: 0 0 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.modal-gallery__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    z-index: 3;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+}
+
+.modal-gallery__arrow:hover {
+    background: #fff;
+    transform: translateY(-50%) scale(1.12);
+}
+
+.modal-gallery__arrow--prev { left: 12px; }
+.modal-gallery__arrow--next { right: 12px; }
+
+.modal-gallery__dots {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    z-index: 3;
+}
+
+.modal-gallery__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.modal-gallery__dot.active {
+    background: #ffd700;
+    transform: scale(1.3);
+}
+
+.modal-gallery__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    z-index: 4;
+    transition: background 0.2s, transform 0.3s;
+}
+
+.modal-gallery__close:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: rotate(90deg);
+}
+
+/* .detail-modal__category-tag and .detail-modal__section-title are styled
+   with Tailwind utility classes directly in the markup (js/pages.js) */
+
+@media (max-width: 480px) {
+    .modal-gallery { height: 220px; }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .hero-kinetic,
+    .split-char .char,
+    .split-word .word,
+    .mask-reveal__panel,
+    .place-card,
+    .place-card__image {
+        transition: none !important;
+        animation: none !important;
+    }
+}
