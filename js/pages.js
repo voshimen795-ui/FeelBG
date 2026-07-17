@@ -223,10 +223,7 @@ class PlaceDetails {
         // identifying signage, so they never misrepresent a specific
         // competitor's business as belonging to a different venue.
         this.galleryPools = {
-            restaurants: [
-                'assets/images/restorani/bay.jpg',
-                'assets/images/restorani/dekstop.jpg'
-            ],
+            restaurants: [],
             cafes: [
                 'assets/images/restorani/bay.jpg',
                 'assets/images/restorani/dekstop.jpg'
