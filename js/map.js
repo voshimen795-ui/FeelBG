@@ -4,9 +4,13 @@ class BelgradeMap {
     constructor() {
         this.map = null;
         this.modal = null;
-        this.routeLayer = null;
+        this.markers = {};
         this.routeMarkers = [];
         this.userMarker = null;
+        this.routeLayerActive = false;
+        this.rotating = false;
+        this._rotateFrame = null;
+        this.defaultView = { center: [20.4568, 44.8178], zoom: 15.2, pitch: 55, bearing: -17.6 };
         this.venues = this.buildVenuesFromDB();
         this.init();
     }
@@ -36,12 +40,12 @@ class BelgradeMap {
         const types = { restaurants: 'restaurant', cafes: 'cafe', nightlife: 'nightlife', attractions: 'attraction' };
         const result = [];
         for (const [cat, list] of Object.entries(db)) {
-            list.forEach(v => {
+            (list || []).forEach(v => {
                 result.push({
                     name: v.name, type: types[cat], area: v.area,
                     lat: v.lat, lng: v.lng, rating: v.rating,
-                    price: v.priceLabel || '', icon: icons[cat], color: colors[cat],
-                    desc: v.description, image: v.image
+                    price: v.price, priceLabel: v.priceLabel || '', icon: icons[cat], color: colors[cat],
+                    desc: v.description, description: v.description, image: v.image, cuisineLabel: v.cuisineLabel
                 });
             });
         }
@@ -64,9 +68,9 @@ class BelgradeMap {
     }
 
     refreshMapUI() {
-        if (!this.markers) return;
         Object.values(this.markers).forEach(({ marker, venue }) => {
-            marker.setPopupContent(this.createPopup(venue));
+            const popup = marker.getPopup && marker.getPopup();
+            if (popup) popup.setHTML(this.createPopup(venue));
         });
         const filtered = this._lastFilteredVenues || this.venues;
         if (filtered) this.renderSidebar(filtered);
@@ -84,14 +88,16 @@ class BelgradeMap {
         if (sidebarHeader) sidebarHeader.innerHTML = `<i class="fas fa-list-ul"></i> ${this.t('map.venueList')}`;
         const adventureBtn = modal.querySelector('#adventure-btn');
         if (adventureBtn) adventureBtn.innerHTML = `<i class="fas fa-hiking"></i> ${this.t('adventure.create')}`;
+        const resetBtn = modal.querySelector('#map-reset');
+        if (resetBtn) resetBtn.title = this.t('map.resetView');
+        const rotateBtn = modal.querySelector('#map-rotate');
+        if (rotateBtn) rotateBtn.title = this.t('map.rotate');
         modal.querySelectorAll('.map-filter[data-type]').forEach(btn => {
             const type = btn.dataset.type;
             const keyMap = { all: 'map.all', restaurant: 'map.food', cafe: 'map.cafes', nightlife: 'map.nightlife', attraction: 'map.sights' };
             const iconMap = { restaurant: '<i class="fas fa-utensils"></i> ', cafe: '<i class="fas fa-coffee"></i> ', nightlife: '<i class="fas fa-music"></i> ', attraction: '<i class="fas fa-landmark"></i> ' };
             if (keyMap[type]) btn.innerHTML = (iconMap[type] || '') + this.t(keyMap[type]);
         });
-        const searchInput = modal.querySelector('#map-search');
-        if (searchInput) searchInput.placeholder = this.t('map.search');
     }
 
     createModal() {
@@ -114,6 +120,8 @@ class BelgradeMap {
                         <button class="map-filter" data-type="attraction"><i class="fas fa-landmark"></i> ${this.t('map.sights')}</button>
                     </div>
                     <button class="map-adventure-btn" id="adventure-btn"><i class="fas fa-hiking"></i> ${this.t('adventure.create')}</button>
+                    <button class="map-icon-btn" id="map-rotate" title="${this.t('map.rotate')}"><i class="fas fa-sync-alt"></i></button>
+                    <button class="map-icon-btn" id="map-reset" title="${this.t('map.resetView')}"><i class="fas fa-crosshairs"></i></button>
                     <button class="map-modal__close" id="map-close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="map-modal__body">
@@ -145,58 +153,174 @@ class BelgradeMap {
             });
         });
         document.getElementById('adventure-btn')?.addEventListener('click', () => this.showAdventurePanel());
+        document.getElementById('map-reset')?.addEventListener('click', () => this.resetView());
+        document.getElementById('map-rotate')?.addEventListener('click', () => this.toggleRotate());
     }
 
     openMap() {
         this.modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         if (!this.map) {
-            requestAnimationFrame(() => setTimeout(() => this.initLeafletMap(), 100));
+            requestAnimationFrame(() => setTimeout(() => this.initMap(), 100));
         } else {
-            this.map.invalidateSize();
+            this.map.resize();
         }
     }
 
     closeMap() {
         this.modal.classList.remove('active');
         document.body.style.overflow = '';
+        this.stopRotate();
     }
 
-    initLeafletMap() {
-        if (!window.L) { this.showMapFallback(); return; }
-        this.map = L.map('belgrade-map', { center: [44.8178, 20.4568], zoom: 13, zoomControl: true });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            maxZoom: 19,
-        }).addTo(this.map);
+    initMap() {
+        if (!window.maplibregl) { this.showMapFallback(); return; }
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        try {
+            this.map = new maplibregl.Map({
+                container: 'belgrade-map',
+                style: 'https://tiles.openfreemap.org/styles/liberty',
+                center: [20.4568, 44.8178],
+                zoom: 9,
+                pitch: 0,
+                bearing: 0,
+                antialias: !isMobile,
+                maxPitch: isMobile ? 50 : 70,
+                renderWorldCopies: false,
+                attributionControl: { compact: true }
+            });
+        } catch (err) {
+            this.showMapFallback();
+            return;
+        }
+        this.map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+        this.map.on('error', () => { /* tolerate tile/glyph load hiccups without breaking the UI */ });
+        // Bind to raw DOM input (not MapLibre's semantic move/rotate events) so our own
+        // programmatic flyTo/setBearing calls don't immediately cancel themselves —
+        // setBearing() fires a synchronous "rotatestart" even for non-interactive calls.
+        const canvasEl = this.map.getCanvasContainer();
+        ['mousedown', 'touchstart', 'wheel', 'dblclick'].forEach(ev => canvasEl.addEventListener(ev, () => this.stopRotate(), { passive: true }));
+        this.map.on('load', () => {
+            this.applyBrandTheme();
+            this.addBuildingExtrusion();
+            this.addMarkers();
+            this._lastFilteredVenues = this.venues;
+            this.renderSidebar(this.venues);
+            this.playIntro(isMobile);
+        });
+    }
+
+    playIntro(isMobile) {
+        setTimeout(() => {
+            if (!this.map) return;
+            this.map.flyTo({
+                center: this.defaultView.center,
+                zoom: isMobile ? this.defaultView.zoom - 0.6 : this.defaultView.zoom,
+                pitch: this.defaultView.pitch,
+                bearing: this.defaultView.bearing,
+                duration: 4200,
+                curve: 1.4,
+                essential: true
+            });
+        }, 250);
+    }
+
+    applyBrandTheme() {
+        const style = this.map.getStyle();
+        if (!style || !style.layers) return;
+        style.layers.forEach(layer => {
+            try {
+                const sl = layer['source-layer'];
+                if (layer.type === 'background') {
+                    this.map.setPaintProperty(layer.id, 'background-color', '#0a1128');
+                } else if (sl === 'water' && layer.type === 'fill') {
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#1c3a78');
+                } else if (sl === 'waterway') {
+                    this.map.setPaintProperty(layer.id, 'line-color', '#1c3a78');
+                } else if ((sl === 'landcover' || sl === 'landuse' || sl === 'park') && layer.type === 'fill') {
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#101f42');
+                } else if (sl === 'transportation' && layer.type === 'line') {
+                    const isMajor = /motorway|trunk|primary/i.test(layer.id);
+                    this.map.setPaintProperty(layer.id, 'line-color', isMajor ? '#b8860b' : '#33456e');
+                } else if (sl === 'building' && layer.type === 'fill') {
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#1a2c5c');
+                    this.map.setPaintProperty(layer.id, 'fill-opacity', 0.7);
+                } else if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+                    this.map.setPaintProperty(layer.id, 'text-color', '#f4efe2');
+                    this.map.setPaintProperty(layer.id, 'text-halo-color', '#0a1128');
+                    this.map.setPaintProperty(layer.id, 'text-halo-width', 1.2);
+                }
+            } catch (err) { /* skip layers whose paint properties don't match this theme pass */ }
+        });
+    }
+
+    addBuildingExtrusion() {
+        if (this.map.getLayer('feelbg-buildings-3d')) return;
+        const style = this.map.getStyle();
+        const vectorSourceId = Object.keys(style.sources || {}).find(id => style.sources[id].type === 'vector');
+        if (!vectorSourceId) return;
+        const firstSymbol = style.layers.find(l => l.type === 'symbol');
+        try {
+            this.map.addLayer({
+                id: 'feelbg-buildings-3d',
+                type: 'fill-extrusion',
+                source: vectorSourceId,
+                'source-layer': 'building',
+                minzoom: 13,
+                paint: {
+                    'fill-extrusion-color': [
+                        'interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 6],
+                        0, '#20315e',
+                        20, '#2c4886',
+                        60, '#3f63b3',
+                        120, '#b8860b'
+                    ],
+                    'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 6],
+                    'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+                    'fill-extrusion-opacity': 0.88
+                }
+            }, firstSymbol ? firstSymbol.id : undefined);
+        } catch (err) { /* base style schema didn't expose the expected building fields — flat map still works */ }
+    }
+
+    addMarkers() {
         this.markers = {};
         this.venues.forEach(venue => {
             const marker = this.createMarker(venue);
             this.markers[venue.name] = { marker, venue };
         });
-        this._lastFilteredVenues = this.venues;
-        this.renderSidebar(this.venues);
     }
 
     createMarker(venue) {
-        const icon = L.divIcon({
-            html: `<div class="map-pin" style="background:${venue.color}"><span>${venue.icon}</span></div>`,
-            className: 'map-custom-icon',
-            iconSize: [40, 48],
-            iconAnchor: [20, 48],
-            popupAnchor: [0, -48],
-        });
-        const marker = L.marker([venue.lat, venue.lng], { icon })
-            .addTo(this.map)
-            .bindPopup(this.createPopup(venue), { maxWidth: 260 });
-        marker.on('click', () => this.highlightSidebarItem(venue.name));
+        const el = document.createElement('div');
+        el.className = 'map-pin-wrap';
+        el.innerHTML = `<div class="map-pin__pulse" style="background:${venue.color}"></div><div class="map-pin" style="background:${venue.color}"><span>${venue.icon}</span></div>`;
+        const popup = new maplibregl.Popup({ offset: 34, maxWidth: '260px', closeButton: true })
+            .setHTML(this.createPopup(venue));
+        popup.on('open', () => this.bindPopupButtons(venue));
+        const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+            .setLngLat([venue.lng, venue.lat])
+            .setPopup(popup)
+            .addTo(this.map);
+        el.addEventListener('click', () => this.highlightSidebarItem(venue.name));
         return marker;
+    }
+
+    bindPopupButtons(venue) {
+        const popupEl = document.querySelector('.maplibregl-popup .map-popup');
+        if (!popupEl) return;
+        const detailsBtn = popupEl.querySelector('.map-popup__details');
+        if (detailsBtn) {
+            detailsBtn.addEventListener('click', () => {
+                if (window._placeDetailsInstance) window._placeDetailsInstance.showDetailsForVenue(venue);
+            });
+        }
     }
 
     createPopup(venue) {
         const typeLabels = { restaurant: this.t('map.restaurant'), cafe: this.t('map.cafeBar'), nightlife: this.t('map.nightlifeLabel'), attraction: this.t('map.attraction') };
         var translatedDesc = this.getTranslatedVenue(venue, 'desc');
-        var translatedPrice = venue.price ? venue.price.replace(/per person/i, this.t('venue.price.perPerson')).replace(/\bentry\b/i, this.t('venue.price.entry')) : '';
+        var translatedPrice = venue.priceLabel ? venue.priceLabel.replace(/per person/i, this.t('venue.price.perPerson')).replace(/\bentry\b/i, this.t('venue.price.entry')) : '';
         var areaK = BelgradeMap.areaKey(venue.area);
         var translatedArea = areaK ? this.t(areaK) : venue.area;
         return `
@@ -209,7 +333,10 @@ class BelgradeMap {
                     <span class="map-popup__area">${translatedArea}</span>
                 </div>
                 <p class="map-popup__desc">${translatedDesc}</p>
-                ${venue.type === 'attraction' ? '' : `<button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>`}
+                <div class="map-popup__actions">
+                    <button class="map-popup__details"><i class="fas fa-circle-info"></i> ${this.t('map.viewDetails')}</button>
+                    ${venue.type === 'attraction' ? '' : `<button class="map-popup__call" data-booking="${venue.name}"><i class="fas fa-calendar-check"></i> ${this.t('map.reserve')}</button>`}
+                </div>
             </div>
         `;
     }
@@ -221,7 +348,7 @@ class BelgradeMap {
             var ak = BelgradeMap.areaKey(v.area);
             var ta = ak ? this.t(ak) : v.area;
             return `
-            <div class="sidebar-item" data-venue="${v.name}" data-lat="${v.lat}" data-lng="${v.lng}">
+            <div class="sidebar-item" data-venue="${v.name}">
                 <div class="sidebar-item__icon" style="background:${v.color}">${v.icon}</div>
                 <div class="sidebar-item__info">
                     <div class="sidebar-item__name">${v.name}</div>
@@ -232,17 +359,32 @@ class BelgradeMap {
         }).join('');
         list.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', () => {
-                const name = item.dataset.venue;
-                this.map.setView([parseFloat(item.dataset.lat), parseFloat(item.dataset.lng)], 16, { animate: true });
-                this.markers[name]?.marker.openPopup();
-                this.highlightSidebarItem(name);
+                const entry = this.markers[item.dataset.venue];
+                if (entry) this.flyToVenue(entry.venue);
             });
         });
     }
 
+    flyToVenue(venue) {
+        if (!this.map) return;
+        this.stopRotate();
+        this.map.flyTo({
+            center: [venue.lng, venue.lat],
+            zoom: 17,
+            pitch: 58,
+            bearing: this.map.getBearing(),
+            duration: 1800,
+            curve: 1.3,
+            essential: true
+        });
+        const entry = this.markers[venue.name];
+        if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
+        this.highlightSidebarItem(venue.name);
+    }
+
     highlightSidebarItem(name) {
         document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-        const item = document.querySelector(`.sidebar-item[data-venue="${name}"]`);
+        const item = document.querySelector(`.sidebar-item[data-venue="${CSS.escape(name)}"]`);
         if (item) { item.classList.add('active'); item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
     }
 
@@ -250,14 +392,43 @@ class BelgradeMap {
         const filtered = type === 'all' ? this.venues : this.venues.filter(v => v.type === type);
         Object.values(this.markers).forEach(({ marker, venue }) => {
             if (type === 'all' || venue.type === type) marker.addTo(this.map);
-            else this.map.removeLayer(marker);
+            else marker.remove();
         });
         this._lastFilteredVenues = filtered;
         this.renderSidebar(filtered);
     }
 
+    resetView() {
+        if (!this.map) return;
+        this.stopRotate();
+        this.map.flyTo({ ...this.defaultView, duration: 1600, curve: 1.3, essential: true });
+    }
+
+    toggleRotate() {
+        this.rotating = !this.rotating;
+        const btn = document.getElementById('map-rotate');
+        if (btn) btn.classList.toggle('active', this.rotating);
+        if (this.rotating) this._rotateStep();
+        else if (this._rotateFrame) cancelAnimationFrame(this._rotateFrame);
+    }
+
+    _rotateStep() {
+        if (!this.rotating || !this.map) return;
+        this.map.setBearing((this.map.getBearing() + 0.045) % 360);
+        this._rotateFrame = requestAnimationFrame(() => this._rotateStep());
+    }
+
+    stopRotate() {
+        if (!this.rotating) return;
+        this.rotating = false;
+        const btn = document.getElementById('map-rotate');
+        if (btn) btn.classList.remove('active');
+        if (this._rotateFrame) cancelAnimationFrame(this._rotateFrame);
+    }
+
     showRouteTo(lat, lng, name) {
         if (!this.map) return;
+        this.stopRotate();
         if (!navigator.geolocation) { alert(this.t('adventure.locationError')); return; }
         navigator.geolocation.getCurrentPosition(
             (pos) => {
@@ -266,8 +437,9 @@ class BelgradeMap {
                 this.fetchRoute([[userLng, userLat], [lng, lat]], [{ name, lat, lng, icon: '📍' }]);
             },
             () => {
-                this.map.setView([lat, lng], 16, { animate: true });
-                if (this.markers[name]) this.markers[name].marker.openPopup();
+                this.map.flyTo({ center: [lng, lat], zoom: 17, pitch: 58, duration: 1600, essential: true });
+                const entry = this.markers[name];
+                if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
             },
             { enableHighAccuracy: true, timeout: 10000 }
         );
@@ -354,49 +526,60 @@ class BelgradeMap {
         }
     }
 
-    drawRoute(geometry, stops, userCoord) {
-        if (!this.map) return;
-        this.routeLayer = L.geoJSON(geometry, {
-            style: { color: '#1e3a8a', weight: 5, opacity: 0.8, dashArray: '10,6' }
-        }).addTo(this.map);
-
-        const userIcon = L.divIcon({
-            html: '<div class="map-pin" style="background:#10b981"><span>📍</span></div>',
-            className: 'map-custom-icon', iconSize: [40, 48], iconAnchor: [20, 48]
-        });
-        this.userMarker = L.marker([userCoord[1], userCoord[0]], { icon: userIcon }).addTo(this.map);
-        this.routeMarkers.push(this.userMarker);
-
+    addRouteStopMarkers(stops) {
         stops.forEach((stop, i) => {
-            const numIcon = L.divIcon({
-                html: `<div class="route-stop-num">${i + 1}</div>`,
-                className: 'map-custom-icon', iconSize: [32, 32], iconAnchor: [16, 16]
-            });
-            const m = L.marker([stop.lat, stop.lng], { icon: numIcon }).addTo(this.map)
-                .bindPopup(`<b>${this.t('adventure.stop')} ${i + 1}:</b> ${stop.name}`);
+            const el = document.createElement('div');
+            el.className = 'route-stop-num';
+            el.textContent = String(i + 1);
+            const popup = new maplibregl.Popup({ offset: 18 }).setHTML(`<b>${this.t('adventure.stop')} ${i + 1}:</b> ${stop.name}`);
+            const m = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([stop.lng, stop.lat]).setPopup(popup).addTo(this.map);
             this.routeMarkers.push(m);
         });
+    }
 
-        const bounds = this.routeLayer.getBounds();
-        if (bounds.isValid()) this.map.fitBounds(bounds, { padding: [50, 50] });
+    drawRoute(geometry, stops, userCoord) {
+        if (!this.map) return;
+        this.clearRouteLayers();
+        this.map.addSource('feelbg-route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry } });
+        this.map.addLayer({
+            id: 'feelbg-route-line', type: 'line', source: 'feelbg-route',
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: { 'line-color': '#ffd700', 'line-width': 5, 'line-opacity': 0.9, 'line-dasharray': [2, 1.4] }
+        });
+        this.routeLayerActive = true;
+
+        const userEl = document.createElement('div');
+        userEl.className = 'map-pin';
+        userEl.style.background = '#10b981';
+        userEl.innerHTML = '<span>📍</span>';
+        this.userMarker = new maplibregl.Marker({ element: userEl, anchor: 'bottom' }).setLngLat([userCoord[0], userCoord[1]]).addTo(this.map);
+        this.routeMarkers.push(this.userMarker);
+
+        this.addRouteStopMarkers(stops);
+
+        const bounds = new maplibregl.LngLatBounds();
+        (geometry.coordinates || []).forEach(c => bounds.extend(c));
+        bounds.extend(userCoord);
+        if (!bounds.isEmpty()) this.map.fitBounds(bounds, { padding: 70, pitch: 40, bearing: 0, duration: 1400 });
     }
 
     drawStraightLine(waypoints, stops) {
-        const latlngs = waypoints.map(p => [p[1], p[0]]);
-        this.routeLayer = L.polyline(latlngs, { color: '#1e3a8a', weight: 4, dashArray: '10,6' }).addTo(this.map);
-        stops.forEach((stop, i) => {
-            const numIcon = L.divIcon({
-                html: `<div class="route-stop-num">${i + 1}</div>`,
-                className: 'map-custom-icon', iconSize: [32, 32], iconAnchor: [16, 16]
-            });
-            const m = L.marker([stop.lat, stop.lng], { icon: numIcon }).addTo(this.map)
-                .bindPopup(`<b>${this.t('adventure.stop')} ${i + 1}:</b> ${stop.name}`);
-            this.routeMarkers.push(m);
+        if (!this.map) return;
+        this.clearRouteLayers();
+        const geometry = { type: 'LineString', coordinates: waypoints };
+        this.map.addSource('feelbg-route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry } });
+        this.map.addLayer({
+            id: 'feelbg-route-line', type: 'line', source: 'feelbg-route',
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: { 'line-color': '#ffd700', 'line-width': 4, 'line-dasharray': [2, 1.4] }
         });
-        if (this.routeLayer.getBounds) {
-            const bounds = this.routeLayer.getBounds();
-            if (bounds.isValid()) this.map.fitBounds(bounds, { padding: [50, 50] });
-        }
+        this.routeLayerActive = true;
+
+        this.addRouteStopMarkers(stops);
+
+        const bounds = new maplibregl.LngLatBounds();
+        waypoints.forEach(c => bounds.extend(c));
+        if (!bounds.isEmpty()) this.map.fitBounds(bounds, { padding: 70, pitch: 40, bearing: 0, duration: 1400 });
     }
 
     showRouteInfo(stops, distKm, durMin) {
@@ -420,11 +603,18 @@ class BelgradeMap {
         });
     }
 
+    clearRouteLayers() {
+        if (!this.map || !this.routeLayerActive) return;
+        if (this.map.getLayer('feelbg-route-line')) this.map.removeLayer('feelbg-route-line');
+        if (this.map.getSource('feelbg-route')) this.map.removeSource('feelbg-route');
+        this.routeLayerActive = false;
+    }
+
     clearRoute() {
-        if (this.routeLayer) { this.map.removeLayer(this.routeLayer); this.routeLayer = null; }
-        this.routeMarkers.forEach(m => this.map.removeLayer(m));
+        this.clearRouteLayers();
+        this.routeMarkers.forEach(m => m.remove());
         this.routeMarkers = [];
-        if (this.userMarker) { this.map.removeLayer(this.userMarker); this.userMarker = null; }
+        if (this.userMarker) { this.userMarker.remove(); this.userMarker = null; }
         const bar = document.getElementById('route-info-bar');
         if (bar) bar.remove();
     }
@@ -433,11 +623,11 @@ class BelgradeMap {
         const mapEl = document.getElementById('belgrade-map');
         if (mapEl) {
             mapEl.innerHTML = `
-                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:#f0f4ff;color:#1e3a8a;">
-                    <i class="fas fa-map-marked-alt" style="font-size:4rem;margin-bottom:1rem;opacity:0.5"></i>
+                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:#0f1e4d;color:#f4efe2;">
+                    <i class="fas fa-map-marked-alt" style="font-size:4rem;margin-bottom:1rem;opacity:0.6;color:#b8860b"></i>
                     <p style="font-size:1.2rem;font-weight:600">Map loading...</p>
                     <a href="https://www.openstreetmap.org/#map=14/44.8178/20.4568" target="_blank"
-                       style="margin-top:1rem;padding:0.75rem 2rem;background:#1e3a8a;color:white;border-radius:8px;text-decoration:none">
+                       style="margin-top:1rem;padding:0.75rem 2rem;background:linear-gradient(135deg,#b8860b,#ffd700);color:#14204a;font-weight:700;border-radius:8px;text-decoration:none">
                         View on OpenStreetMap</a>
                 </div>`;
         }
@@ -449,7 +639,7 @@ class BelgradeMap {
             #map-modal{display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center}
             #map-modal.active{display:flex}
             .map-modal__overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
-            .map-modal__container{position:relative;z-index:1;width:96vw;max-width:1200px;height:88vh;background:#fff;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 80px rgba(0,0,0,.5);animation:mapSlideIn .35s cubic-bezier(.34,1.56,.64,1)}
+            .map-modal__container{position:relative;z-index:1;width:96vw;max-width:1200px;height:88vh;background:#0a1128;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 80px rgba(0,0,0,.5);animation:mapSlideIn .35s cubic-bezier(.34,1.56,.64,1)}
             @keyframes mapSlideIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
             .map-modal__header{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;flex-shrink:0;flex-wrap:wrap}
             .map-modal__title{display:flex;align-items:center;gap:.75rem;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;flex:1}
@@ -460,25 +650,30 @@ class BelgradeMap {
             .map-filter:hover,.map-filter.active{background:#b8860b;border-color:#b8860b}
             .map-adventure-btn{background:linear-gradient(135deg,#b8860b,#d4a017);border:none;color:white;padding:.45rem 1.2rem;border-radius:20px;cursor:pointer;font-size:.85rem;font-family:'Poppins',sans-serif;font-weight:600;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap}
             .map-adventure-btn:hover{background:linear-gradient(135deg,#d4a017,#ffd700);transform:scale(1.05)}
+            .map-icon-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+            .map-icon-btn:hover{background:#b8860b;border-color:#b8860b}
+            .map-icon-btn.active{background:#b8860b;border-color:#ffd700;color:#14204a}
             .map-modal__close{background:rgba(255,255,255,.15);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;margin-left:auto}
             .map-modal__close:hover{background:rgba(255,255,255,.3)}
             .map-modal__body{display:flex;flex:1;overflow:hidden}
-            #belgrade-map{flex:1;min-height:0;z-index:1}
-            .map-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid #e5e7eb;background:#f8faff;overflow:hidden}
-            .map-sidebar__header{padding:1rem 1.25rem;font-weight:600;font-family:'Poppins',sans-serif;font-size:.9rem;color:#1e3a8a;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:.5rem;flex-shrink:0;background:white}
+            #belgrade-map{flex:1;min-height:0;z-index:1;background:#0a1128}
+            .map-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid rgba(184,134,11,.25);background:#0f1e4d;overflow:hidden}
+            .map-sidebar__header{padding:1rem 1.25rem;font-weight:600;font-family:'Poppins',sans-serif;font-size:.9rem;color:#ffd700;border-bottom:1px solid rgba(184,134,11,.25);display:flex;align-items:center;gap:.5rem;flex-shrink:0;background:#0a1128}
             .map-sidebar__list{overflow-y:auto;flex:1}
-            .sidebar-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s}
-            .sidebar-item:hover,.sidebar-item.active{background:#eff6ff}
-            .sidebar-item.active{border-left:3px solid #1e3a8a}
+            .sidebar-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s}
+            .sidebar-item:hover,.sidebar-item.active{background:rgba(184,134,11,.15)}
+            .sidebar-item.active{border-left:3px solid #ffd700}
             .sidebar-item__icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
             .sidebar-item__info{flex:1;min-width:0}
-            .sidebar-item__name{font-size:.85rem;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-            .sidebar-item__area{font-size:.75rem;color:#64748b}
-            .sidebar-item__rating{font-size:.75rem;color:#b8860b;font-weight:600;flex-shrink:0}
-            .map-custom-icon{background:none;border:none}
-            .map-pin{width:38px;height:38px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.8)}
+            .sidebar-item__name{font-size:.85rem;font-weight:600;color:#f4efe2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+            .sidebar-item__area{font-size:.75rem;color:#9aa8cc}
+            .sidebar-item__rating{font-size:.75rem;color:#ffd700;font-weight:600;flex-shrink:0}
+            .map-pin-wrap{position:relative;width:40px;height:48px;cursor:pointer}
+            .map-pin{position:absolute;left:1px;top:0;width:38px;height:38px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.85)}
             .map-pin span{transform:rotate(45deg);font-size:1rem;display:block}
-            .map-popup{font-family:'Poppins',sans-serif;min-width:200px}
+            .map-pin__pulse{position:absolute;left:9px;top:8px;width:22px;height:22px;border-radius:50%;opacity:.55;animation:mapPinPulse 2.2s ease-out infinite}
+            @keyframes mapPinPulse{0%{transform:scale(.6);opacity:.55}70%{transform:scale(2.1);opacity:0}100%{opacity:0}}
+            .map-popup{font-family:'Poppins',sans-serif;min-width:210px}
             .map-popup__type{display:inline-block;color:white;padding:.15rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;margin-bottom:.4rem}
             .map-popup__name{font-size:1.05rem;font-weight:700;color:#1e293b;margin:0 0 .4rem;font-family:'Playfair Display',serif}
             .map-popup__desc{font-size:.8rem;color:#64748b;margin:0 0 .6rem;line-height:1.4}
@@ -486,11 +681,16 @@ class BelgradeMap {
             .map-popup__rating{color:#b8860b;font-weight:600}
             .map-popup__price{background:#f0f4ff;padding:.1rem .5rem;border-radius:8px;color:#1e3a8a;font-weight:600}
             .map-popup__area{color:#64748b}
-            .map-popup__call{display:flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,#25d366,#128c7e);color:white;border:none;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;justify-content:center;transition:background .2s;cursor:pointer;font-family:'Poppins',sans-serif;width:100%}
+            .map-popup__actions{display:flex;gap:.5rem}
+            .map-popup__details{display:flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;border:none;padding:.5rem .8rem;border-radius:8px;font-size:.78rem;font-weight:600;justify-content:center;transition:filter .2s;cursor:pointer;font-family:'Poppins',sans-serif;flex:1}
+            .map-popup__details:hover{filter:brightness(1.1)}
+            .map-popup__call{display:flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#25d366,#128c7e);color:white;border:none;padding:.5rem .8rem;border-radius:8px;font-size:.78rem;font-weight:600;justify-content:center;transition:background .2s;cursor:pointer;font-family:'Poppins',sans-serif;flex:1}
             .map-popup__call:hover{background:linear-gradient(135deg,#128c7e,#075e54)}
-            .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.2)}
-            .leaflet-popup-content{margin:14px 16px}
-            .route-stop-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;font-family:'Poppins',sans-serif;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+            .maplibregl-popup-content{border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);padding:14px 16px}
+            .maplibregl-popup-close-button{font-size:1.1rem;color:#94a3b8;padding:4px 8px}
+            .maplibregl-ctrl-group{background:#0f1e4d!important;border:1px solid rgba(184,134,11,.3)!important}
+            .maplibregl-ctrl-group button{filter:invert(1) brightness(1.3)}
+            .route-stop-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;font-family:'Poppins',sans-serif;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
             #route-info-bar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.5rem;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;font-size:.85rem;font-family:'Poppins',sans-serif;gap:1rem;flex-shrink:0}
             .route-info-content{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;flex:1}
             .route-info-content i{color:#b8860b}
