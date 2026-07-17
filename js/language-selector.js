@@ -184,8 +184,8 @@ class LanguageSelector {
         const fallback = this.translations['en'] || {};
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
-            const text = lang[key] || fallback[key];
-            if (text) {
+            const text = key in lang ? lang[key] : fallback[key];
+            if (text !== undefined) {
                 if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                     element.placeholder = text;
                 } else if (element.tagName === 'OPTION') {

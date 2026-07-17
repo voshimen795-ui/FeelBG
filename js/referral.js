@@ -62,7 +62,9 @@
         var langCode = stored ? JSON.parse(stored).code : 'en';
         var lang = translations[langCode] || {};
         var fallback = translations['en'] || {};
-        return lang[key] || fallback[key] || key;
+        if (key in lang) return lang[key];
+        if (key in fallback) return fallback[key];
+        return key;
     }
 
     var ACTIVE_CODE_WINDOW_MS = 48 * 60 * 60 * 1000; // codes fall off the widget after 48h even if never redeemed

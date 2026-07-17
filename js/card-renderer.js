@@ -25,7 +25,9 @@ class CardRenderer {
         var langCode = stored ? JSON.parse(stored).code : 'en';
         var lang = translations[langCode] || {};
         var fallback = translations['en'] || {};
-        return lang[key] || fallback[key] || key;
+        if (key in lang) return lang[key];
+        if (key in fallback) return fallback[key];
+        return key;
     }
 
     static getTranslated(venue, field) {

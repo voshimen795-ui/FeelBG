@@ -6,7 +6,9 @@ function t(key) {
     const langCode = stored ? JSON.parse(stored).code : 'en';
     const lang = translations[langCode] || {};
     const fallback = translations['en'] || {};
-    return lang[key] || fallback[key] || key;
+    if (key in lang) return lang[key];
+    if (key in fallback) return fallback[key];
+    return key;
 }
 
 class PlaceFiltering {
@@ -131,7 +133,9 @@ class PlaceFiltering {
         var langCode = stored ? JSON.parse(stored).code : 'en';
         var lang = translations[langCode] || {};
         var fallback = translations['en'] || {};
-        return lang[key] || fallback[key] || key;
+        if (key in lang) return lang[key];
+        if (key in fallback) return fallback[key];
+        return key;
     }
 
     updateResultsCount(count) {
