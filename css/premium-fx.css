@@ -294,10 +294,11 @@ body {
     white-space: nowrap;
 }
 
-/* FeelBG in the hero uses the exact same shimmering gold texture as
-   the business cards, instead of a plain white word. */
+/* FeelBG in the hero: bright gold-yellow, not the darker bronze tone the
+   business cards use — this is a headline word, it needs to read as
+   vivid gold/yellow at a glance, not a muted metallic shimmer. */
 .hero-kinetic__brand {
-    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%);
+    background: linear-gradient(135deg, #ffd700 0%, #fff3b0 45%, #ffcc00 100%);
     background-size: 220% 220%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -643,6 +644,22 @@ body.hero-kinetic-done .hero-kinetic {
 .form__input option {
     background: #0f1e4d;
     color: #f4efe2;
+}
+
+/* Mobile browsers (iOS Safari, Chrome) paint autofilled/suggested fields
+   with their own white/yellow background that ignores normal CSS — this
+   is the standard override to force them to stay on-brand. */
+.form__input:-webkit-autofill,
+.form__input:-webkit-autofill:hover,
+.form__input:-webkit-autofill:focus,
+.newsletter-input:-webkit-autofill,
+.newsletter-input:-webkit-autofill:hover,
+.newsletter-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f4efe2 !important;
+    -webkit-box-shadow: 0 0 0 1000px #0f1e4d inset !important;
+    box-shadow: 0 0 0 1000px #0f1e4d inset !important;
+    caret-color: #f4efe2;
+    transition: background-color 9999s ease-in-out 0s;
 }
 
 .place-card__image {
