@@ -46,9 +46,9 @@
     bottom: 64px;
     right: 0;
     width: 300px;
-    background: #fff;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
     border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     padding: 0;
     opacity: 0;
     transform: translateY(12px) scale(0.95);
@@ -109,7 +109,7 @@
 .insider-tip-text {
     font-size: 0.9rem;
     line-height: 1.55;
-    color: #334155;
+    color: #f4efe2;
     margin: 0;
 }
 
@@ -122,20 +122,20 @@
     display: block;
     width: 100%;
     padding: 12px 16px;
-    background: #f8fafc;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%);
     border: none;
-    border-top: 1px solid #e2e8f0;
-    color: #1e3a8a;
-    font-weight: 600;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    color: #14204a;
+    font-weight: 700;
     font-size: 0.85rem;
     cursor: pointer;
     text-align: right;
-    transition: background 0.2s ease;
+    transition: filter 0.2s ease;
     font-family: 'Poppins', sans-serif;
 }
 
 .insider-tip-next:hover {
-    background: #eef2ff;
+    filter: brightness(1.08);
 }
 
 .insider-tip-next i {

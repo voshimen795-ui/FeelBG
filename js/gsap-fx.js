@@ -145,78 +145,13 @@
         }).to(panel, { clipPath: 'circle(150% at 50% 50%)', ease: 'power2.inOut' });
     }
 
-    /* ============================================
-       PHASE 4 — CHAR / WORD SPLIT SCRUB REVEAL
-       ============================================ */
-    function splitChars(el) {
-        var text = el.textContent;
-        if (!text.trim()) return [];
-        el.setAttribute('aria-label', text);
-        el.classList.add('split-char');
-        el.innerHTML = '';
-        var frag = document.createDocumentFragment();
-        Array.prototype.forEach.call(text, function (ch) {
-            var span = document.createElement('span');
-            span.className = 'char';
-            span.setAttribute('aria-hidden', 'true');
-            span.textContent = ch === ' ' ? ' ' : ch;
-            frag.appendChild(span);
-        });
-        el.appendChild(frag);
-        return Array.prototype.slice.call(el.querySelectorAll('.char'));
-    }
-
-    function splitWords(el) {
-        var text = el.textContent;
-        if (!text.trim()) return [];
-        el.setAttribute('aria-label', text);
-        el.classList.add('split-word');
-        el.innerHTML = '';
-        var parts = text.split(/(\s+)/);
-        parts.forEach(function (part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) {
-                el.appendChild(document.createTextNode(part));
-                return;
-            }
-            var span = document.createElement('span');
-            span.className = 'word';
-            span.textContent = part;
-            el.appendChild(span);
-        });
-        return Array.prototype.slice.call(el.querySelectorAll('.word'));
-    }
-
-    function initTextScrub() {
-        document.querySelectorAll('.js-split-chars').forEach(function (el) {
-            if (prefersReducedMotion) return;
-            var chars = splitChars(el);
-            if (!chars.length) return;
-            gsap.timeline({
-                scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
-            }).to(chars, {
-                opacity: 1, rotateX: 0, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.02
-            });
-        });
-
-        document.querySelectorAll('.js-split-words').forEach(function (el) {
-            if (prefersReducedMotion) return;
-            var words = splitWords(el);
-            if (!words.length) return;
-            gsap.timeline({
-                scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
-            }).to(words, {
-                opacity: 1, y: 0, rotateX: 0, duration: 0.7, ease: 'power3.out', stagger: 0.03
-            });
-        });
-    }
-
-    /* Safety net: split headings must never stay permanently invisible.
-       Late-loading images/fonts can shift the page after ScrollTrigger
-       measures its start positions, which can make a trigger miss its
-       window entirely. Re-measure once everything has settled, and as a
-       last resort force-reveal anything still hidden once it's already
-       on screen. */
+    /* Headings/paragraphs are shown as plain static text — no
+       char/word-split scroll animation. That system kept producing
+       hard-to-diagnose rendering bugs (text landing invisible or
+       oddly positioned depending on font/CDN/layout timing), so it's
+       removed rather than patched again. Section titles still get a
+       gold shimmer via CSS only (see .section__title in
+       premium-fx.css), which has no such failure mode. */
     function refreshAfterLoad() {
         window.addEventListener('load', function () {
             setTimeout(function () { ScrollTrigger.refresh(); }, 50);
@@ -226,21 +161,6 @@
         }
     }
 
-    function forceRevealStuckText() {
-        setInterval(function () {
-            document.querySelectorAll('.split-char, .split-word').forEach(function (el) {
-                var rect = el.getBoundingClientRect();
-                var onScreen = rect.top < window.innerHeight && rect.bottom > 0;
-                if (!onScreen) return;
-                var hidden = el.querySelectorAll('.char, .word');
-                hidden.forEach(function (span) {
-                    if (getComputedStyle(span).opacity === '0' && rect.top < window.innerHeight * 0.6) {
-                        gsap.to(span, { opacity: 1, rotateX: 0, y: 0, duration: 0.5, ease: 'power2.out' });
-                    }
-                });
-            });
-        }, 1500);
-    }
 
     /* ============================================
        HERO FLAG-LETTER WORD (SERBIA / SRBIJE)
@@ -285,8 +205,6 @@
         initKineticHero();
         initCardScatter();
         initMaskReveal();
-        initTextScrub();
         refreshAfterLoad();
-        forceRevealStuckText();
     });
 })();

@@ -192,15 +192,18 @@
             </div>
             
             <div class="hero__background">
-                <video class="hero__video" autoplay muted loop playsinline poster="assets/images/belgrade-by-night-4576220_1280.jpg">
-                    <source src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_30fps.mp4" type="video/mp4">
-                </video>
                 <div class="hero__slideshow">
+                    <!-- Fallback image shown until the first video starts playing, or if autoplay is blocked -->
                     <div class="hero__slide active" style="background-image: url('assets/images/belgrade-by-night-4576220_1280.jpg');"></div>
-                    <div class="hero__slide" style="background-image: url('assets/images/kalemegdan-fortress.jpg');"></div>
-                    <div class="hero__slide" style="background-image: url('assets/images/topcider-park.jpg');"></div>
-                    <div class="hero__slide" style="background-image: url('assets/images/ada-ciganlija.jpg');"></div>
-                    <div class="hero__slide" style="background-image: url('assets/images/wmremove-transformed (1).png');"></div>
+                    <!-- Video playlist: 4 real Belgrade clips (Pexels, free license) in an endless crossfade rotation -->
+                    <video class="hero__video" muted playsinline loop preload="auto"
+                        src="https://www.pexels.com/download/video/34432508/"></video>
+                    <video class="hero__video" muted playsinline loop preload="none"
+                        src="https://www.pexels.com/download/video/34432585/"></video>
+                    <video class="hero__video" muted playsinline loop preload="none"
+                        src="https://www.pexels.com/download/video/34432609/"></video>
+                    <video class="hero__video" muted playsinline loop preload="none"
+                        src="https://www.pexels.com/download/video/34432514/"></video>
                 </div>
                 <div class="hero__overlay"></div>
                 <div class="animated-shapes">
@@ -235,8 +238,8 @@
             <div class="container">
                 <div class="section__header belgrade-accent scroll-reveal">
                     <span class="section__subtitle" data-i18n="categories.subtitle">What to Explore</span>
-                    <h2 class="section__title js-split-chars" data-i18n="categories.title">Discover Belgrade</h2>
-                    <p class="section__description js-split-words" data-i18n="categories.description">
+                    <h2 class="section__title" data-i18n="categories.title">Discover Belgrade</h2>
+                    <p class="section__description" data-i18n="categories.description">
                         From world-class dining to vibrant nightlife - explore everything Belgrade has to offer
                     </p>
                 </div>
@@ -318,8 +321,8 @@
             <div class="container">
                 <div class="section__header scroll-reveal" data-aos="fade-up">
                     <span class="section__subtitle" data-i18n="gems.subtitle">Off the Beaten Path</span>
-                    <h2 class="section__title js-split-chars" data-i18n="gems.title">Belgrade's Hidden Gems</h2>
-                    <p class="section__description js-split-words" data-i18n="gems.description">
+                    <h2 class="section__title" data-i18n="gems.title">Belgrade's Hidden Gems</h2>
+                    <p class="section__description" data-i18n="gems.description">
                         Secret parks, quiet viewpoints, and nature escapes the guidebooks never mention
                     </p>
                 </div>
@@ -411,7 +414,7 @@
             <div class="container">
                 <div class="section__header" data-aos="fade-up">
                     <span class="section__subtitle" data-i18n="events.subtitle">What's Happening Now</span>
-                    <h2 class="section__title js-split-chars" data-i18n="events.title">Live Events & Belgrade News</h2>
+                    <h2 class="section__title" data-i18n="events.title">Live Events & Belgrade News</h2>
                     <p class="section__description" data-i18n="events.description">
                         Concerts, festivals, live music and the latest from the city that never stops
                     </p>
@@ -559,7 +562,7 @@
             <div class="container">
                 <div class="section__header" data-aos="fade-up">
                     <span class="section__subtitle">Get In Touch</span>
-                    <h2 class="section__title js-split-chars">Have Questions?</h2>
+                    <h2 class="section__title">Have Questions?</h2>
                     <p class="section__description">
                         We're here to help you plan the perfect Belgrade experience
                     </p>

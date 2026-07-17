@@ -7,29 +7,48 @@
 .hero-kinetic,
 .hero-kinetic__title,
 .card-scatter-stage .place-card,
-.split-char .char,
-.split-word .word,
 .mask-reveal__panel,
 .mask-reveal__circle {
     will-change: transform, opacity;
 }
 
 /* ============================================
-   HOME HERO VIDEO BACKGROUND
-   Sits above the fallback image slideshow (shown only if the
-   video fails to load) and below the gradient overlay/shapes/kinetic title.
+   HOME HERO VIDEO PLAYLIST
+   4 clips crossfade in an endless rotation (driven by the
+   HeroSlideshow class in js/script.js). The fallback image
+   stays visible underneath until the first clip starts playing,
+   or permanently if autoplay is blocked / reduced-motion is on.
    ============================================ */
 .hero__video {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero__video.active {
+    opacity: 1;
     z-index: 1;
 }
 
-.hero__slideshow {
-    z-index: 0;
+.hero__slide.active {
+    z-index: 2;
+}
+
+@media (max-width: 600px) {
+    .hero { min-height: 100svh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero__video { display: none; }
+    .hero__slide.active { opacity: 1; }
 }
 
 /* ============================================
@@ -72,16 +91,6 @@ body {
 
 .section__description {
     color: var(--page-text-secondary) !important;
-}
-
-/* .section__title uses background-clip:text + transparent text-fill-color
-   for its gradient. That transparent fill inherits down into the .char
-   spans the char-split reveal creates, which have no background of their
-   own to clip — leaving every letter invisible. Give the split chars an
-   explicit solid color so they're never see-through. */
-.section__title.split-char .char {
-    -webkit-text-fill-color: #ffd700;
-    color: #ffd700;
 }
 
 .mask-reveal__base-inner h2,
@@ -396,6 +405,168 @@ body.hero-kinetic-done .hero-kinetic {
     background: rgba(10, 17, 40, 0.28);
 }
 
+/* ============================================
+   GOLD CARDS EVERYWHERE
+   Every card-shaped surface on the site (category tiles,
+   hidden-gem cards, live-events cards) shares the same gold
+   texture as business cards/the modal, with dark-navy text.
+   ============================================ */
+.category__card {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%);
+}
+
+.category__card::before {
+    background: rgba(10, 17, 40, 0.18);
+}
+
+.category__card:hover::before {
+    background: rgba(10, 17, 40, 0.05);
+}
+
+.category__card,
+.category__title,
+.category__description {
+    color: #14204a;
+}
+
+.category__icon {
+    background: rgba(10, 17, 40, 0.18);
+}
+
+.category__card:hover .category__icon {
+    background: rgba(10, 17, 40, 0.28);
+}
+
+.category__count {
+    background: rgba(10, 17, 40, 0.2);
+    color: #14204a;
+}
+
+.gem-card,
+.event-slide__inner {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%) !important;
+}
+
+.gem-card__title,
+.event-title,
+.event-price {
+    color: #14204a !important;
+}
+
+.gem-card__desc,
+.event-desc,
+.gem-card__meta span {
+    color: rgba(20, 32, 74, 0.8) !important;
+}
+
+.gem-badge {
+    background: rgba(10, 17, 40, 0.85) !important;
+}
+
+.event-venue {
+    color: #14204a !important;
+}
+
+/* ============================================
+   GOLD / NAVY ONLY — BUTTONS + PLACEHOLDERS
+   No white backgrounds on interactive controls
+   anywhere on the site.
+   ============================================ */
+.filter-search {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+}
+
+.filter-search i {
+    color: #ffd700 !important;
+}
+
+.filter-search input {
+    color: #f4efe2 !important;
+}
+
+.filter-search input::placeholder {
+    color: rgba(244, 239, 226, 0.55) !important;
+}
+
+.filter-pill {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    color: #f4efe2 !important;
+}
+
+.filter-pill:hover {
+    border-color: #ffd700 !important;
+}
+
+.filter-pill.active {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%) !important;
+    color: #14204a !important;
+}
+
+.filter-select {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    color: #f4efe2 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.filter-select option {
+    background: #0f1e4d;
+    color: #f4efe2;
+}
+
+.view-btn {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    color: #f4efe2 !important;
+}
+
+.view-btn.active {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%) !important;
+    color: #14204a !important;
+}
+
+.place-card .btn-icon {
+    background: rgba(10, 17, 40, 0.3) !important;
+}
+
+.place-card__heart {
+    background: rgba(10, 17, 40, 0.35) !important;
+    color: #f4efe2;
+}
+
+.place-card__heart:hover {
+    background: #14204a !important;
+}
+
+/* Contact form (sits directly on the dark page background) */
+.form__input {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #f4efe2 !important;
+}
+
+.form__input:focus {
+    background: linear-gradient(160deg, #14204a 0%, #0a1128 100%) !important;
+    border-color: #ffd700 !important;
+}
+
+.form__input::placeholder {
+    color: rgba(244, 239, 226, 0.5);
+}
+
+.form__label {
+    color: rgba(244, 239, 226, 0.7);
+}
+
+.form__input:focus ~ .form__label,
+.form__input:not(:placeholder-shown) ~ .form__label {
+    background: #0a1128 !important;
+    color: #ffd700 !important;
+}
+
+.form__input option {
+    background: #0f1e4d;
+    color: #f4efe2;
+}
+
 .place-card__image {
     transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -441,29 +612,6 @@ body.hero-kinetic-done .hero-kinetic {
     justify-content: center;
     background: linear-gradient(135deg, #fdf6e3 0%, #ffffff 55%, #fff8e1 100%);
     clip-path: circle(0% at 50% 50%);
-}
-
-/* ============================================
-   PHASE 4 — CHAR / WORD SPLIT SCRUB REVEAL
-   ============================================ */
-.split-char,
-.split-word {
-    display: inline-block;
-    perspective: 600px;
-}
-
-.split-char .char {
-    display: inline-block;
-    opacity: 0;
-    transform: rotateX(-90deg) translateY(0.2em);
-    transform-origin: 50% 100%;
-}
-
-.split-word .word {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.6em) rotateX(-40deg);
-    transform-origin: 50% 100%;
 }
 
 /* ============================================
@@ -596,8 +744,6 @@ body.hero-kinetic-done .hero-kinetic {
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
     .hero-kinetic,
-    .split-char .char,
-    .split-word .word,
     .mask-reveal__panel,
     .place-card,
     .place-card__image,
