@@ -46,8 +46,26 @@ the changes to take effect — saving alone doesn't update the live web app.
 
 Each row: `Timestamp, Code, Venue, Action, Received At`. `Action` is one of
 `code_generated`, `whatsapp_booking_initiated`, `directions_clicked`,
-`voucher_viewed`, `qr_scan`. No names, phone numbers, or other personal data
-are ever sent — only the anonymous code, the venue name, and the action.
+`voucher_viewed`, `qr_scan`, `code_redeemed`. No names, phone numbers, or
+other personal data are ever sent — only the anonymous code, the venue name,
+and the action.
+
+## Redemption emails
+
+Every visitor who has an active code sees a small gold circle on every page
+of the site, which shows their code(s) again and lets them (or the venue
+staff) tap "Mark as Redeemed". The moment that happens, if this backend is
+deployed, `doPost` in `Code.gs` calls `MailApp.sendEmail(...)` and you get an
+email at `OWNER_EMAIL` (top of `Code.gs`, defaults to the address this build
+was requested from — change it if that's wrong) with the venue, the code,
+and the timestamp. This uses Apps Script's built-in `MailApp` — no extra
+setup, no API keys, and it's inside the free daily quota (100 emails/day on
+a plain Gmail account, which this use case won't come close to).
+
+Without this backend deployed, "Mark as Redeemed" still works — it clears
+the code from the visitor's badge and logs the event to their own browser —
+but you won't get an email, since a static site has no way to send one on
+its own.
 
 ## Per-venue QR codes / share links
 

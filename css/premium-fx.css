@@ -290,10 +290,26 @@ body {
     margin: 0;
     font-family: 'Cormorant Garamond', 'Playfair Display', serif;
     font-size: clamp(3rem, 13vw, 11rem);
-    color: #ffffff;
-    text-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     transform-origin: 50% 50%;
     white-space: nowrap;
+}
+
+/* FeelBG in the hero uses the exact same shimmering gold texture as
+   the business cards, instead of a plain white word. */
+.hero-kinetic__brand {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%);
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.45));
+}
+
+/* Brighten the flag-colored SERBIA / SRBIJE word without changing its
+   red/blue/white identity. */
+.hero__title-serbia .letter {
+    filter: brightness(1.35) saturate(1.15) drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
 }
 
 /* Fallback colors in case the Tailwind CDN script fails to load
@@ -563,6 +579,21 @@ body.hero-kinetic-done .hero-kinetic {
 .view-btn {
     background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
     color: #f4efe2 !important;
+}
+
+.newsletter-input {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    color: #f4efe2 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.newsletter-input::placeholder {
+    color: rgba(244, 239, 226, 0.55) !important;
+}
+
+.newsletter-input:focus {
+    border-color: #ffd700 !important;
+    outline: none;
 }
 
 .view-btn.active {
