@@ -233,8 +233,8 @@ window.FEELBG_VENUES = {
             badge: "topRated",
             description:
                 "Belgrade's Sea — river island paradise with beaches, sports and cafés",
-            lat: 44.7955,
-            lng: 20.421,
+            lat: 44.7833,
+            lng: 20.4,
             image: "assets/images/ada-ciganlija.jpg",
         },
         {
@@ -247,8 +247,8 @@ window.FEELBG_VENUES = {
             badge: "topRated",
             description:
                 "One of the largest Orthodox churches in the world with stunning gold mosaics",
-            lat: 44.7993,
-            lng: 20.4671,
+            lat: 44.7981,
+            lng: 20.4691,
             image: "assets/atractions/sveti.jpg",
         },
         {
@@ -261,8 +261,8 @@ window.FEELBG_VENUES = {
             badge: "popular",
             description:
                 "The world's only museum dedicated to inventor Nikola Tesla with interactive exhibits",
-            lat: 44.8085,
-            lng: 20.466,
+            lat: 44.8052,
+            lng: 20.4707,
             image: "assets/atractions/nidza.jpg",
         },
         {
@@ -288,8 +288,8 @@ window.FEELBG_VENUES = {
             badge: "popular",
             description:
                 "Millennium Tower with panoramic views of the Danube and old Zemun",
-            lat: 44.8427,
-            lng: 20.3974,
+            lat: 44.8483,
+            lng: 20.4097,
             image: "assets/atractions/gardos.jpg",
         },
         {
@@ -301,8 +301,8 @@ window.FEELBG_VENUES = {
             rating: 4.6,
             description:
                 "Serbia's largest museum with 400,000+ artifacts spanning 3,000 years",
-            lat: 44.8184,
-            lng: 20.4577,
+            lat: 44.8167,
+            lng: 20.4594,
             image: "assets/atractions/muzej nac.jpg",
         },
         {

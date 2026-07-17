@@ -259,6 +259,27 @@ class PlaceDetails {
         return 'restaurants';
     }
 
+    typeToPageType(type) {
+        const map = { restaurant: 'restaurants', cafe: 'cafes', nightlife: 'nightlife', attraction: 'attractions' };
+        return map[type] || 'restaurants';
+    }
+
+    showDetailsForVenue(venue) {
+        const pageType = this.typeToPageType(venue.type);
+        const card = document.createElement('div');
+        card.dataset.price = venue.priceLabel ? (venue.price || 'moderate') : 'none';
+        card.dataset.lat = venue.lat;
+        card.dataset.lng = venue.lng;
+        card.innerHTML = `
+            <div class="place-card__image" style="background-image:url('${venue.image || ''}')"></div>
+            <div class="place-card__rating"><i class="fas fa-star"></i> ${venue.rating || ''}</div>
+            <div class="place-card__location"><i class="fas fa-map-marker-alt"></i> ${venue.area || ''}</div>
+            <div class="place-card__description">${venue.desc || venue.description || ''}</div>
+            <div class="place-card__cuisine">${venue.cuisineLabel || ''}</div>
+        `;
+        this.showDetails(venue.name, card, pageType);
+    }
+
     findVenue(title) {
         const venues = window.FEELBG_VENUES;
         if (!venues) return null;
@@ -281,7 +302,7 @@ class PlaceDetails {
         return images.slice(0, 5);
     }
 
-    showDetails(title, card) {
+    showDetails(title, card, forcedPageType) {
         const rating = card.querySelector('.place-card__rating')?.textContent.trim() || '';
         const location = card.querySelector('.place-card__location')?.textContent.trim() || '';
         const description = card.querySelector('.place-card__description')?.textContent.trim() || '';
@@ -290,7 +311,7 @@ class PlaceDetails {
         const hours = this.hoursMap[priceLevel] || '10:00 – 23:00';
         const cuisine = card.querySelector('.place-card__cuisine')?.textContent.trim() || '';
 
-        const pageType = this.getPageType();
+        const pageType = forcedPageType || this.getPageType();
         const venue = this.findVenue(title);
 
         // Extract the venue's own image from the card's background image
@@ -422,5 +443,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window._placeFilteringInstance = new PlaceFiltering();
     new LoadMoreFeature();
     new MapToggle();
-    new PlaceDetails();
+    window._placeDetailsInstance = new PlaceDetails();
 });
