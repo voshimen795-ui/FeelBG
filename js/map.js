@@ -58,7 +58,9 @@ class BelgradeMap {
         const langCode = stored ? JSON.parse(stored).code : 'en';
         const lang = translations[langCode] || {};
         const fallback = translations['en'] || {};
-        return lang[key] || fallback[key] || key;
+        if (key in lang) return lang[key];
+        if (key in fallback) return fallback[key];
+        return key;
     }
 
     init() {

@@ -807,7 +807,24 @@ class HeroSlideshow {
 
 // ============================================
 // LIVE EVENTS DATE INITIALIZER
+// Each slide carries its real calendar date in data-event-date. The
+// displayed date and the "live / coming up / save the date" status are
+// both computed against *today's* real date, so the section never lies
+// about an event being "live tonight" once that date has passed — it
+// stays accurate for as long as the site is live, not just on the day
+// this was written.
 // ============================================
+
+function liveEventsT(key) {
+    const translations = window.FEELBG_TRANSLATIONS || {};
+    const stored = localStorage.getItem('feelbg_language');
+    const langCode = stored ? JSON.parse(stored).code : 'en';
+    const lang = translations[langCode] || {};
+    const fallback = translations['en'] || {};
+    if (key in lang) return lang[key];
+    if (key in fallback) return fallback[key];
+    return key;
+}
 
 class LiveEventsInit {
     constructor() {
@@ -815,21 +832,59 @@ class LiveEventsInit {
     }
 
     init() {
-        const today = new Date();
-        const fmt = (d) => d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+        const fmt = (d) => d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        const now = new Date();
+        const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-        const dates = [
-            fmt(today),
-            fmt(new Date(today.getTime() + 2 * 86400000)),
-            fmt(today),
-            fmt(new Date(today.getTime() + 4 * 86400000)),
-            fmt(new Date(today.getTime() + 86400000))
-        ];
+        let firstUpcomingRadioId = null;
 
-        dates.forEach((date, i) => {
-            const el = document.getElementById(`ev-date-${i + 1}`);
-            if (el) el.textContent = date;
+        document.querySelectorAll('.event-slide[data-event-date]').forEach((slide) => {
+            const eventDate = new Date(slide.dataset.eventDate + 'T00:00:00');
+            const index = slide.id.replace('slide-', '');
+            const dateEl = document.getElementById(`ev-date-${index}`);
+            if (dateEl) dateEl.textContent = fmt(eventDate);
+
+            const diffDays = Math.round((eventDate - todayMidnight) / 86400000);
+            const statusEl = slide.querySelector('.event-status');
+            const radio = document.getElementById(`b${index}`);
+            const thumb = document.querySelector(`label.events-thumb[for="b${index}"]`);
+            const dot = document.querySelector(`label.events-dot[for="b${index}"]`);
+
+            if (diffDays < 0) {
+                // Event has already happened — hide it from the live carousel
+                // instead of showing a stale "tonight!" claim for a past date.
+                slide.style.display = 'none';
+                if (radio) radio.style.display = 'none';
+                if (thumb) thumb.style.display = 'none';
+                if (dot) dot.style.display = 'none';
+                return;
+            }
+
+            if (!firstUpcomingRadioId && radio) firstUpcomingRadioId = radio.id;
+
+            if (statusEl) {
+                statusEl.className = 'event-status';
+                if (diffDays === 0) {
+                    statusEl.classList.add('live');
+                    statusEl.textContent = liveEventsT('events.status.live');
+                } else if (diffDays <= 21) {
+                    statusEl.classList.add('upcoming');
+                    statusEl.textContent = liveEventsT('events.status.soon');
+                } else {
+                    statusEl.classList.add('news');
+                    statusEl.textContent = liveEventsT('events.status.saveDate');
+                }
+            }
         });
+
+        // If the radio that's checked by default (slide 1) turned out to be a
+        // past event and got hidden above, jump the carousel to whichever
+        // slide is actually first in line instead of showing a blank frame.
+        const checkedRadio = document.querySelector('.events-carousel-wrapper input[name="control"]:checked');
+        if (firstUpcomingRadioId && (!checkedRadio || checkedRadio.style.display === 'none')) {
+            const target = document.getElementById(firstUpcomingRadioId);
+            if (target) target.checked = true;
+        }
     }
 }
 
