@@ -231,11 +231,7 @@ class PlaceDetails {
             nightlife: [
                 'assets/images/belgrade-by-night-4576220_1280.jpg'
             ],
-            attractions: [
-                'assets/images/kalemegdan-fortress.jpg',
-                'assets/images/topcider-park.jpg',
-                'assets/images/ada-ciganlija.jpg'
-            ]
+            attractions: []
         };
         this.init();
     }
