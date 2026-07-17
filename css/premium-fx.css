@@ -294,17 +294,19 @@ body {
     white-space: nowrap;
 }
 
-/* FeelBG in the hero: bright gold-yellow, not the darker bronze tone the
-   business cards use — this is a headline word, it needs to read as
-   vivid gold/yellow at a glance, not a muted metallic shimmer. */
+/* FeelBG in the hero: a clean top-to-bottom metallic gold gradient with
+   no inner shading — text-shadow is reset because it's inherited from
+   .hero-kinetic__title and was reading as a dark inset/overlay on top of
+   the transparent glyph fill. Only a soft outer drop-shadow remains, to
+   separate the word from the video background. */
 .hero-kinetic__brand {
-    background: linear-gradient(135deg, #ffd700 0%, #fff3b0 45%, #ffcc00 100%);
-    background-size: 220% 220%;
+    background: linear-gradient(to bottom, #FFF2B3 0%, #F5D76E 25%, #D4AF37 50%, #B8860B 75%, #8B6A00 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.45));
+    text-shadow: none !important;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
 }
 
 /* Brighten the flag-colored SERBIA / SRBIJE word without changing its
@@ -613,6 +615,32 @@ body.hero-kinetic-done .hero-kinetic {
 
 .place-card__heart:hover {
     background: #14204a !important;
+}
+
+/* Contact info cards (Location / Reservations / Email / Support Hours) —
+   same gold texture as the business cards instead of plain white. */
+.contact__item {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%) !important;
+}
+
+.contact__details h4 {
+    color: #14204a !important;
+}
+
+.contact__details p {
+    color: rgba(20, 32, 74, 0.75) !important;
+}
+
+/* Contact form panel — gold instead of white, submit button switched to
+   Royal Blue so it doesn't blend into the now-gold panel around it. */
+.contact__form {
+    background: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%) !important;
+}
+
+.contact__form button[type="submit"] {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4) !important;
 }
 
 /* Contact form (sits directly on the dark page background) */
