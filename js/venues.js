@@ -31,7 +31,7 @@ window.FEELBG_VENUES = {
                 "Exclusive boutique restaurant in the heart of Belgrade's center",
             lat: 44.8190,
             lng: 20.4600,
-            image: "assets/images/restorani/dekstop.jpg",
+            image: "assets/images/restorani/butik3.jpg",
         },
         {
             name: "Zlatni Bokal",
@@ -93,7 +93,7 @@ window.FEELBG_VENUES = {
                 "Wine-focused restaurant with contemporary Serbian dishes",
             lat: 44.8065,
             lng: 20.423,
-            image: "assets/images/restorani/bay.jpg",
+            image: "assets/images/restorani/suvinjon.jpg",
         },
         {
             name: "Dva Jelena",
@@ -174,7 +174,7 @@ window.FEELBG_VENUES = {
                 "Premier nightclub at Belgrade Waterfront with top electronic DJs",
             lat: 44.8148,
             lng: 20.4480,
-            image: "assets/images/belgrade-by-night-4576220_1280.jpg",
+            image: "assets/images/money-club.jpg",
         },
         {
             name: "Lasta",

@@ -11,6 +11,10 @@
 var SHEET_NAME = 'Referrals';
 var DASHBOARD_KEY = 'change-me-to-a-private-key';
 
+// Where redemption notifications go. Change this if needed — it defaults to
+// the address that requested this build.
+var OWNER_EMAIL = 'voshimen795@gmail.com';
+
 function getSheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME);
@@ -21,12 +25,32 @@ function getSheet_() {
   return sheet;
 }
 
+function notifyOwnerOfRedemption_(body) {
+  if (!OWNER_EMAIL) return;
+  var venue = body.venue || '(unknown venue)';
+  var code = body.code || '(unknown code)';
+  var when = body.ts ? new Date(body.ts) : new Date();
+  var subject = 'FeelBG: code ' + code + ' redeemed at ' + venue;
+  var message = 'A referral code was just marked as redeemed.\n\n' +
+    'Venue: ' + venue + '\n' +
+    'Code: ' + code + '\n' +
+    'Redeemed at: ' + when.toString() + '\n\n' +
+    'This is for your commission records — see the full log in your ' +
+    'Referrals sheet or at /partner-report.html.';
+  try {
+    MailApp.sendEmail(OWNER_EMAIL, subject, message);
+  } catch (err) {
+    // Swallow — a failed notification shouldn't fail the logging request.
+  }
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
     var sheet = getSheet_();
     var ts = body.ts ? new Date(body.ts) : new Date();
     sheet.appendRow([ts, body.code || '', body.venue || '', body.action || '', new Date()]);
+    if (body.action === 'code_redeemed') notifyOwnerOfRedemption_(body);
     return ContentService.createTextOutput(JSON.stringify({ ok: true }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {

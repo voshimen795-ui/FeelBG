@@ -71,13 +71,14 @@ footer a{color:var(--gold-light);}
 <script>
 'use strict';
 (function () {
-  var ACTIONS = ['qr_scan', 'code_generated', 'whatsapp_booking_initiated', 'directions_clicked', 'voucher_viewed'];
+  var ACTIONS = ['qr_scan', 'code_generated', 'whatsapp_booking_initiated', 'directions_clicked', 'voucher_viewed', 'code_redeemed'];
   var ACTION_LABELS = {
     qr_scan: 'QR / Link Scans',
     code_generated: 'Codes Generated',
     whatsapp_booking_initiated: 'WhatsApp Bookings',
     directions_clicked: 'Directions Clicks',
-    voucher_viewed: 'Vouchers Viewed'
+    voucher_viewed: 'Vouchers Viewed',
+    code_redeemed: 'Codes Redeemed'
   };
 
   var rows = [];
@@ -148,7 +149,7 @@ footer a{color:var(--gold-light);}
 
   function renderTotals() {
     var fr = filteredRows();
-    var counts = { qr_scan: 0, code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0 };
+    var counts = { qr_scan: 0, code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0, code_redeemed: 0 };
     fr.forEach(function (r) { if (counts[r.action] !== undefined) counts[r.action]++; });
     var venues = {};
     fr.forEach(function (r) { if (r.venue) venues[r.venue] = true; });
@@ -169,15 +170,15 @@ footer a{color:var(--gold-light);}
     var byVenue = {};
     fr.forEach(function (r) {
       if (!r.venue) return;
-      byVenue[r.venue] = byVenue[r.venue] || { code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0, codes: {} };
+      byVenue[r.venue] = byVenue[r.venue] || { code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0, code_redeemed: 0, codes: {} };
       if (byVenue[r.venue][r.action] !== undefined) byVenue[r.venue][r.action]++;
       if (r.code) byVenue[r.venue].codes[r.code] = true;
     });
     var venueNames = Object.keys(byVenue).sort();
-    var html = '<table><thead><tr><th>Venue</th><th>Unique Codes</th><th>WhatsApp Bookings</th><th>Directions Clicks</th><th>Vouchers Viewed</th></tr></thead><tbody>';
+    var html = '<table><thead><tr><th>Venue</th><th>Unique Codes</th><th>WhatsApp Bookings</th><th>Directions Clicks</th><th>Vouchers Viewed</th><th>Redeemed</th></tr></thead><tbody>';
     venueNames.forEach(function (v) {
       var d = byVenue[v];
-      html += '<tr><td class="venue-name">' + escapeHtml(v) + '</td><td>' + Object.keys(d.codes).length + '</td><td>' + d.whatsapp_booking_initiated + '</td><td>' + d.directions_clicked + '</td><td>' + d.voucher_viewed + '</td></tr>';
+      html += '<tr><td class="venue-name">' + escapeHtml(v) + '</td><td>' + Object.keys(d.codes).length + '</td><td>' + d.whatsapp_booking_initiated + '</td><td>' + d.directions_clicked + '</td><td>' + d.voucher_viewed + '</td><td>' + d.code_redeemed + '</td></tr>';
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
