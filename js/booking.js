@@ -185,7 +185,10 @@ class BookingChatbot {
         const inputArea = document.getElementById('bcb-input-area');
         inputArea.style.display = 'none';
 
-        const msg = `${this.t('chatbot.reservationFor')} ${this.answers.venue}\n${this.t('chatbot.guests')}: ${this.answers.guests}\n${this.t('chatbot.time')}: ${this.answers.time}\n${this.t('chatbot.requests')}: ${this.answers.requests}`;
+        this.referralCode = window.FeelBGReferral ? window.FeelBGReferral.getOrCreateCode(this.answers.venue) : null;
+
+        let msg = `${this.t('chatbot.reservationFor')} ${this.answers.venue}\n${this.t('chatbot.guests')}: ${this.answers.guests}\n${this.t('chatbot.time')}: ${this.answers.time}\n${this.t('chatbot.requests')}: ${this.answers.requests}`;
+        if (this.referralCode) msg = window.FeelBGReferral.buildWhatsAppMessage(msg, this.referralCode);
         const encoded = encodeURIComponent(msg);
         const waUrl = `https://wa.me/${this.whatsappNumber}?text=${encoded}`;
 
@@ -200,11 +203,44 @@ class BookingChatbot {
                 `<div class="bcb-summary-row"><i class="fas fa-clock"></i> ${this.answers.time}</div>` +
                 `<div class="bcb-summary-row"><i class="fas fa-comment"></i> ${this.answers.requests}</div>` +
                 `</div>` +
-                `<a href="${waUrl}" target="_blank" rel="noopener" class="bcb-whatsapp-btn">` +
-                `<i class="fab fa-whatsapp"></i> ${this.t('chatbot.sendWhatsApp')}</a>`,
+                `<div class="bcb-summary-actions">` +
+                `<a href="${waUrl}" target="_blank" rel="noopener" class="bcb-whatsapp-btn" id="bcb-wa-link">` +
+                `<i class="fab fa-whatsapp"></i> ${this.t('chatbot.sendWhatsApp')}</a>` +
+                (this.referralCode ? `<button class="bcb-voucher-btn" id="bcb-voucher-btn"><i class="fas fa-ticket-alt"></i> ${this.t('voucher.button')}</button>` : '') +
+                `</div>`,
                 'bot'
             );
+            document.getElementById('bcb-wa-link')?.addEventListener('click', () => {
+                if (window.FeelBGReferral) window.FeelBGReferral.track('whatsapp_booking_initiated', this.answers.venue, this.referralCode);
+            });
+            document.getElementById('bcb-voucher-btn')?.addEventListener('click', () => this.showVoucher());
         }, 500);
+    }
+
+    showVoucher() {
+        if (window.FeelBGReferral) window.FeelBGReferral.track('voucher_viewed', this.answers.venue, this.referralCode);
+        const existing = document.getElementById('bcb-voucher-overlay');
+        if (existing) existing.remove();
+        const dateStr = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        const overlay = document.createElement('div');
+        overlay.id = 'bcb-voucher-overlay';
+        overlay.innerHTML = `
+            <div class="bcb-voucher-backdrop"></div>
+            <div class="bcb-voucher-card">
+                <div class="bcb-voucher-brand">Feel<span>BG</span></div>
+                <div class="bcb-voucher-heading">${this.t('voucher.title')}</div>
+                <div class="bcb-voucher-venue">${this.answers.venue}</div>
+                <div class="bcb-voucher-code">${this.referralCode || ''}</div>
+                <div class="bcb-voucher-date"><i class="fas fa-calendar-day"></i> ${dateStr}</div>
+                <div class="bcb-voucher-perk"><i class="fas fa-glass-cheers"></i> ${this.t('voucher.perk')}</div>
+                <div class="bcb-voucher-note">${this.t('voucher.subtitle')}</div>
+                <button class="bcb-voucher-close" id="bcb-voucher-close">${this.t('voucher.close')}</button>
+            </div>`;
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => overlay.classList.add('bcb-voucher-open'));
+        const close = () => { overlay.classList.remove('bcb-voucher-open'); setTimeout(() => overlay.remove(), 250); };
+        overlay.querySelector('.bcb-voucher-backdrop').addEventListener('click', close);
+        overlay.querySelector('#bcb-voucher-close').addEventListener('click', close);
     }
 
     injectStyles() {
@@ -242,9 +278,29 @@ class BookingChatbot {
 .bcb-summary{background:#fff;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #b8860b}
 .bcb-summary-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px}
 .bcb-summary-row i{color:#b8860b;width:16px;text-align:center}
-.bcb-whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:12px 20px;background:#25d366;color:#fff!important;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;transition:background .2s}
+.bcb-summary-actions{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.bcb-whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;background:#25d366;color:#fff!important;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;transition:background .2s}
 .bcb-whatsapp-btn:hover{background:#1da851}
 .bcb-whatsapp-btn i{font-size:20px}
+.bcb-voucher-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:filter .2s;font-family:'Poppins',sans-serif}
+.bcb-voucher-btn:hover{filter:brightness(1.1)}
+#bcb-voucher-overlay{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+#bcb-voucher-overlay.bcb-voucher-open{opacity:1;pointer-events:auto}
+.bcb-voucher-backdrop{position:absolute;inset:0;background:rgba(10,17,40,.75);backdrop-filter:blur(6px)}
+.bcb-voucher-card{position:relative;width:320px;max-width:88vw;background:linear-gradient(160deg,#0f1e4d 0%,#0a1128 100%);border:1px solid rgba(184,134,11,.4);border-radius:20px;padding:32px 26px 26px;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.5);transform:translateY(20px) scale(.95);transition:transform .25s;font-family:'Poppins',sans-serif;color:#f4efe2}
+#bcb-voucher-overlay.bcb-voucher-open .bcb-voucher-card{transform:translateY(0) scale(1)}
+.bcb-voucher-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#f4efe2;margin-bottom:14px;letter-spacing:.02em}
+.bcb-voucher-brand span{color:#ffd700}
+.bcb-voucher-heading{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#9aa8cc;margin-bottom:10px}
+.bcb-voucher-venue{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:16px;color:#fff}
+.bcb-voucher-code{font-family:'Poppins',sans-serif;font-size:26px;font-weight:800;letter-spacing:.06em;color:#14204a;background:linear-gradient(135deg,#b8860b 0%,#ffd700 100%);border-radius:10px;padding:12px 10px;margin-bottom:16px}
+.bcb-voucher-date{font-size:13px;color:#c9d2ec;margin-bottom:8px}
+.bcb-voucher-date i{color:#b8860b;margin-right:6px}
+.bcb-voucher-perk{font-size:13px;color:#ffd700;font-weight:600;margin-bottom:14px}
+.bcb-voucher-perk i{margin-right:6px}
+.bcb-voucher-note{font-size:12px;color:#9aa8cc;margin-bottom:18px;line-height:1.5}
+.bcb-voucher-close{width:100%;padding:11px;border:1px solid rgba(184,134,11,.4);background:transparent;color:#f4efe2;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:background .2s}
+.bcb-voucher-close:hover{background:rgba(184,134,11,.15)}
 @media(max-width:480px){.bcb-container{width:100%;max-width:100%;height:100%;max-height:100%;border-radius:0}}
 .btn-reserve{color:#25d366!important;border-color:#25d366!important}
 .btn-reserve:hover{background:#25d366!important;color:#fff!important}
