@@ -885,6 +885,26 @@ class LiveEventsInit {
             const target = document.getElementById(firstUpcomingRadioId);
             if (target) target.checked = true;
         }
+
+        this.bindNavButtons();
+    }
+
+    bindNavButtons() {
+        const prevBtn = document.getElementById('events-prev');
+        const nextBtn = document.getElementById('events-next');
+        if (!prevBtn || !nextBtn) return;
+
+        const go = (delta) => {
+            const radios = Array.from(document.querySelectorAll('.events-carousel-wrapper input[name="control"]'))
+                .filter((r) => r.style.display !== 'none');
+            if (!radios.length) return;
+            const currentIndex = radios.findIndex((r) => r.checked);
+            const nextIndex = (currentIndex + delta + radios.length) % radios.length;
+            radios[nextIndex].checked = true;
+        };
+
+        prevBtn.addEventListener('click', () => go(-1));
+        nextBtn.addEventListener('click', () => go(1));
     }
 }
 
