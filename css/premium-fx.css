@@ -51,6 +51,22 @@
     .hero__slide.active { opacity: 1; }
 }
 
+/* Hero overlay — lightened ~45% from the original
+   rgba(30,58,138,.95) -> rgba(184,134,11,.85) gradient so the video
+   actually reads through, while still adding enough depth for text
+   contrast. Scoped to the hero only — the shared --gradient-overlay
+   variable (preloader, newsletter, etc.) is untouched. Text shadow
+   is restored (hero-fullscreen.css disables it) since a lighter
+   overlay alone isn't enough contrast for the heading. */
+.hero__background::before {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(184, 134, 11, 0.45) 100%) !important;
+}
+
+.hero__title,
+.hero-kinetic__title {
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
 /* ============================================
    LUXURY DARK-NAVY + GOLD THEME
    Page chrome only — component cards (place-card,
@@ -198,9 +214,40 @@ body {
     color: #0f1e4d !important;
 }
 
-.footer__trust i,
-.footer-logo-section .logo-accent {
+.footer__trust i {
     color: #0f1e4d !important;
+}
+
+/* Footer wordmark: "Feel" in navy, "BG" as the bronze-gold accent,
+   with a small gold underline beneath — plus the tagline in Poppins
+   (already the site's default body font). */
+.footer-logo-section .footer__title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.65rem;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+}
+
+.footer-logo-section .footer__title::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    bottom: 0;
+    width: 46px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #b8860b, #ffd700);
+}
+
+.footer-logo-section .logo-accent {
+    color: #b8860b !important;
+    font-weight: 800;
+}
+
+.footer-logo-section .footer__text {
+    font-family: 'Poppins', sans-serif;
+    max-width: 320px;
 }
 
 .footer__bottom {

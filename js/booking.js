@@ -65,6 +65,7 @@ class BookingChatbot {
                 </div>
             </div>`;
         document.body.appendChild(modal);
+        this.modalEl = modal;
         requestAnimationFrame(() => modal.classList.add('bcb-open'));
         this.messagesEl = document.getElementById('bcb-messages');
         this.inputEl = document.getElementById('bcb-input');
@@ -72,6 +73,11 @@ class BookingChatbot {
         modal.querySelector('.bcb-close').addEventListener('click', () => this.close());
         document.getElementById('bcb-send').addEventListener('click', () => this.handleSend());
         this.inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') this.handleSend(); });
+        // The keyboard opening on mobile is what caused the container to jump
+        // and hide the newest message — re-anchor scroll on focus too, not
+        // just when a message is added.
+        this.inputEl.addEventListener('focus', () => this.scrollToBottom());
+        this.bindViewportHandling();
         this.askNext();
     }
 
@@ -81,6 +87,41 @@ class BookingChatbot {
             modal.classList.remove('bcb-open');
             setTimeout(() => modal.remove(), 300);
         }
+        this.unbindViewportHandling();
+    }
+
+    // Keeps the modal sized to the *visual* viewport (not the layout
+    // viewport), so when the on-screen keyboard opens on mobile the chat
+    // shrinks to fit instead of getting pushed off-screen — the input and
+    // the newest message both stay visible.
+    bindViewportHandling() {
+        if (!window.visualViewport || !this.modalEl) return;
+        const vv = window.visualViewport;
+        const apply = () => {
+            this.modalEl.style.height = vv.height + 'px';
+            this.modalEl.style.top = vv.offsetTop + 'px';
+            this.scrollToBottom();
+        };
+        apply();
+        vv.addEventListener('resize', apply);
+        vv.addEventListener('scroll', apply);
+        this._vvApply = apply;
+    }
+
+    unbindViewportHandling() {
+        if (!window.visualViewport || !this._vvApply) return;
+        window.visualViewport.removeEventListener('resize', this._vvApply);
+        window.visualViewport.removeEventListener('scroll', this._vvApply);
+        this._vvApply = null;
+    }
+
+    scrollToBottom() {
+        if (!this.messagesEl) return;
+        // rAF so we measure scrollHeight after the browser has laid out
+        // whatever just changed (new message, keyboard resize, etc.)
+        requestAnimationFrame(() => {
+            this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
+        });
     }
 
     addMessage(text, sender) {
@@ -88,7 +129,21 @@ class BookingChatbot {
         div.className = `bcb-msg bcb-msg--${sender}`;
         div.innerHTML = text;
         this.messagesEl.appendChild(div);
-        this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
+        this.scrollToBottom();
+    }
+
+    showTyping() {
+        const div = document.createElement('div');
+        div.className = 'bcb-msg bcb-msg--bot bcb-typing';
+        div.id = 'bcb-typing-indicator';
+        div.innerHTML = '<span class="bcb-typing-dot"></span><span class="bcb-typing-dot"></span><span class="bcb-typing-dot"></span>';
+        this.messagesEl.appendChild(div);
+        this.scrollToBottom();
+    }
+
+    hideTyping() {
+        const el = document.getElementById('bcb-typing-indicator');
+        if (el) el.remove();
     }
 
     askNext() {
@@ -97,10 +152,12 @@ class BookingChatbot {
             this.t('chatbot.q2'),
             this.t('chatbot.q3')
         ];
+        this.showTyping();
         setTimeout(() => {
+            this.hideTyping();
             this.addMessage(questions[this.step], 'bot');
             this.inputEl.focus();
-        }, 400);
+        }, 700);
     }
 
     handleSend() {
@@ -132,7 +189,9 @@ class BookingChatbot {
         const encoded = encodeURIComponent(msg);
         const waUrl = `https://wa.me/${this.whatsappNumber}?text=${encoded}`;
 
+        this.showTyping();
         setTimeout(() => {
+            this.hideTyping();
             this.addMessage(
                 `${this.t('chatbot.summary')}<br><br>` +
                 `<div class="bcb-summary">` +
@@ -155,27 +214,32 @@ class BookingChatbot {
         style.textContent = `
 #booking-chatbot-modal{position:fixed;top:0;left:0;width:100%;height:100%;z-index:100000;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
 #booking-chatbot-modal.bcb-open{opacity:1}
-.bcb-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
-.bcb-container{position:relative;width:380px;max-width:92vw;height:520px;max-height:85vh;background:#fff;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);transform:translateY(30px) scale(.95);transition:transform .3s}
+.bcb-overlay{position:absolute;inset:0;background:rgba(10,17,40,.65);backdrop-filter:blur(4px)}
+.bcb-container{position:relative;width:380px;max-width:92vw;height:520px;max-height:85vh;background:#faf8f4;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(10,17,40,.4);transform:translateY(30px) scale(.95);transition:transform .3s;font-family:'Poppins',sans-serif}
 .bcb-open .bcb-container{transform:translateY(0) scale(1)}
-.bcb-header{background:linear-gradient(135deg,#1e3a8a,#2d4ea0);color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between}
+.bcb-header{background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .bcb-header-info{display:flex;align-items:center;gap:12px}
-.bcb-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.bcb-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid #ffd700;box-shadow:0 0 0 3px rgba(255,215,0,.2);display:flex;align-items:center;justify-content:center;font-size:17px;color:#ffd700;flex-shrink:0}
 .bcb-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
-.bcb-subtitle{font-size:12px;opacity:.8;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcb-subtitle{font-size:12px;opacity:.85;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bcb-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px 8px;line-height:1;opacity:.8}
 .bcb-close:hover{opacity:1}
-.bcb-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f0f2f5}
-.bcb-msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;animation:bcbFadeIn .3s}
-.bcb-msg--bot{align-self:flex-start;background:#fff;color:#1a1a1a;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.bcb-msg--user{align-self:flex-end;background:linear-gradient(135deg,#1e3a8a,#2d4ea0);color:#fff;border-bottom-right-radius:4px}
+.bcb-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f2eee4;min-height:0}
+.bcb-msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;font-family:'Poppins',sans-serif;animation:bcbFadeIn .3s}
+.bcb-msg--bot{align-self:flex-start;background:#fffdf9;color:#1f2937;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(10,17,40,.1)}
+.bcb-msg--user{align-self:flex-end;background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);color:#fff;border-bottom-right-radius:4px}
 @keyframes bcbFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.bcb-input-area{display:flex;padding:12px;gap:8px;background:#fff;border-top:1px solid #e5e7eb}
-.bcb-input{flex:1;border:1px solid #d1d5db;border-radius:24px;padding:10px 16px;font-size:14px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif}
+.bcb-typing{display:flex;gap:5px;align-items:center;padding:14px 16px}
+.bcb-typing-dot{width:7px;height:7px;border-radius:50%;background:#b8860b;animation:bcbTypingBounce 1.2s infinite ease-in-out}
+.bcb-typing-dot:nth-child(2){animation-delay:.15s}
+.bcb-typing-dot:nth-child(3){animation-delay:.3s}
+@keyframes bcbTypingBounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+.bcb-input-area{display:flex;padding:12px;gap:8px;background:#fffdf9;border-top:1px solid rgba(184,134,11,.2);flex-shrink:0}
+.bcb-input{flex:1;border:1px solid #d9d2c2;border-radius:24px;padding:10px 16px;font-size:14px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif;background:#fff;color:#1f2937}
 .bcb-input:focus{border-color:#1e3a8a}
-.bcb-send{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#1e3a8a,#2d4ea0);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .15s}
+.bcb-send{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#b8860b 0%,#ffd700 100%);color:#14204a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:transform .15s}
 .bcb-send:hover{transform:scale(1.1)}
-.bcb-summary{background:#f8f9fa;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #b8860b}
+.bcb-summary{background:#fff;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #b8860b}
 .bcb-summary-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px}
 .bcb-summary-row i{color:#b8860b;width:16px;text-align:center}
 .bcb-whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:12px 20px;background:#25d366;color:#fff!important;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;transition:background .2s}
