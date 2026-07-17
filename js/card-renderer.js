@@ -67,7 +67,7 @@ class CardRenderer {
                     <p class="place-card__description">' + desc + '</p>\
                     ' + priceHtml + '\
                     <div class="place-card__footer">\
-                        <button class="btn-icon" title="' + this.t('ui.directions') + '"><i class="fas fa-directions"></i></button>\
+                        <button class="btn-icon btn-directions" title="' + this.t('ui.directions') + '"><i class="fas fa-directions"></i></button>\
                         ' + reserveHtml + '\
                         <button class="btn-details">' + this.t('ui.details') + ' <i class="fas fa-arrow-right"></i></button>\
                     </div>\

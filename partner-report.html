@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FeelBG · Partner Referral Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<style>
+:root{--navy:#0a1128;--navy-2:#0f1e4d;--royal:#1e3a8a;--gold:#b8860b;--gold-light:#ffd700;--cream:#f4efe2;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at 20% 0%,#132456 0%,var(--navy) 55%);color:var(--cream);min-height:100vh;padding:32px 20px 60px;}
+.wrap{max-width:1100px;margin:0 auto;}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;}
+.brand{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:800;}
+.brand span{color:var(--gold-light);}
+.subtitle{font-size:.85rem;color:#9aa8cc;margin-top:4px;}
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:.5rem 1rem;border-radius:20px;font-size:.8rem;font-weight:600;}
+.status-pill.remote{background:rgba(37,211,102,.15);color:#5fe08a;border:1px solid rgba(95,224,138,.3);}
+.status-pill.local{background:rgba(184,134,11,.15);color:var(--gold-light);border:1px solid rgba(184,134,11,.35);}
+.status-pill.error{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(252,165,165,.3);}
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:24px;}
+select,button.tool-btn{font-family:'Poppins',sans-serif;font-size:.85rem;padding:.55rem 1rem;border-radius:10px;border:1px solid rgba(184,134,11,.35);background:var(--navy-2);color:var(--cream);cursor:pointer;}
+button.tool-btn{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-light) 100%);color:#14204a;font-weight:700;border:none;}
+button.tool-btn:hover{filter:brightness(1.08);}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+.total-card{background:var(--navy-2);border:1px solid rgba(184,134,11,.25);border-radius:14px;padding:18px;}
+.total-card .num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;color:var(--gold-light);}
+.total-card .label{font-size:.78rem;color:#9aa8cc;margin-top:4px;text-transform:uppercase;letter-spacing:.06em;}
+table{width:100%;border-collapse:collapse;background:var(--navy-2);border-radius:14px;overflow:hidden;border:1px solid rgba(184,134,11,.2);}
+thead th{background:linear-gradient(135deg,var(--royal),#2d5be3);color:#fff;text-align:left;padding:12px 16px;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;}
+tbody td{padding:12px 16px;font-size:.88rem;border-top:1px solid rgba(255,255,255,.06);}
+tbody tr:hover{background:rgba(184,134,11,.08);}
+.venue-name{font-weight:600;color:#fff;}
+.empty-state{text-align:center;padding:60px 20px;color:#9aa8cc;}
+.empty-state i{font-size:2.5rem;color:var(--gold);margin-bottom:14px;display:block;}
+footer{margin-top:40px;font-size:.75rem;color:#6b7aa3;text-align:center;line-height:1.6;}
+footer a{color:var(--gold-light);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">Feel<span>BG</span> Partner Report</div>
+      <div class="subtitle">Referral attribution by venue — for commission reconciliation</div>
+    </div>
+    <div id="status-pill" class="status-pill local"><i class="fas fa-circle-notch fa-spin"></i> Loading…</div>
+  </header>
+
+  <div class="toolbar">
+    <select id="month-select"></select>
+    <button class="tool-btn" id="refresh-btn"><i class="fas fa-rotate"></i> Refresh</button>
+    <button class="tool-btn" id="export-btn"><i class="fas fa-file-csv"></i> Export CSV</button>
+  </div>
+
+  <div class="totals" id="totals"></div>
+
+  <div id="table-wrap"></div>
+
+  <footer>
+    Unlisted internal report — no login required, don't link this page publicly.<br>
+    Reading from: <span id="source-detail">—</span>. Set up cross-device logging in
+    <code>referral-backend/README.md</code>.
+  </footer>
+</div>
+
+<script src="js/referral-config.js"></script>
+<script>
+'use strict';
+(function () {
+  var ACTIONS = ['qr_scan', 'code_generated', 'whatsapp_booking_initiated', 'directions_clicked', 'voucher_viewed'];
+  var ACTION_LABELS = {
+    qr_scan: 'QR / Link Scans',
+    code_generated: 'Codes Generated',
+    whatsapp_booking_initiated: 'WhatsApp Bookings',
+    directions_clicked: 'Directions Clicks',
+    voucher_viewed: 'Vouchers Viewed'
+  };
+
+  var rows = [];
+
+  function localRows() {
+    try { return JSON.parse(localStorage.getItem('feelbg_referrals')) || []; } catch (e) { return []; }
+  }
+
+  function setStatus(kind, text) {
+    var el = document.getElementById('status-pill');
+    el.className = 'status-pill ' + kind;
+    var icon = kind === 'remote' ? 'fa-cloud' : kind === 'error' ? 'fa-triangle-exclamation' : 'fa-desktop';
+    el.innerHTML = '<i class="fas ' + icon + '"></i> ' + text;
+    document.getElementById('source-detail').textContent = text;
+  }
+
+  function loadRows() {
+    var endpoint = window.FEELBG_REFERRAL_LOG_ENDPOINT || '';
+    if (!endpoint) {
+      rows = localRows();
+      setStatus('local', 'this device only (no backend configured)');
+      render();
+      return;
+    }
+    var key = window.FEELBG_REFERRAL_DASHBOARD_KEY || '';
+    var url = endpoint + (endpoint.indexOf('?') === -1 ? '?' : '&') + 'key=' + encodeURIComponent(key);
+    fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+      if (data && data.ok && Array.isArray(data.rows)) {
+        rows = data.rows;
+        setStatus('remote', 'remote log (' + rows.length + ' events, all devices)');
+      } else {
+        throw new Error((data && data.error) || 'unexpected response');
+      }
+      render();
+    }).catch(function (err) {
+      rows = localRows();
+      setStatus('error', 'backend unreachable (' + err.message + ') — showing this device only');
+      render();
+    });
+  }
+
+  function monthsAvailable() {
+    var set = {};
+    rows.forEach(function (r) { set[new Date(r.ts).toISOString().slice(0, 7)] = true; });
+    return Object.keys(set).sort().reverse();
+  }
+
+  function populateMonthSelect() {
+    var sel = document.getElementById('month-select');
+    var months = monthsAvailable();
+    var opts = '<option value="all">All time</option>' + months.map(function (m) {
+      return '<option value="' + m + '">' + m + '</option>';
+    }).join('');
+    sel.innerHTML = opts;
+  }
+
+  function filteredRows() {
+    var month = document.getElementById('month-select').value;
+    if (!month || month === 'all') return rows;
+    return rows.filter(function (r) { return new Date(r.ts).toISOString().slice(0, 7) === month; });
+  }
+
+  function render() {
+    populateMonthSelect();
+    renderTotals();
+    renderTable();
+  }
+
+  function renderTotals() {
+    var fr = filteredRows();
+    var counts = { qr_scan: 0, code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0 };
+    fr.forEach(function (r) { if (counts[r.action] !== undefined) counts[r.action]++; });
+    var venues = {};
+    fr.forEach(function (r) { if (r.venue) venues[r.venue] = true; });
+    var html = '<div class="total-card"><div class="num">' + Object.keys(venues).length + '</div><div class="label">Active Venues</div></div>';
+    ACTIONS.forEach(function (a) {
+      html += '<div class="total-card"><div class="num">' + counts[a] + '</div><div class="label">' + ACTION_LABELS[a] + '</div></div>';
+    });
+    document.getElementById('totals').innerHTML = html;
+  }
+
+  function renderTable() {
+    var fr = filteredRows();
+    var wrap = document.getElementById('table-wrap');
+    if (!fr.length) {
+      wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>No referral events yet for this period.</div>';
+      return;
+    }
+    var byVenue = {};
+    fr.forEach(function (r) {
+      if (!r.venue) return;
+      byVenue[r.venue] = byVenue[r.venue] || { code_generated: 0, whatsapp_booking_initiated: 0, directions_clicked: 0, voucher_viewed: 0, codes: {} };
+      if (byVenue[r.venue][r.action] !== undefined) byVenue[r.venue][r.action]++;
+      if (r.code) byVenue[r.venue].codes[r.code] = true;
+    });
+    var venueNames = Object.keys(byVenue).sort();
+    var html = '<table><thead><tr><th>Venue</th><th>Unique Codes</th><th>WhatsApp Bookings</th><th>Directions Clicks</th><th>Vouchers Viewed</th></tr></thead><tbody>';
+    venueNames.forEach(function (v) {
+      var d = byVenue[v];
+      html += '<tr><td class="venue-name">' + escapeHtml(v) + '</td><td>' + Object.keys(d.codes).length + '</td><td>' + d.whatsapp_booking_initiated + '</td><td>' + d.directions_clicked + '</td><td>' + d.voucher_viewed + '</td></tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function exportCsv() {
+    var fr = filteredRows();
+    var lines = ['timestamp,code,venue,action'];
+    fr.forEach(function (r) {
+      lines.push([new Date(r.ts).toISOString(), r.code || '', '"' + (r.venue || '').replace(/"/g, '""') + '"', r.action || ''].join(','));
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'feelbg-referrals.csv';
+    a.click();
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', loadRows);
+  document.getElementById('export-btn').addEventListener('click', exportCsv);
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.id === 'month-select') render();
+  });
+
+  loadRows();
+})();
+</script>
+</body>
+</html>
