@@ -15,6 +15,24 @@
 }
 
 /* ============================================
+   HOME HERO VIDEO BACKGROUND
+   Sits above the fallback image slideshow (shown only if the
+   video fails to load) and below the gradient overlay/shapes/kinetic title.
+   ============================================ */
+.hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero__slideshow {
+    z-index: 0;
+}
+
+/* ============================================
    LUXURY DARK-NAVY + GOLD THEME
    Page chrome only — component cards (place-card,
    gem-card, event-slide, forms) keep their light
