@@ -2,8 +2,7 @@
 
 (function() {
     var tipIcons = [
-        'fa-coins', 'fa-clock', 'fa-water', 'fa-taxi', 'fa-utensils', 'fa-sun',
-        'fa-walking', 'fa-heart', 'fa-music', 'fa-coffee', 'fa-bus', 'fa-camera'
+        'fa-bus', 'fa-tint', 'fa-taxi', 'fa-landmark', 'fa-glass-cheers'
     ];
 
     function t(key) {

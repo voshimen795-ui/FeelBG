@@ -728,24 +728,76 @@ class KeyboardNavigation {
 
 class HeroSlideshow {
     constructor() {
-        this.slides = document.querySelectorAll('.hero__slide');
-        this.currentSlide = 0;
-        
-        if (this.slides.length > 1) {
+        this.videos = Array.from(document.querySelectorAll('.hero__video'));
+        this.fallback = document.querySelector('.hero__slide');
+        this.current = 0;
+        this.CLIP_SECONDS = 9; // how many seconds each clip plays before crossfading
+
+        if (this.videos.length) {
             this.init();
+        } else {
+            this.initImageFallback();
         }
     }
 
-    init() {
+    // Legacy behavior: if no <video class="hero__video"> elements are present,
+    // cycle through .hero__slide background images instead.
+    initImageFallback() {
+        const slides = document.querySelectorAll('.hero__slide');
+        if (slides.length <= 1) return;
+        let current = 0;
         setInterval(() => {
-            this.nextSlide();
-        }, 6000); // Change image every 6 seconds
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }, 6000);
     }
 
-    nextSlide() {
-        this.slides[this.currentSlide].classList.remove('active');
-        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-        this.slides[this.currentSlide].classList.add('active');
+    safePlay(v) {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {
+            // Autoplay blocked or weak network — fallback image stays, nothing breaks
+        });
+    }
+
+    init() {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return; // fallback image stays put, CSS hides the <video> elements
+        }
+
+        const first = this.videos[0];
+
+        // Once the first video is actually playing, hide the fallback image
+        first.addEventListener('playing', () => {
+            if (this.fallback) this.fallback.classList.remove('active');
+            first.classList.add('active');
+        }, { once: true });
+
+        this.safePlay(first);
+        if (this.videos[1]) this.videos[1].preload = 'auto'; // preload the next clip
+
+        if (this.videos.length > 1) {
+            setInterval(() => this.nextVideo(), this.CLIP_SECONDS * 1000);
+        }
+
+        // Battery saving: pause when the tab/app isn't visible
+        document.addEventListener('visibilitychange', () => {
+            const v = this.videos[this.current];
+            if (document.hidden) v.pause();
+            else this.safePlay(v);
+        });
+    }
+
+    nextVideo() {
+        const cur = this.videos[this.current];
+        this.current = (this.current + 1) % this.videos.length; // endless rotation
+        const nxt = this.videos[this.current];
+        nxt.preload = 'auto';
+        nxt.currentTime = 0;
+        this.safePlay(nxt);
+        nxt.classList.add('active');
+        cur.classList.remove('active');
+        setTimeout(() => cur.pause(), 1300); // pause the old clip only after the crossfade finishes
     }
 }
 
