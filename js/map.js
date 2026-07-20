@@ -4,18 +4,20 @@ class BelgradeMap {
     constructor() {
         this.map = null;
         this.modal = null;
-        this.markers = {};
-        this.routeMarkers = [];
-        this.userMarker = null;
         this.routeLayerActive = false;
+        this.routeStopsActive = false;
         this.rotating = false;
         this._rotateFrame = null;
         this._touring = false;
         this._tourStops = [];
         this._tourIndex = 0;
         this._tourTimer = null;
+        this._activePopup = null;
+        this._activePopupVenue = null;
         this.defaultView = { center: [20.4568, 44.8178], zoom: 15.2, pitch: 55, bearing: -17.6 };
         this.venues = this.buildVenuesFromDB();
+        this.venuesByName = {};
+        this.venues.forEach(v => { this.venuesByName[v.name] = v; });
         this.init();
     }
 
@@ -74,10 +76,10 @@ class BelgradeMap {
     }
 
     refreshMapUI() {
-        Object.values(this.markers).forEach(({ marker, venue }) => {
-            const popup = marker.getPopup && marker.getPopup();
-            if (popup) popup.setHTML(this.createPopup(venue));
-        });
+        if (this._activePopup && this._activePopupVenue) {
+            this._activePopup.setHTML(this.createPopup(this._activePopupVenue));
+            this.bindPopupButtons(this._activePopupVenue);
+        }
         const filtered = this._lastFilteredVenues || this.venues;
         if (filtered) this.renderSidebar(filtered);
         this.retranslateModalChrome();
@@ -170,25 +172,26 @@ class BelgradeMap {
     openMap() {
         this.modal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        if (!this.map) {
-            // Wait for the modal's own slide-in animation to actually finish
-            // before MapLibre reads the container's size — initializing mid
-            // CSS-transform gave the map a stale layout to measure against,
-            // which is what caused markers to drift out of sync while panning.
-            const container = this.modal.querySelector('.map-modal__container');
-            let started = false;
-            const start = () => {
-                if (started) return;
-                started = true;
-                container.removeEventListener('animationend', start);
-                this.initMap();
-            };
-            container.addEventListener('animationend', start);
-            // Fallback in case the animation is skipped (prefers-reduced-motion, etc.)
-            setTimeout(start, 500);
-        } else {
-            this.map.resize();
-        }
+        if (this.map) { this.map.resize(); return; }
+        // The map-open button is click-bound both here and by MapToggle in
+        // pages.js, so a single tap calls openMap() twice — without this
+        // instance-level guard that used to create TWO stacked WebGL maps on
+        // the same container, with the leaked first one still burning GPU on
+        // every frame. One scheduled init, ever.
+        if (this._initScheduled) return;
+        this._initScheduled = true;
+        // Wait for the modal's own slide-in animation to actually finish
+        // before MapLibre reads the container's size — initializing mid
+        // CSS-transform gave the map a stale layout to measure against,
+        // which is what caused markers to drift out of sync while panning.
+        const container = this.modal.querySelector('.map-modal__container');
+        const start = () => {
+            container.removeEventListener('animationend', start);
+            if (!this.map) this.initMap();
+        };
+        container.addEventListener('animationend', start);
+        // Fallback in case the animation is skipped (prefers-reduced-motion, etc.)
+        setTimeout(start, 500);
     }
 
     closeMap() {
@@ -199,6 +202,7 @@ class BelgradeMap {
     }
 
     initMap() {
+        if (this.map) return;
         if (!window.maplibregl) { this.showMapFallback(); return; }
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
         try {
@@ -225,18 +229,11 @@ class BelgradeMap {
         // setBearing() fires a synchronous "rotatestart" even for non-interactive calls.
         const canvasEl = this.map.getCanvasContainer();
         ['mousedown', 'touchstart', 'wheel', 'dblclick'].forEach(ev => canvasEl.addEventListener(ev, () => { this.stopRotate(); this.stopTour(); }, { passive: true }));
-        // Every DOM marker gets repositioned on every 'render' frame while the
-        // camera moves. The pulsing halo (its own separate CSS animation) adds
-        // paint work on top of that repositioning on every single frame, which
-        // is exactly what shows up as markers visibly lagging/drifting behind
-        // the map during a fast pan — pausing it while the camera is actually
-        // moving removes that extra paint cost until the map settles again.
-        this.map.on('movestart', () => document.getElementById('belgrade-map')?.classList.add('map-is-moving'));
-        this.map.on('moveend', () => document.getElementById('belgrade-map')?.classList.remove('map-is-moving'));
         this.map.on('load', () => {
             this.applyBrandTheme();
             this.addBuildingExtrusion();
-            this.addMarkers();
+            this.registerPinImages();
+            this.addVenueLayers();
             this._lastFilteredVenues = this.venues;
             this.renderSidebar(this.venues);
             this.playIntro(isMobile);
@@ -258,37 +255,68 @@ class BelgradeMap {
         }, 250);
     }
 
-    // A bright, realistic map — real water blue, park green, warm stone
-    // building tones — that actually looks like Belgrade from above,
-    // instead of a dark navy tint over everything. Gold/navy stay reserved
-    // for our own UI chrome (markers, sidebar, buttons) and as an accent on
-    // tall landmark buildings, rather than recoloring the whole map.
+    // A bright, colorful map that reads like Belgrade from above, with a
+    // clear visual hierarchy for orientation: amber motorways -> pale-gold
+    // primary roads -> white side streets, real blue rivers with blue
+    // italic-styled water labels, layered greens for parks vs. woods, warm
+    // stone buildings, and navy place names. Gold/navy chrome stays on our
+    // own UI (markers, sidebar, buttons), not smeared over the basemap.
     applyBrandTheme() {
         const style = this.map.getStyle();
         if (!style || !style.layers) return;
         style.layers.forEach(layer => {
             try {
                 const sl = layer['source-layer'];
+                const id = layer.id;
                 if (layer.type === 'background') {
-                    this.map.setPaintProperty(layer.id, 'background-color', '#f3ede0');
+                    this.map.setPaintProperty(id, 'background-color', '#f6f0e2');
                 } else if (sl === 'water' && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#7fc1e8');
+                    this.map.setPaintProperty(id, 'fill-color', '#5eb1e4');
                 } else if (sl === 'waterway') {
-                    this.map.setPaintProperty(layer.id, 'line-color', '#7fc1e8');
+                    this.map.setPaintProperty(id, 'line-color', '#5eb1e4');
                 } else if (sl === 'park' && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#bfdca0');
-                } else if ((sl === 'landcover' || sl === 'landuse') && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#ece4d3');
+                    this.map.setPaintProperty(id, 'fill-color', '#a3d284');
+                } else if (sl === 'landcover' && layer.type === 'fill') {
+                    const isWood = /wood|forest/i.test(id);
+                    this.map.setPaintProperty(id, 'fill-color', isWood ? '#8cc172' : '#b9dc9c');
+                } else if (sl === 'landuse' && layer.type === 'fill') {
+                    const isGreen = /park|grass|cemetery|stadium|pitch|garden/i.test(id);
+                    this.map.setPaintProperty(id, 'fill-color', isGreen ? '#b9dc9c' : '#efe7d4');
                 } else if (sl === 'transportation' && layer.type === 'line') {
-                    const isMajor = /motorway|trunk|primary/i.test(layer.id);
-                    this.map.setPaintProperty(layer.id, 'line-color', isMajor ? '#e0a83a' : '#ffffff');
-                } else if (sl === 'building' && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#dcd0b8');
-                    this.map.setPaintProperty(layer.id, 'fill-opacity', 0.9);
+                    const isRail = /rail|transit/i.test(id);
+                    const isCasing = /casing/i.test(id);
+                    const isMotorway = /motorway|trunk/i.test(id);
+                    const isPrimary = /primary/i.test(id);
+                    const isPath = /path|pedestrian|footway|steps/i.test(id);
+                    if (isRail) this.map.setPaintProperty(id, 'line-color', '#c4b6a2');
+                    else if (isCasing) this.map.setPaintProperty(id, 'line-color', isMotorway ? '#d8952b' : '#ddd2bd');
+                    else if (isMotorway) this.map.setPaintProperty(id, 'line-color', '#f5b53f');
+                    else if (isPrimary) this.map.setPaintProperty(id, 'line-color', '#fbd982');
+                    else if (isPath) this.map.setPaintProperty(id, 'line-color', '#e8ddc7');
+                    else this.map.setPaintProperty(id, 'line-color', '#ffffff');
+                } else if (sl === 'building' && (layer.type === 'fill' || layer.type === 'fill-extrusion')) {
+                    if (layer.type === 'fill') {
+                        this.map.setPaintProperty(id, 'fill-color', '#e0d4bc');
+                        this.map.setPaintProperty(id, 'fill-opacity', 0.95);
+                    }
+                } else if (sl === 'boundary' && layer.type === 'line') {
+                    this.map.setPaintProperty(id, 'line-color', '#c0a6c9');
                 } else if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-                    this.map.setPaintProperty(layer.id, 'text-color', '#1e3a8a');
-                    this.map.setPaintProperty(layer.id, 'text-halo-color', '#ffffff');
-                    this.map.setPaintProperty(layer.id, 'text-halo-width', 1.3);
+                    const isWaterLabel = sl === 'water_name' || /water/i.test(id);
+                    const isRoadLabel = sl === 'transportation_name' || /road_|street/i.test(id);
+                    if (isWaterLabel) {
+                        this.map.setPaintProperty(id, 'text-color', '#1d6fa8');
+                        this.map.setPaintProperty(id, 'text-halo-color', 'rgba(255,255,255,0.85)');
+                        this.map.setPaintProperty(id, 'text-halo-width', 1.2);
+                    } else if (isRoadLabel) {
+                        this.map.setPaintProperty(id, 'text-color', '#6f6853');
+                        this.map.setPaintProperty(id, 'text-halo-color', '#ffffff');
+                        this.map.setPaintProperty(id, 'text-halo-width', 1.4);
+                    } else {
+                        this.map.setPaintProperty(id, 'text-color', '#1e3a8a');
+                        this.map.setPaintProperty(id, 'text-halo-color', '#ffffff');
+                        this.map.setPaintProperty(id, 'text-halo-width', 1.6);
+                    }
                 }
             } catch (err) { /* skip layers whose paint properties don't match this theme pass */ }
         });
@@ -325,27 +353,133 @@ class BelgradeMap {
         } catch (err) { /* base style schema didn't expose the expected building fields — flat map still works */ }
     }
 
-    addMarkers() {
-        this.markers = {};
-        this.venues.forEach(venue => {
-            const marker = this.createMarker(venue);
-            this.markers[venue.name] = { marker, venue };
-        });
+    /* ============================================
+       IN-CANVAS MARKERS
+       Pins are rendered as WebGL symbol layers inside the map canvas
+       itself, NOT as HTML overlays. HTML markers get repositioned by
+       JavaScript one frame after the canvas paints, which is what made
+       pins visibly slide around during panning — a symbol layer is
+       painted in the same GPU frame as the streets beneath it, so the
+       pins are now physically incapable of drifting.
+       ============================================ */
+
+    _makePinImage(color, emoji) {
+        const c = document.createElement('canvas');
+        c.width = 64; c.height = 80;
+        const ctx = c.getContext('2d');
+        ctx.beginPath();
+        ctx.moveTo(32, 76);
+        ctx.quadraticCurveTo(9, 44, 9, 27);
+        ctx.arc(32, 27, 23, Math.PI, 0, false);
+        ctx.quadraticCurveTo(55, 44, 32, 76);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.lineWidth = 3.5;
+        ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(32, 27, 15, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        ctx.fill();
+        ctx.font = '19px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(emoji, 32, 29);
+        return ctx.getImageData(0, 0, 64, 80);
     }
 
-    createMarker(venue) {
-        const el = document.createElement('div');
-        el.className = 'map-pin-wrap';
-        el.innerHTML = `<div class="map-pin__pulse" style="background:${venue.color}"></div><div class="map-pin" style="background:${venue.color}"><span>${venue.icon}</span></div>`;
-        const popup = new maplibregl.Popup({ offset: 34, maxWidth: '260px', closeButton: true })
-            .setHTML(this.createPopup(venue));
-        popup.on('open', () => this.bindPopupButtons(venue));
-        const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+    _makeStopImage(n) {
+        const c = document.createElement('canvas');
+        c.width = 56; c.height = 56;
+        const ctx = c.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(28, 28, 24, 0, Math.PI * 2);
+        ctx.fillStyle = '#1e3a8a';
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(String(n), 28, 30);
+        return ctx.getImageData(0, 0, 56, 56);
+    }
+
+    registerPinImages() {
+        const cats = {
+            restaurant: { color: '#b8860b', emoji: '🍽️' },
+            cafe: { color: '#1e3a8a', emoji: '☕' },
+            nightlife: { color: '#7c3aed', emoji: '🎶' },
+            attraction: { color: '#dc2626', emoji: '🏰' }
+        };
+        Object.entries(cats).forEach(([type, d]) => {
+            const id = 'feelbg-pin-' + type;
+            if (!this.map.hasImage(id)) this.map.addImage(id, this._makePinImage(d.color, d.emoji), { pixelRatio: 2 });
+        });
+        if (!this.map.hasImage('feelbg-pin-user')) this.map.addImage('feelbg-pin-user', this._makePinImage('#10b981', '📍'), { pixelRatio: 2 });
+        for (let i = 1; i <= 8; i++) {
+            const id = 'feelbg-stop-' + i;
+            if (!this.map.hasImage(id)) this.map.addImage(id, this._makeStopImage(i), { pixelRatio: 2 });
+        }
+    }
+
+    addVenueLayers() {
+        const features = this.venues.map(v => ({
+            type: 'Feature',
+            properties: { name: v.name, vtype: v.type },
+            geometry: { type: 'Point', coordinates: [v.lng, v.lat] }
+        }));
+        this.map.addSource('feelbg-venues', { type: 'geojson', data: { type: 'FeatureCollection', features } });
+        this.map.addLayer({
+            id: 'feelbg-venue-halo',
+            type: 'circle',
+            source: 'feelbg-venues',
+            paint: {
+                'circle-radius': 13,
+                'circle-color': ['match', ['get', 'vtype'], 'restaurant', '#b8860b', 'cafe', '#1e3a8a', 'nightlife', '#7c3aed', 'attraction', '#dc2626', '#b8860b'],
+                'circle-opacity': 0.22,
+                'circle-blur': 0.7
+            }
+        });
+        this.map.addLayer({
+            id: 'feelbg-venue-pins',
+            type: 'symbol',
+            source: 'feelbg-venues',
+            layout: {
+                'icon-image': ['concat', 'feelbg-pin-', ['get', 'vtype']],
+                'icon-anchor': 'bottom',
+                'icon-allow-overlap': true,
+                'icon-ignore-placement': true
+            }
+        });
+        this.map.on('click', 'feelbg-venue-pins', (e) => {
+            if (!e.features || !e.features.length) return;
+            const venue = this.venuesByName[e.features[0].properties.name];
+            if (venue) { this.openVenuePopup(venue); this.highlightSidebarItem(venue.name); }
+        });
+        this.map.on('mouseenter', 'feelbg-venue-pins', () => { this.map.getCanvas().style.cursor = 'pointer'; });
+        this.map.on('mouseleave', 'feelbg-venue-pins', () => { this.map.getCanvas().style.cursor = ''; });
+    }
+
+    openVenuePopup(venue) {
+        this.closeVenuePopup();
+        const popup = new maplibregl.Popup({ offset: 42, maxWidth: '260px', closeButton: true })
             .setLngLat([venue.lng, venue.lat])
-            .setPopup(popup)
+            .setHTML(this.createPopup(venue))
             .addTo(this.map);
-        el.addEventListener('click', () => this.highlightSidebarItem(venue.name));
-        return marker;
+        this._activePopup = popup;
+        this._activePopupVenue = venue;
+        popup.on('close', () => {
+            if (this._activePopup === popup) { this._activePopup = null; this._activePopupVenue = null; }
+        });
+        this.bindPopupButtons(venue);
+    }
+
+    closeVenuePopup() {
+        if (this._activePopup) { this._activePopup.remove(); this._activePopup = null; this._activePopupVenue = null; }
     }
 
     bindPopupButtons(venue) {
@@ -401,8 +535,8 @@ class BelgradeMap {
         }).join('');
         list.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', () => {
-                const entry = this.markers[item.dataset.venue];
-                if (entry) this.flyToVenue(entry.venue);
+                const venue = this.venuesByName[item.dataset.venue];
+                if (venue) this.flyToVenue(venue);
             });
         });
     }
@@ -420,8 +554,9 @@ class BelgradeMap {
             curve: 1.3,
             essential: true
         });
-        const entry = this.markers[venue.name];
-        if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
+        // Open the popup once the flight lands, so it doesn't wobble across
+        // the screen while the camera is still moving.
+        this.map.once('moveend', () => this.openVenuePopup(venue));
         this.highlightSidebarItem(venue.name);
     }
 
@@ -433,10 +568,12 @@ class BelgradeMap {
 
     filterMarkers(type) {
         const filtered = type === 'all' ? this.venues : this.venues.filter(v => v.type === type);
-        Object.values(this.markers).forEach(({ marker, venue }) => {
-            if (type === 'all' || venue.type === type) marker.addTo(this.map);
-            else marker.remove();
-        });
+        if (this.map) {
+            const filter = type === 'all' ? null : ['==', ['get', 'vtype'], type];
+            if (this.map.getLayer('feelbg-venue-pins')) this.map.setFilter('feelbg-venue-pins', filter);
+            if (this.map.getLayer('feelbg-venue-halo')) this.map.setFilter('feelbg-venue-halo', filter);
+        }
+        if (this._activePopupVenue && type !== 'all' && this._activePopupVenue.type !== type) this.closeVenuePopup();
         this._lastFilteredVenues = filtered;
         this.renderSidebar(filtered);
     }
@@ -506,12 +643,10 @@ class BelgradeMap {
         this.highlightSidebarItem(venue.name);
         this._tourTimer = setTimeout(() => {
             if (!this._touring) return;
-            const entry = this.markers[venue.name];
-            if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
+            this.openVenuePopup(venue);
             this._tourTimer = setTimeout(() => {
                 if (!this._touring) return;
-                const openEntry = this.markers[venue.name];
-                if (openEntry && openEntry.marker.getPopup && openEntry.marker.getPopup().isOpen()) openEntry.marker.togglePopup();
+                this.closeVenuePopup();
                 this._tourIndex++;
                 this._runTourStep();
             }, 2200);
@@ -546,8 +681,8 @@ class BelgradeMap {
             },
             () => {
                 this.map.flyTo({ center: [lng, lat], zoom: 17, pitch: 58, duration: 1600, essential: true });
-                const entry = this.markers[name];
-                if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
+                const venue = this.venuesByName[name];
+                if (venue) this.map.once('moveend', () => this.openVenuePopup(venue));
             },
             { enableHighAccuracy: true, timeout: 10000 }
         );
@@ -634,15 +769,40 @@ class BelgradeMap {
         }
     }
 
-    addRouteStopMarkers(stops) {
-        stops.forEach((stop, i) => {
-            const el = document.createElement('div');
-            el.className = 'route-stop-num';
-            el.textContent = String(i + 1);
-            const popup = new maplibregl.Popup({ offset: 18 }).setHTML(`<b>${this.t('adventure.stop')} ${i + 1}:</b> ${stop.name}`);
-            const m = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([stop.lng, stop.lat]).setPopup(popup).addTo(this.map);
-            this.routeMarkers.push(m);
+    // Route stops and the user's own position render in-canvas too, for the
+    // same zero-drift reason as the venue pins.
+    addRouteStopLayers(stops, userCoord) {
+        const features = stops.map((stop, i) => ({
+            type: 'Feature',
+            properties: { icon: 'feelbg-stop-' + Math.min(i + 1, 8), label: `${this.t('adventure.stop')} ${i + 1}: ${stop.name}`, anchor: 'center' },
+            geometry: { type: 'Point', coordinates: [stop.lng, stop.lat] }
+        }));
+        if (userCoord) {
+            features.push({
+                type: 'Feature',
+                properties: { icon: 'feelbg-pin-user', label: '', anchor: 'bottom' },
+                geometry: { type: 'Point', coordinates: userCoord }
+            });
+        }
+        this.map.addSource('feelbg-route-stops', { type: 'geojson', data: { type: 'FeatureCollection', features } });
+        this.map.addLayer({
+            id: 'feelbg-route-stops-layer',
+            type: 'symbol',
+            source: 'feelbg-route-stops',
+            layout: {
+                'icon-image': ['get', 'icon'],
+                'icon-anchor': ['get', 'anchor'],
+                'icon-allow-overlap': true,
+                'icon-ignore-placement': true
+            }
         });
+        this.map.on('click', 'feelbg-route-stops-layer', (e) => {
+            if (!e.features || !e.features.length) return;
+            const label = e.features[0].properties.label;
+            if (!label) return;
+            new maplibregl.Popup({ offset: 20 }).setLngLat(e.features[0].geometry.coordinates).setHTML(`<b>${label}</b>`).addTo(this.map);
+        });
+        this.routeStopsActive = true;
     }
 
     drawRoute(geometry, stops, userCoord) {
@@ -656,14 +816,7 @@ class BelgradeMap {
         });
         this.routeLayerActive = true;
 
-        const userEl = document.createElement('div');
-        userEl.className = 'map-pin';
-        userEl.style.background = '#10b981';
-        userEl.innerHTML = '<span>📍</span>';
-        this.userMarker = new maplibregl.Marker({ element: userEl, anchor: 'bottom' }).setLngLat([userCoord[0], userCoord[1]]).addTo(this.map);
-        this.routeMarkers.push(this.userMarker);
-
-        this.addRouteStopMarkers(stops);
+        this.addRouteStopLayers(stops, userCoord);
 
         const bounds = new maplibregl.LngLatBounds();
         (geometry.coordinates || []).forEach(c => bounds.extend(c));
@@ -683,7 +836,7 @@ class BelgradeMap {
         });
         this.routeLayerActive = true;
 
-        this.addRouteStopMarkers(stops);
+        this.addRouteStopLayers(stops, waypoints[0]);
 
         const bounds = new maplibregl.LngLatBounds();
         waypoints.forEach(c => bounds.extend(c));
@@ -712,17 +865,21 @@ class BelgradeMap {
     }
 
     clearRouteLayers() {
-        if (!this.map || !this.routeLayerActive) return;
-        if (this.map.getLayer('feelbg-route-line')) this.map.removeLayer('feelbg-route-line');
-        if (this.map.getSource('feelbg-route')) this.map.removeSource('feelbg-route');
-        this.routeLayerActive = false;
+        if (!this.map) return;
+        if (this.routeLayerActive) {
+            if (this.map.getLayer('feelbg-route-line')) this.map.removeLayer('feelbg-route-line');
+            if (this.map.getSource('feelbg-route')) this.map.removeSource('feelbg-route');
+            this.routeLayerActive = false;
+        }
+        if (this.routeStopsActive) {
+            if (this.map.getLayer('feelbg-route-stops-layer')) this.map.removeLayer('feelbg-route-stops-layer');
+            if (this.map.getSource('feelbg-route-stops')) this.map.removeSource('feelbg-route-stops');
+            this.routeStopsActive = false;
+        }
     }
 
     clearRoute() {
         this.clearRouteLayers();
-        this.routeMarkers.forEach(m => m.remove());
-        this.routeMarkers = [];
-        if (this.userMarker) { this.userMarker.remove(); this.userMarker = null; }
         const bar = document.getElementById('route-info-bar');
         if (bar) bar.remove();
     }
@@ -764,7 +921,7 @@ class BelgradeMap {
             .map-modal__close{background:rgba(255,255,255,.15);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;margin-left:auto}
             .map-modal__close:hover{background:rgba(255,255,255,.3)}
             .map-modal__body{display:flex;flex:1;overflow:hidden}
-            #belgrade-map{flex:1;min-height:0;z-index:1;background:#f3ede0}
+            #belgrade-map{flex:1;min-height:0;z-index:1;background:#f6f0e2}
             .map-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid rgba(184,134,11,.25);background:#0f1e4d;overflow:hidden}
             .map-sidebar__header{padding:1rem 1.25rem;font-weight:600;font-family:'Poppins',sans-serif;font-size:.9rem;color:#ffd700;border-bottom:1px solid rgba(184,134,11,.25);display:flex;align-items:center;gap:.5rem;flex-shrink:0;background:#0a1128}
             .map-sidebar__list{overflow-y:auto;flex:1}
@@ -776,12 +933,6 @@ class BelgradeMap {
             .sidebar-item__name{font-size:.85rem;font-weight:600;color:#f4efe2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
             .sidebar-item__area{font-size:.75rem;color:#9aa8cc}
             .sidebar-item__rating{font-size:.75rem;color:#ffd700;font-weight:600;flex-shrink:0}
-            .map-pin-wrap{position:relative;width:40px;height:48px;cursor:pointer}
-            .map-pin{position:absolute;left:1px;top:0;width:38px;height:38px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.85)}
-            .map-pin span{transform:rotate(45deg);font-size:1rem;display:block}
-            .map-pin__pulse{position:absolute;left:9px;top:8px;width:22px;height:22px;border-radius:50%;opacity:.55;animation:mapPinPulse 2.2s ease-out infinite}
-            @keyframes mapPinPulse{0%{transform:scale(.6);opacity:.55}70%{transform:scale(2.1);opacity:0}100%{opacity:0}}
-            #belgrade-map.map-is-moving .map-pin__pulse{animation-play-state:paused;opacity:0}
             .map-popup{font-family:'Poppins',sans-serif;min-width:210px}
             .map-popup__type{display:inline-block;color:white;padding:.15rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;margin-bottom:.4rem}
             .map-popup__name{font-size:1.05rem;font-weight:700;color:#1e293b;margin:0 0 .4rem;font-family:'Playfair Display',serif}
@@ -799,7 +950,6 @@ class BelgradeMap {
             .maplibregl-popup-close-button{font-size:1.1rem;color:#94a3b8;padding:4px 8px}
             .maplibregl-ctrl-group{background:#0f1e4d!important;border:1px solid rgba(184,134,11,.3)!important}
             .maplibregl-ctrl-group button{filter:invert(1) brightness(1.3)}
-            .route-stop-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;font-family:'Poppins',sans-serif;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
             #route-info-bar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.5rem;background:linear-gradient(135deg,#1e3a8a,#2d5be3);color:white;font-size:.85rem;font-family:'Poppins',sans-serif;gap:1rem;flex-shrink:0}
             .route-info-content{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;flex:1}
             .route-info-content i{color:#b8860b}
