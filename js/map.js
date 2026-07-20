@@ -10,6 +10,10 @@ class BelgradeMap {
         this.routeLayerActive = false;
         this.rotating = false;
         this._rotateFrame = null;
+        this._touring = false;
+        this._tourStops = [];
+        this._tourIndex = 0;
+        this._tourTimer = null;
         this.defaultView = { center: [20.4568, 44.8178], zoom: 15.2, pitch: 55, bearing: -17.6 };
         this.venues = this.buildVenuesFromDB();
         this.init();
@@ -94,6 +98,8 @@ class BelgradeMap {
         if (resetBtn) resetBtn.title = this.t('map.resetView');
         const rotateBtn = modal.querySelector('#map-rotate');
         if (rotateBtn) rotateBtn.title = this.t('map.rotate');
+        const tourBtn = modal.querySelector('#map-tour');
+        if (tourBtn) tourBtn.title = this.t(this._touring ? 'map.stopTour' : 'map.startTour');
         modal.querySelectorAll('.map-filter[data-type]').forEach(btn => {
             const type = btn.dataset.type;
             const keyMap = { all: 'map.all', restaurant: 'map.food', cafe: 'map.cafes', nightlife: 'map.nightlife', attraction: 'map.sights' };
@@ -122,6 +128,7 @@ class BelgradeMap {
                         <button class="map-filter" data-type="attraction"><i class="fas fa-landmark"></i> ${this.t('map.sights')}</button>
                     </div>
                     <button class="map-adventure-btn" id="adventure-btn"><i class="fas fa-hiking"></i> ${this.t('adventure.create')}</button>
+                    <button class="map-icon-btn" id="map-tour" title="${this.t('map.startTour')}"><i class="fas fa-play"></i></button>
                     <button class="map-icon-btn" id="map-rotate" title="${this.t('map.rotate')}"><i class="fas fa-sync-alt"></i></button>
                     <button class="map-icon-btn" id="map-reset" title="${this.t('map.resetView')}"><i class="fas fa-crosshairs"></i></button>
                     <button class="map-modal__close" id="map-close"><i class="fas fa-times"></i></button>
@@ -157,13 +164,28 @@ class BelgradeMap {
         document.getElementById('adventure-btn')?.addEventListener('click', () => this.showAdventurePanel());
         document.getElementById('map-reset')?.addEventListener('click', () => this.resetView());
         document.getElementById('map-rotate')?.addEventListener('click', () => this.toggleRotate());
+        document.getElementById('map-tour')?.addEventListener('click', () => this.toggleTour());
     }
 
     openMap() {
         this.modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         if (!this.map) {
-            requestAnimationFrame(() => setTimeout(() => this.initMap(), 100));
+            // Wait for the modal's own slide-in animation to actually finish
+            // before MapLibre reads the container's size — initializing mid
+            // CSS-transform gave the map a stale layout to measure against,
+            // which is what caused markers to drift out of sync while panning.
+            const container = this.modal.querySelector('.map-modal__container');
+            let started = false;
+            const start = () => {
+                if (started) return;
+                started = true;
+                container.removeEventListener('animationend', start);
+                this.initMap();
+            };
+            container.addEventListener('animationend', start);
+            // Fallback in case the animation is skipped (prefers-reduced-motion, etc.)
+            setTimeout(start, 500);
         } else {
             this.map.resize();
         }
@@ -173,6 +195,7 @@ class BelgradeMap {
         this.modal.classList.remove('active');
         document.body.style.overflow = '';
         this.stopRotate();
+        this.stopTour();
     }
 
     initMap() {
@@ -201,7 +224,15 @@ class BelgradeMap {
         // programmatic flyTo/setBearing calls don't immediately cancel themselves —
         // setBearing() fires a synchronous "rotatestart" even for non-interactive calls.
         const canvasEl = this.map.getCanvasContainer();
-        ['mousedown', 'touchstart', 'wheel', 'dblclick'].forEach(ev => canvasEl.addEventListener(ev, () => this.stopRotate(), { passive: true }));
+        ['mousedown', 'touchstart', 'wheel', 'dblclick'].forEach(ev => canvasEl.addEventListener(ev, () => { this.stopRotate(); this.stopTour(); }, { passive: true }));
+        // Every DOM marker gets repositioned on every 'render' frame while the
+        // camera moves. The pulsing halo (its own separate CSS animation) adds
+        // paint work on top of that repositioning on every single frame, which
+        // is exactly what shows up as markers visibly lagging/drifting behind
+        // the map during a fast pan — pausing it while the camera is actually
+        // moving removes that extra paint cost until the map settles again.
+        this.map.on('movestart', () => document.getElementById('belgrade-map')?.classList.add('map-is-moving'));
+        this.map.on('moveend', () => document.getElementById('belgrade-map')?.classList.remove('map-is-moving'));
         this.map.on('load', () => {
             this.applyBrandTheme();
             this.addBuildingExtrusion();
@@ -227,6 +258,11 @@ class BelgradeMap {
         }, 250);
     }
 
+    // A bright, realistic map — real water blue, park green, warm stone
+    // building tones — that actually looks like Belgrade from above,
+    // instead of a dark navy tint over everything. Gold/navy stay reserved
+    // for our own UI chrome (markers, sidebar, buttons) and as an accent on
+    // tall landmark buildings, rather than recoloring the whole map.
     applyBrandTheme() {
         const style = this.map.getStyle();
         if (!style || !style.layers) return;
@@ -234,23 +270,25 @@ class BelgradeMap {
             try {
                 const sl = layer['source-layer'];
                 if (layer.type === 'background') {
-                    this.map.setPaintProperty(layer.id, 'background-color', '#0a1128');
+                    this.map.setPaintProperty(layer.id, 'background-color', '#f3ede0');
                 } else if (sl === 'water' && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#1c3a78');
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#7fc1e8');
                 } else if (sl === 'waterway') {
-                    this.map.setPaintProperty(layer.id, 'line-color', '#1c3a78');
-                } else if ((sl === 'landcover' || sl === 'landuse' || sl === 'park') && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#101f42');
+                    this.map.setPaintProperty(layer.id, 'line-color', '#7fc1e8');
+                } else if (sl === 'park' && layer.type === 'fill') {
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#bfdca0');
+                } else if ((sl === 'landcover' || sl === 'landuse') && layer.type === 'fill') {
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#ece4d3');
                 } else if (sl === 'transportation' && layer.type === 'line') {
                     const isMajor = /motorway|trunk|primary/i.test(layer.id);
-                    this.map.setPaintProperty(layer.id, 'line-color', isMajor ? '#b8860b' : '#33456e');
+                    this.map.setPaintProperty(layer.id, 'line-color', isMajor ? '#e0a83a' : '#ffffff');
                 } else if (sl === 'building' && layer.type === 'fill') {
-                    this.map.setPaintProperty(layer.id, 'fill-color', '#1a2c5c');
-                    this.map.setPaintProperty(layer.id, 'fill-opacity', 0.7);
+                    this.map.setPaintProperty(layer.id, 'fill-color', '#dcd0b8');
+                    this.map.setPaintProperty(layer.id, 'fill-opacity', 0.9);
                 } else if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-                    this.map.setPaintProperty(layer.id, 'text-color', '#f4efe2');
-                    this.map.setPaintProperty(layer.id, 'text-halo-color', '#0a1128');
-                    this.map.setPaintProperty(layer.id, 'text-halo-width', 1.2);
+                    this.map.setPaintProperty(layer.id, 'text-color', '#1e3a8a');
+                    this.map.setPaintProperty(layer.id, 'text-halo-color', '#ffffff');
+                    this.map.setPaintProperty(layer.id, 'text-halo-width', 1.3);
                 }
             } catch (err) { /* skip layers whose paint properties don't match this theme pass */ }
         });
@@ -270,16 +308,18 @@ class BelgradeMap {
                 'source-layer': 'building',
                 minzoom: 13,
                 paint: {
+                    // Warm stone tones for ordinary buildings, shading into
+                    // gold only for genuinely tall landmark towers.
                     'fill-extrusion-color': [
                         'interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 6],
-                        0, '#20315e',
-                        20, '#2c4886',
-                        60, '#3f63b3',
+                        0, '#ede2c8',
+                        20, '#d9c39a',
+                        60, '#c9a876',
                         120, '#b8860b'
                     ],
                     'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 6],
                     'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
-                    'fill-extrusion-opacity': 0.88
+                    'fill-extrusion-opacity': 0.92
                 }
             }, firstSymbol ? firstSymbol.id : undefined);
         } catch (err) { /* base style schema didn't expose the expected building fields — flat map still works */ }
@@ -370,6 +410,7 @@ class BelgradeMap {
     flyToVenue(venue) {
         if (!this.map) return;
         this.stopRotate();
+        this.stopTour();
         this.map.flyTo({
             center: [venue.lng, venue.lat],
             zoom: 17,
@@ -403,6 +444,7 @@ class BelgradeMap {
     resetView() {
         if (!this.map) return;
         this.stopRotate();
+        this.stopTour();
         this.map.flyTo({ ...this.defaultView, duration: 1600, curve: 1.3, essential: true });
     }
 
@@ -428,9 +470,73 @@ class BelgradeMap {
         if (this._rotateFrame) cancelAnimationFrame(this._rotateFrame);
     }
 
+    // Cinematic guided tour: flies through the top-rated venue(s) in each
+    // category in turn, pausing to pop up each one before moving on.
+    toggleTour() {
+        if (this._touring) this.stopTour();
+        else this.startTour();
+    }
+
+    startTour() {
+        if (!this.map || this._touring) return;
+        this.stopRotate();
+        const byCategory = {};
+        this.venues.forEach((v) => { (byCategory[v.type] = byCategory[v.type] || []).push(v); });
+        const stops = [];
+        Object.values(byCategory).forEach((list) => {
+            list.slice().sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 2).forEach((v) => stops.push(v));
+        });
+        if (!stops.length) return;
+        this._touring = true;
+        this._tourStops = stops;
+        this._tourIndex = 0;
+        const btn = document.getElementById('map-tour');
+        if (btn) { btn.classList.add('active'); btn.innerHTML = '<i class="fas fa-stop"></i>'; btn.title = this.t('map.stopTour'); }
+        this._runTourStep();
+    }
+
+    _runTourStep() {
+        if (!this._touring || !this.map) return;
+        if (this._tourIndex >= this._tourStops.length) { this._finishTour(); return; }
+        const venue = this._tourStops[this._tourIndex];
+        this.map.flyTo({
+            center: [venue.lng, venue.lat], zoom: 17.2, pitch: 58,
+            bearing: (this.map.getBearing() + 28) % 360, duration: 2600, curve: 1.3, essential: true
+        });
+        this.highlightSidebarItem(venue.name);
+        this._tourTimer = setTimeout(() => {
+            if (!this._touring) return;
+            const entry = this.markers[venue.name];
+            if (entry && entry.marker.getPopup && !entry.marker.getPopup().isOpen()) entry.marker.togglePopup();
+            this._tourTimer = setTimeout(() => {
+                if (!this._touring) return;
+                const openEntry = this.markers[venue.name];
+                if (openEntry && openEntry.marker.getPopup && openEntry.marker.getPopup().isOpen()) openEntry.marker.togglePopup();
+                this._tourIndex++;
+                this._runTourStep();
+            }, 2200);
+        }, 2700);
+    }
+
+    _finishTour() {
+        this._touring = false;
+        const btn = document.getElementById('map-tour');
+        if (btn) { btn.classList.remove('active'); btn.innerHTML = '<i class="fas fa-play"></i>'; btn.title = this.t('map.startTour'); }
+        this.resetView();
+    }
+
+    stopTour() {
+        if (!this._touring) return;
+        this._touring = false;
+        if (this._tourTimer) clearTimeout(this._tourTimer);
+        const btn = document.getElementById('map-tour');
+        if (btn) { btn.classList.remove('active'); btn.innerHTML = '<i class="fas fa-play"></i>'; btn.title = this.t('map.startTour'); }
+    }
+
     showRouteTo(lat, lng, name) {
         if (!this.map) return;
         this.stopRotate();
+        this.stopTour();
         if (!navigator.geolocation) { alert(this.t('adventure.locationError')); return; }
         navigator.geolocation.getCurrentPosition(
             (pos) => {
@@ -658,7 +764,7 @@ class BelgradeMap {
             .map-modal__close{background:rgba(255,255,255,.15);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;margin-left:auto}
             .map-modal__close:hover{background:rgba(255,255,255,.3)}
             .map-modal__body{display:flex;flex:1;overflow:hidden}
-            #belgrade-map{flex:1;min-height:0;z-index:1;background:#0a1128}
+            #belgrade-map{flex:1;min-height:0;z-index:1;background:#f3ede0}
             .map-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid rgba(184,134,11,.25);background:#0f1e4d;overflow:hidden}
             .map-sidebar__header{padding:1rem 1.25rem;font-weight:600;font-family:'Poppins',sans-serif;font-size:.9rem;color:#ffd700;border-bottom:1px solid rgba(184,134,11,.25);display:flex;align-items:center;gap:.5rem;flex-shrink:0;background:#0a1128}
             .map-sidebar__list{overflow-y:auto;flex:1}
@@ -675,6 +781,7 @@ class BelgradeMap {
             .map-pin span{transform:rotate(45deg);font-size:1rem;display:block}
             .map-pin__pulse{position:absolute;left:9px;top:8px;width:22px;height:22px;border-radius:50%;opacity:.55;animation:mapPinPulse 2.2s ease-out infinite}
             @keyframes mapPinPulse{0%{transform:scale(.6);opacity:.55}70%{transform:scale(2.1);opacity:0}100%{opacity:0}}
+            #belgrade-map.map-is-moving .map-pin__pulse{animation-play-state:paused;opacity:0}
             .map-popup{font-family:'Poppins',sans-serif;min-width:210px}
             .map-popup__type{display:inline-block;color:white;padding:.15rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;margin-bottom:.4rem}
             .map-popup__name{font-size:1.05rem;font-weight:700;color:#1e293b;margin:0 0 .4rem;font-family:'Playfair Display',serif}

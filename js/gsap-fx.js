@@ -80,15 +80,18 @@
 
             gsap.set(cards, { transformPerspective: 1200, force3D: true });
 
+            // No pin here: pinned ScrollTrigger sections freeze native scroll
+            // and hand it to the animation instead, which is a well-known
+            // source of stutter/jank on mobile (the dynamic browser toolbar
+            // resizing the viewport mid-scroll fights with the pin). The
+            // scatter now just scrubs in as the grid naturally passes through
+            // the viewport, so scrolling itself can never stutter.
             var tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: stage,
-                    start: 'top top+=90',
-                    end: '+=100%',
-                    scrub: 1,
-                    pin: true,
-                    pinSpacing: true,
-                    anticipatePin: 1
+                    start: 'top 85%',
+                    end: 'bottom 35%',
+                    scrub: 1
                 }
             });
 
@@ -134,13 +137,15 @@
             return;
         }
 
+        // Same reasoning as the card scatter above: no pin, so this can
+        // never fight with native scroll — the circle reveal just scrubs in
+        // as the section passes through the viewport.
         gsap.timeline({
             scrollTrigger: {
                 trigger: section,
-                start: 'top top',
-                end: '+=120%',
-                scrub: 1.5,
-                pin: true
+                start: 'top 75%',
+                end: 'bottom 25%',
+                scrub: 1
             }
         }).to(panel, { clipPath: 'circle(150% at 50% 50%)', ease: 'power2.inOut' });
     }
