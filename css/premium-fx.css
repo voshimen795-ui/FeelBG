@@ -863,6 +863,31 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 /* ============================================
+   BELGRADE CONSTELLATION (Three.js)
+   Gold particle network behind the Discover
+   Belgrade section — canvas sits between the
+   section's navy background and its content.
+   ============================================ */
+.categories {
+    position: relative;
+    overflow: hidden;
+}
+
+.categories .constellation-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.categories > .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
    LIVE EVENTS — PREV/NEXT SLIDER BUTTONS
    ============================================ */
 .events-nav {
