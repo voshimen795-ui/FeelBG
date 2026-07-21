@@ -1078,3 +1078,30 @@ body.hero-kinetic-done .hero-kinetic {
 .hero__browse-link:hover {
     color: #ffd700;
 }
+
+/* Non-home pages: plain "FeelBG" wordmark in a navy gradient instead of
+   the logo artwork + dark plate — reads cleanly against the gold header. */
+.nav__logo-link--text {
+    background: none;
+    padding: 0.2rem 0.3rem;
+    border-radius: 0;
+}
+
+.nav__logo-brandtext {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    background: linear-gradient(135deg, #0a1129 0%, #14204a 35%, #1e3a8a 65%, #2b4cb0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #14204a;
+}
+
+@media (max-width: 767px) {
+    .nav__logo-brandtext {
+        font-size: 1.4rem;
+    }
+}

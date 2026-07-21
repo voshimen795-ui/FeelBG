@@ -1,18 +1,19 @@
 'use strict';
 
 /**
- * FeelBG AI Adventure — "Create My Belgrade Story".
+ * FeelBG Belgrade Adventure — "Create My Belgrade Story".
  *
  * Opened from the hero button ([data-adventure]). Asks four quick questions
- * (who it's for, what they want to do, how long, budget), sends them to
- * /api/adventure (Claude Fable 5 server-side), and renders the returned
- * story as a cinematic scroll: a real Belgrade video backdrop, then each
+ * (who it's for, what they want to do, how long, budget), then crafts a
+ * short story entirely on the client: venues are scored and picked with a
+ * small deterministic rules engine (mood/interest match, budget-tier fit,
+ * rating, a touch of randomness for variety), and each stop's narrative is
+ * assembled from localized text templates around the venue's real name and
+ * area — no network call, no external model, nothing that can go down.
+ * Renders as a cinematic scroll: a real Belgrade video backdrop, then each
  * stop as a chapter — the venue's real photo drifting in slow Ken Burns
  * motion like a film still — with a navy Reserve button that hands off to
  * the existing WhatsApp booking chat.
- *
- * If the API isn't configured or fails, it falls back to the classic
- * venue browser so the guest is never stuck.
  */
 class BelgradeAdventure {
     constructor() {
@@ -43,14 +44,6 @@ class BelgradeAdventure {
         if (key in lang) return lang[key];
         if (key in fallback) return fallback[key];
         return key;
-    }
-
-    langCode() {
-        try {
-            const stored = localStorage.getItem('feelbg_language');
-            if (stored) return JSON.parse(stored).code || 'en';
-        } catch (err) { /* ignore */ }
-        return 'en';
     }
 
     open() {
@@ -192,32 +185,140 @@ class BelgradeAdventure {
             </div>`;
     }
 
-    // ---------- Step 3: fetch + story ----------
+    // ---------- Step 3: craft the story locally + render ----------
 
-    async generate() {
-        this.renderLoading();
-        let adventure = null;
-        try {
-            const resp = await fetch('/api/adventure', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    mood: this.answers.mood,
-                    interests: this.answers.interests,
-                    time: this.answers.time,
-                    budget: this.answers.budget,
-                    language: this.langCode()
-                })
+    // Fills {placeholders} in a translated template string with the given values.
+    tpl(key, vars) {
+        let text = this.t(key);
+        if (vars) {
+            Object.keys(vars).forEach((k) => {
+                text = text.split('{' + k + '}').join(vars[k]);
             });
-            if (resp.ok) adventure = await resp.json();
-        } catch (err) { /* network failure — handled below */ }
-
-        if (!this.modalEl) return; // user closed while waiting
-        if (!adventure || !adventure.stops || !adventure.stops.length) {
-            this.renderError();
-            return;
         }
-        this.renderStory(adventure);
+        return text;
+    }
+
+    // Picks one of N numbered template variants (adventure.tpl.foo.1, .2, ...),
+    // falling back down to variant 1 if a higher-numbered one isn't translated
+    // for the active language (t() already falls back to English per-key, this
+    // just keeps the count itself sane across languages with fewer variants).
+    pickTemplate(baseKey, count, vars) {
+        const n = Math.floor(Math.random() * count) + 1;
+        return this.tpl(baseKey + '.' + n, vars);
+    }
+
+    scoreVenue(v, kind, answers) {
+        const priceTier = { moderate: 1, upscale: 2 }[v.price] || 1;
+        const budgetTarget = { budget: 1, moderate: 1, upscale: 2 }[answers.budget] || 1;
+        let score = (v.rating || 4.4) * 2;
+        score -= Math.abs(priceTier - budgetTarget) * 2;
+        if (v.badge === 'topRated') score += 2;
+        else if (v.badge === 'popular') score += 1;
+        else if (v.badge === 'trending') score += 1;
+        if (kind === 'restaurant' && answers.interests.includes('food')) score += 3;
+        if (kind === 'nightlife' && answers.interests.includes('nightlife')) score += 3;
+        if (kind === 'restaurant' && answers.interests.includes('chill') && priceTier === 1) score += 1.5;
+        score += Math.random() * 1.5; // small jitter so repeat generations vary
+        return score;
+    }
+
+    rankVenues(list, kind, answers) {
+        return list
+            .map((v) => ({ v, score: this.scoreVenue(v, kind, answers) }))
+            .sort((a, b) => b.score - a.score)
+            .map((x) => x.v);
+    }
+
+    // Decides how many stops and of what kind, from mood/interests/time —
+    // simple, readable rules instead of a model call.
+    planStops(answers) {
+        const allowNightlife = answers.mood !== 'family' && answers.mood !== 'business';
+        const wantsNightlife = allowNightlife && (
+            answers.interests.includes('nightlife') ||
+            answers.mood === 'friends' ||
+            answers.mood === 'romantic'
+        );
+
+        if (answers.time === 'short') return ['restaurant'];
+        if (answers.time === 'all_night') {
+            if (wantsNightlife) return ['restaurant', 'nightlife', 'nightlife'];
+            if (allowNightlife) return ['restaurant', 'restaurant', 'nightlife'];
+            return ['restaurant', 'restaurant', 'restaurant'];
+        }
+        // evening (default)
+        return wantsNightlife ? ['restaurant', 'nightlife'] : ['restaurant', 'restaurant'];
+    }
+
+    craftAdventure(answers) {
+        const db = window.FEELBG_VENUES || {};
+        const restaurants = db.restaurants || [];
+        const nightlife = db.nightlife || [];
+        const attractions = db.attractions || [];
+
+        const rankedRestaurants = this.rankVenues(restaurants, 'restaurant', answers);
+        const rankedNightlife = this.rankVenues(nightlife, 'nightlife', answers);
+        const plan = this.planStops(answers);
+
+        const used = new Set();
+        const takeFrom = (list) => {
+            const pick = list.find((v) => !used.has(v.name));
+            if (pick) used.add(pick.name);
+            return pick;
+        };
+        const nightlifeNames = new Set(nightlife.map((v) => v.name));
+
+        const stops = [];
+        plan.forEach((kind) => {
+            const primary = kind === 'nightlife' ? rankedNightlife : rankedRestaurants;
+            const v = takeFrom(primary) || takeFrom(rankedRestaurants) || takeFrom(rankedNightlife);
+            if (!v) return;
+            const actualKind = nightlifeNames.has(v.name) ? 'nightlife' : 'restaurant';
+            stops.push({ venue: v, kind: actualKind });
+        });
+
+        if (!stops.length) return null;
+
+        const stopsOut = stops.map((s, i) => {
+            const slotKey = i === 0
+                ? 'adventure.tpl.slot.goldenHour'
+                : (s.kind === 'nightlife' ? 'adventure.tpl.slot.lateNight' : 'adventure.tpl.slot.afterDinner');
+            const narrativeBase = s.kind === 'nightlife' ? 'adventure.tpl.stopNightlife' : 'adventure.tpl.stopRestaurant';
+            const narrativeCount = s.kind === 'nightlife' ? 3 : 4;
+            return {
+                venueName: s.venue.name,
+                timeOfDay: this.t(slotKey),
+                narrative: this.pickTemplate(narrativeBase, narrativeCount, { name: s.venue.name, area: s.venue.area || '' }),
+                venue: s.venue
+            };
+        });
+
+        let intro = this.pickTemplate('adventure.tpl.intro', 4);
+        if (answers.interests.includes('culture') && attractions.length) {
+            const topAttraction = attractions.slice().sort((a, b) => (b.rating || 0) - (a.rating || 0))[0];
+            if (topAttraction) intro += ' ' + this.tpl('adventure.tpl.cultureLine', { attraction: topAttraction.name });
+        }
+
+        return {
+            title: this.pickTemplate('adventure.tpl.title', 4),
+            intro,
+            stops: stopsOut,
+            outro: this.pickTemplate('adventure.tpl.outro', 4)
+        };
+    }
+
+    generate() {
+        this.renderLoading();
+        // A brief pause purely for feel — the story is assembled locally,
+        // but an instant cut from quiz to finished story reads as a glitch.
+        setTimeout(() => {
+            if (!this.modalEl) return; // user closed while waiting
+            const adventure = this.craftAdventure(this.answers);
+            if (!adventure) {
+                this.renderError();
+                return;
+            }
+            this.renderStory(adventure);
+        }, 900);
     }
 
     renderError() {
