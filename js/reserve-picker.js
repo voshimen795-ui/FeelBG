@@ -18,7 +18,7 @@ class ReservePicker {
         this.modalEl = null;
         this.injectStyles();
         document.addEventListener('click', (e) => {
-            const trigger = e.target.closest('[data-reserve-picker]');
+            const trigger = e.target.closest('[data-venue-browser]');
             if (trigger) {
                 e.preventDefault();
                 this.open();

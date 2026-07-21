@@ -18,5 +18,8 @@
   "license": "MIT",
   "devDependencies": {
     "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0"
   }
 }

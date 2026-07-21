@@ -1059,3 +1059,22 @@ body.hero-kinetic-done .hero-kinetic {
         animation: none !important;
     }
 }
+
+.hero__browse-link {
+    margin-top: 0.15rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(244, 239, 226, 0.85);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    transition: color 0.2s ease;
+}
+
+.hero__browse-link:hover {
+    color: #ffd700;
+}
