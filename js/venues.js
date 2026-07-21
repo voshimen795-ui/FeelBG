@@ -1,6 +1,6 @@
 "use strict";
 
-window.FEELBG_VENUES = {
+var FEELBG_VENUES = {
     restaurants: [
         {
             name: "Temperament",
@@ -334,3 +334,10 @@ window.FEELBG_VENUES = {
         },
     ],
 };
+
+if (typeof window !== "undefined") {
+    window.FEELBG_VENUES = FEELBG_VENUES;
+}
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = FEELBG_VENUES;
+}
