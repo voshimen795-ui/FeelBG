@@ -196,30 +196,6 @@ body {
 }
 
 /* ============================================
-   SWIPEABLE CATEGORIES (Mobile)
-   ============================================ */
-@media (max-width: 767px) {
-    .categories__grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 1rem;
-        padding: 0 1rem 1rem;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-    
-    .categories__grid::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .category__card {
-        min-width: 280px;
-        scroll-snap-align: center;
-    }
-}
-
-/* ============================================
    FLOATING ACTION BUTTON (Mobile)
    ============================================ */
 .mobile-fab {
