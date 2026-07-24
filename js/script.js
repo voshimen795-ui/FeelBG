@@ -36,33 +36,6 @@ const throttle = (func, limit = 100) => {
 };
 
 // ============================================
-// PRELOADER
-// ============================================
-
-class Preloader {
-    constructor() {
-        this.preloader = $('#preloader');
-        this.init();
-    }
-
-    init() {
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                this.hide();
-            }, 1000);
-        });
-    }
-
-    hide() {
-        if (!this.preloader) return;
-        this.preloader.classList.add('hidden');
-        setTimeout(() => {
-            if (this.preloader) this.preloader.style.display = 'none';
-        }, 500);
-    }
-}
-
-// ============================================
 // CUSTOM CURSOR
 // ============================================
 
@@ -910,7 +883,6 @@ class LiveEventsInit {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new Preloader();
     new CustomCursor();
     new Header();
     new AnimatedCounter();
