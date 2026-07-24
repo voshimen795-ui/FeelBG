@@ -46,9 +46,12 @@
     .hero { min-height: 100svh; }
 }
 
+/* Reduced-motion users still get the calm looping first clip (see
+   HeroSlideshow in js/script.js — it skips the multi-clip crossfade
+   rotation here, not the video itself) so the hero isn't a flat
+   static image; the fallback slide just doesn't need to sit above it. */
 @media (prefers-reduced-motion: reduce) {
-    .hero__video { display: none; }
-    .hero__slide.active { opacity: 1; }
+    .hero__video { transition: none; }
 }
 
 /* Hero overlay — lightened ~45% from the original

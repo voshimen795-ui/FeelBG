@@ -734,9 +734,11 @@ class HeroSlideshow {
     }
 
     init() {
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            return; // fallback image stays put, CSS hides the <video> elements
-        }
+        // A single muted, looping ambient background clip is fine even for
+        // reduced-motion users (same category as an autoplaying GIF hero
+        // image) — what we skip below is the repeated scene-cutting
+        // crossfade rotation between different clips every few seconds.
+        const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         const first = this.videos[0];
 
@@ -749,7 +751,7 @@ class HeroSlideshow {
         this.safePlay(first);
         if (this.videos[1]) this.videos[1].preload = 'auto'; // preload the next clip
 
-        if (this.videos.length > 1) {
+        if (this.videos.length > 1 && !reducedMotion) {
             setInterval(() => this.nextVideo(), this.CLIP_SECONDS * 1000);
         }
 
