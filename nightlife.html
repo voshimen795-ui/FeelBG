@@ -219,5 +219,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="js/gsap-fx.js"></script>
+
+    <!-- Vercel Web Analytics (static-site integration -- no framework/bundler here,
+         so this is the plain-HTML path Vercel documents instead of the
+         @vercel/analytics React component). Served automatically once Analytics
+         is enabled for this project in the Vercel dashboard. -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
