@@ -32,13 +32,23 @@
             return;
         }
 
+        // Captured once, before the tween ever touches the title. getBoundingClientRect()
+        // reflects the CURRENT paint position including any transform already applied —
+        // re-querying it live once the tween is running would feed the already-shrunk
+        // position back in as if it were the starting point, corrupting the delta on every
+        // ScrollTrigger refresh. That's what caused the title to get stuck shrunk and
+        // "float" in place instead of smoothly scaling back out when scrolling back up.
+        var titleRect = title.getBoundingClientRect();
+        var titleCenterX = titleRect.left + titleRect.width / 2;
+        var titleCenterY = titleRect.top + titleRect.height / 2;
+        var titleHeight = titleRect.height;
+
         function getDelta() {
-            var t = title.getBoundingClientRect();
             var l = navLogo.getBoundingClientRect();
             return {
-                x: (l.left + l.width / 2) - (t.left + t.width / 2),
-                y: (l.top + l.height / 2) - (t.top + t.height / 2),
-                scale: Math.max(0.1, (l.height * 0.85) / t.height)
+                x: (l.left + l.width / 2) - titleCenterX,
+                y: (l.top + l.height / 2) - titleCenterY,
+                scale: Math.max(0.1, (l.height * 0.85) / titleHeight)
             };
         }
 
@@ -54,13 +64,28 @@
             }
         });
 
+        // duration: 1 makes this tween span the timeline's *entire* scrubbed
+        // range. Without it, GSAP's default duration (0.5) meant the title's
+        // transform only actually covered the first ~43% of the real scroll
+        // distance (since the opacity fade below, starting at 0.65 with its
+        // own default 0.5 duration, stretched the timeline's total length to
+        // 1.15) — for the remaining ~57% the title just sat frozen at its
+        // final shrunk value. Scrolling down that read as "arrives early,
+        // then fades"; scrolling back up it read as the title floating in
+        // place, tiny and static, for most of the hero before suddenly
+        // snapping back to full size right near the top.
+        //
+        // ease: 'none' matters too, separately: this tween is driven by
+        // scrub (scroll position), not by time — a dramatic named ease
+        // concentrates motion into a narrow band and fights the duration fix.
         tl.to(title, {
             x: function () { return getDelta().x; },
             y: function () { return getDelta().y; },
             scale: function () { return getDelta().scale; },
-            ease: 'power4.inOut'
+            ease: 'none',
+            duration: 1
         }, 0);
-        tl.to(wrap, { opacity: 0, ease: 'power1.in' }, 0.65);
+        tl.to(wrap, { opacity: 0, ease: 'none', duration: 0.35 }, 0.65);
     }
 
     /* ============================================

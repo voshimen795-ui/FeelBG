@@ -587,6 +587,19 @@ body.hero-kinetic-done .hero-kinetic {
     color: #f4efe2 !important;
 }
 
+/* Leftover from the pre-redesign light theme — var(--text-primary) is a
+   dark charcoal meant for a white page background. On the site's dark
+   navy background it rendered at ~1.3:1 contrast, effectively invisible. */
+.results-count {
+    color: #f4efe2 !important;
+}
+
+/* Same issue: var(--text-secondary) is a mid-gray tuned for white
+   backgrounds, well under WCAG AA (~3.9:1) on dark navy. */
+.events-thumb {
+    color: #9aa8cc !important;
+}
+
 .newsletter-input {
     background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
     color: #f4efe2 !important;

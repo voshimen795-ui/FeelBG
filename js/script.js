@@ -321,34 +321,6 @@ class SmoothScroll {
 }
 
 // ============================================
-// SCROLL TO TOP BUTTON
-// ============================================
-
-class ScrollToTop {
-    constructor() {
-        this.button = $('#scroll-top');
-        this.init();
-    }
-
-    init() {
-        window.addEventListener('scroll', throttle(() => {
-            if (window.scrollY >= 500) {
-                this.button.classList.add('show');
-            } else {
-                this.button.classList.remove('show');
-            }
-        }, 100));
-
-        this.button.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-}
-
-// ============================================
 // FORM VALIDATION & SUBMISSION
 // ============================================
 
@@ -890,7 +862,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new AnimatedCounter();
     new ParticlesAnimation();
     new SmoothScroll();
-    new ScrollToTop();
     new ContactForm();
     new NewsletterForm();
     new ParallaxEffect();
