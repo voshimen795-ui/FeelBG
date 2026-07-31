@@ -115,7 +115,7 @@
 .filters-section {
     padding: var(--spacing-lg) 0;
     background: var(--bg-secondary);
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid transparent;
     position: sticky;
     top: 80px;
     z-index: 90;
@@ -209,7 +209,7 @@
     min-width: 150px;
     padding: 0.75rem 1rem;
     background: var(--white);
-    border: 2px solid #e5e7eb;
+    border: 2px solid transparent;
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 500;
@@ -448,25 +448,6 @@
     font-weight: 700;
     color: var(--primary-color);
     font-size: 0.875rem;
-}
-
-.open-status {
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.open-status.open {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.open-status.closed {
-    background: #fee2e2;
-    color: #991b1b;
 }
 
 .place-card__footer {
@@ -720,26 +701,21 @@
 .detail-modal__title {
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
-    color: #1e3a8a;
     margin: 0;
     line-height: 1.2;
 }
 .detail-modal__rating {
     padding: 0.35rem 0.75rem;
-    background: #f3f4f6;
     border-radius: 0.5rem;
     font-weight: 700;
-    color: #b8860b;
     font-size: 0.95rem;
     white-space: nowrap;
 }
 .detail-modal__location {
-    color: #6b7280;
     font-size: 0.9rem;
     margin: 0 0 0.5rem;
 }
 .detail-modal__desc {
-    color: #374151;
     font-size: 0.9rem;
     line-height: 1.6;
     margin: 0 0 1rem;
@@ -747,16 +723,9 @@
 
 .detail-modal__info {
     padding: 1.25rem;
-    background: #fefce8;
     border-radius: 0.75rem;
     margin-bottom: 1.25rem;
-    border: 1px solid #fef08a;
-}
-.detail-modal__info h4 {
-    margin: 0 0 0.75rem;
-    color: #1e3a8a;
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
+    border: 1px solid transparent;
 }
 .detail-modal__info-row {
     display: flex;
@@ -764,10 +733,8 @@
     gap: 0.6rem;
     padding: 0.4rem 0;
     font-size: 0.9rem;
-    color: #374151;
 }
 .detail-modal__info-row i {
-    color: #b8860b;
     width: 18px;
     text-align: center;
     font-size: 0.85rem;
@@ -801,8 +768,6 @@
 }
 .detail-modal__close-btn {
     padding: 0.85rem 1.25rem;
-    background: #f3f4f6;
-    color: #374151;
     border: none;
     border-radius: 0.75rem;
     font-weight: 600;
@@ -811,7 +776,6 @@
     font-family: 'Poppins', sans-serif;
     transition: background 0.2s;
 }
-.detail-modal__close-btn:hover { background: #e5e7eb; }
 
 @media (max-width: 480px) {
     .detail-modal { max-width: 100%; border-radius: 1rem; }

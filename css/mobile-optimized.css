@@ -102,7 +102,15 @@ body {
 .hero {
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    padding-bottom: 80px; /* Space for bottom nav */
+}
+
+/* Space for the bottom nav — only where the bottom nav actually renders.
+   This was unscoped, so it also pushed the hero's centred content up by
+   40px on desktop, where there is no bottom nav to make room for. */
+@media (max-width: 767px) {
+    .hero {
+        padding-bottom: 80px;
+    }
 }
 
 /* Better image optimization for mobile */
