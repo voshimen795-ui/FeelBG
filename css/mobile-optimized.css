@@ -338,6 +338,15 @@ body {
 .scroll-reveal:nth-child(3) { transition-delay: 0.3s; }
 .scroll-reveal:nth-child(4) { transition-delay: 0.4s; }
 
+/* The 4 "Discover Belgrade" cards below the hero (Restaurants/Cafes/
+   Nightlife/Attractions) are each the nth-child(1..4) of .categories__grid,
+   so the stagger above made them fade in one at a time, ~0.1s apart, over
+   ~1s total. They render together instead, since they're reached by
+   scrolling as a single row, not read in sequence like a list. */
+.categories__grid .scroll-reveal {
+    transition-delay: 0s !important;
+}
+
 /* ============================================
    LOGO PLACEMENTS - MOBILE OPTIMIZED
    ============================================ */
