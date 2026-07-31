@@ -1121,3 +1121,86 @@ body.hero-kinetic-done .hero-kinetic {
         font-size: 1.4rem;
     }
 }
+
+/* ============================================
+   DESKTOP HEADER NAVIGATION (>= 768px)
+
+   styles.css hides .nav__list, .nav__link and .nav__toggle with
+   `display: none !important` at every width, and dropdown-menu.css parks
+   .nav__menu off-screen at `right: -100%` on index.html. With the hamburger
+   hidden too, nothing could ever open that slide-out panel — so the mobile
+   bottom bar was the site's only working navigation, which is why it had
+   been forced to render on desktop with !important.
+
+   A bottom tab bar is a mobile pattern, so desktop gets a real navbar
+   instead: the same links, laid out inline in the header. Below 768px none
+   of this applies and the bottom bar still handles navigation.
+   ============================================ */
+@media (min-width: 768px) {
+    /* Undo the off-screen slide-out panel so the menu sits in the header's
+       normal flex flow. Only index.html loads the rules being reversed here;
+       on the category pages these are harmless no-ops. */
+    .nav__menu {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        width: auto !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 0 !important;
+        background: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+        transition: none !important;
+        z-index: auto !important;
+    }
+
+    .nav__list {
+        display: flex !important;
+        align-items: center;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Navy on the gold header. #14204a holds ~4.9:1 against #b8860b, the
+       darkest stop of the header gradient, so it clears WCAG AA across the
+       whole sweep rather than only over the bright middle. */
+    .nav__link {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        color: #14204a !important;
+        font-weight: 600;
+        white-space: nowrap;
+        background: transparent;
+    }
+
+    .nav__link:hover,
+    .nav__link.active-link {
+        background: #14204a !important;
+        color: #ffd700 !important;
+    }
+
+    /* Redundant once the links themselves are visible. */
+    .nav__actions .nav__toggle {
+        display: none !important;
+    }
+}
+
+/* Narrow desktop: drop the icons and tighten spacing so five links, the
+   logo and the language picker still fit on one row without wrapping. */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .nav__link {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.85rem;
+        gap: 0;
+    }
+
+    .nav__link i {
+        display: none;
+    }
+}
