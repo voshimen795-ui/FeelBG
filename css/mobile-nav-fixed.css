@@ -65,29 +65,41 @@
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
-body {
-    padding-bottom: 65px !important;
-}
-
-main {
-    padding-bottom: 65px !important;
-}
-
-.footer {
-    margin-bottom: 65px !important;
-}
-
+/* The bottom nav is a mobile-only pattern, so the space it takes up is
+   reserved on mobile only. These three rules used to sit outside any media
+   query, which reserved 65px of dead space at the bottom of every desktop
+   page for a bar that shouldn't render there at all. */
 @media (max-width: 767px) {
+    body {
+        padding-bottom: 65px !important;
+    }
+
+    main {
+        padding-bottom: 65px !important;
+    }
+
+    .footer {
+        margin-bottom: 65px !important;
+    }
+
     .mobile-bottom-nav {
         display: flex !important;
     }
+
     .mobile-nav-item span {
         font-size: 0.55rem !important;
     }
 }
 
+/* Desktop already has a full navbar in the header, so the bottom bar is a
+   redundant second navigation there. This rule has to live in this file to
+   work: mobile-optimized.css hides it at this breakpoint too, but that file
+   isn't loaded on the four category pages, and the `display: flex !important`
+   base rule above would out-rank it anyway. This block previously repeated
+   `display: flex !important` — an apparent copy-paste of the mobile block —
+   which is what forced the bar onto desktop across the whole site. */
 @media (min-width: 768px) {
     .mobile-bottom-nav {
-        display: flex !important;
+        display: none !important;
     }
 }
