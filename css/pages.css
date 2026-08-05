@@ -56,7 +56,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     margin-bottom: var(--spacing-sm);
     color: rgba(255, 255, 255, 0.8);
 }
@@ -75,13 +75,13 @@
 }
 
 .page-hero__title {
-    font-size: 3.5rem;
+    font-size: var(--text-4xl);
     margin-bottom: var(--spacing-sm);
     color: var(--white);
 }
 
 .page-hero__description {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: var(--spacing-md);
     max-width: 700px;
@@ -100,13 +100,13 @@
     padding: 0.75rem 1.5rem;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     font-weight: 600;
 }
 
 .stat-item i {
     color: var(--secondary-light);
-    font-size: 1.25rem;
+    font-size: var(--icon-md);
 }
 
 /* ============================================
@@ -133,20 +133,20 @@
     display: flex;
     align-items: center;
     background: var(--white);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 0.75rem 1.5rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-1);
     transition: all var(--transition-normal);
 }
 
 .filter-search:focus-within {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-2);
     transform: translateY(-2px);
 }
 
 .filter-search i {
     color: var(--secondary-color);
-    font-size: 1.25rem;
+    font-size: var(--icon-md);
     margin-right: 1rem;
 }
 
@@ -155,7 +155,7 @@
     min-width: 0;
     border: none;
     background: transparent;
-    font-size: 1rem;
+    font-size: var(--text-base);
     color: var(--text-primary);
     outline: none;
 }
@@ -175,8 +175,8 @@
     padding: 0.75rem 1.5rem;
     background: var(--white);
     border: 2px solid transparent;
-    border-radius: var(--radius-lg);
-    font-size: 0.875rem;
+    border-radius: var(--radius-xl);
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--text-primary);
     cursor: pointer;
@@ -210,8 +210,8 @@
     padding: 0.75rem 1rem;
     background: var(--white);
     border: 2px solid transparent;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
     font-weight: 500;
     color: var(--text-primary);
     cursor: pointer;
@@ -228,8 +228,8 @@
     background: var(--primary-color);
     color: var(--white);
     border: none;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-normal);
@@ -260,7 +260,7 @@
 }
 
 .results-count {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
     color: var(--text-primary);
 }
 
@@ -277,8 +277,8 @@
     justify-content: center;
     background: var(--bg-secondary);
     border: 2px solid transparent;
-    border-radius: var(--radius-md);
-    font-size: 1.25rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xl);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-normal);
@@ -305,15 +305,15 @@
 
 .place-card {
     background: var(--white);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-1);
     transition: all var(--transition-normal);
 }
 
 .place-card:hover {
     transform: translateY(-10px);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-4);
 }
 
 .place-card__image {
@@ -330,8 +330,8 @@
     padding: 0.5rem 1rem;
     background: var(--gradient-secondary);
     color: var(--white);
-    border-radius: var(--radius-md);
-    font-size: 0.75rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xs);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -370,7 +370,7 @@
 }
 
 .place-card__heart i {
-    font-size: 1.25rem;
+    font-size: var(--icon-md);
 }
 
 .place-card__heart.active i {
@@ -390,7 +390,7 @@
 }
 
 .place-card__title {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
     color: var(--primary-color);
     margin: 0;
     line-height: 1.2;
@@ -402,14 +402,14 @@
     gap: 0.25rem;
     padding: 0.5rem 0.75rem;
     background: var(--bg-secondary);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     font-weight: 700;
     color: var(--secondary-color);
     flex-shrink: 0;
 }
 
 .place-card__rating i {
-    font-size: 0.875rem;
+    font-size: var(--icon-sm);
 }
 
 .place-card__cuisine,
@@ -417,7 +417,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
@@ -447,7 +447,7 @@
 .price-range {
     font-weight: 700;
     color: var(--primary-color);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
 }
 
 .place-card__footer {
@@ -464,9 +464,9 @@
     justify-content: center;
     background: var(--bg-secondary);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     color: var(--primary-color);
-    font-size: 1.125rem;
+    font-size: var(--icon-md);
     cursor: pointer;
     transition: all var(--transition-normal);
 }
@@ -483,9 +483,9 @@
     background: var(--gradient-secondary);
     color: var(--white);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     cursor: pointer;
     transition: all var(--transition-normal);
     display: flex;
@@ -496,7 +496,7 @@
 
 .btn-details:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-gold-glow);
 }
 
 /* ============================================
@@ -523,7 +523,7 @@
 
 @media screen and (max-width: 768px) {
     .page-hero__title {
-        font-size: 2.5rem;
+        font-size: var(--text-3xl);
     }
     
     .page-hero__stats {
@@ -562,7 +562,7 @@
     }
     
     .page-hero__title {
-        font-size: 2rem;
+        font-size: var(--text-2xl);
     }
     
     .filter-advanced {
@@ -680,7 +680,7 @@
     background: rgba(0,0,0,0.5);
     color: #fff;
     border: none;
-    font-size: 22px;
+    font-size: var(--text-xl);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -699,8 +699,8 @@
     margin-bottom: 0.5rem;
 }
 .detail-modal__title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
     margin: 0;
     line-height: 1.2;
 }
@@ -708,15 +708,15 @@
     padding: 0.35rem 0.75rem;
     border-radius: 0.5rem;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     white-space: nowrap;
 }
 .detail-modal__location {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     margin: 0 0 0.5rem;
 }
 .detail-modal__desc {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     line-height: 1.6;
     margin: 0 0 1rem;
 }
@@ -732,12 +732,12 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.4rem 0;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 .detail-modal__info-row i {
     width: 18px;
     text-align: center;
-    font-size: 0.85rem;
+    font-size: var(--icon-sm);
 }
 
 .detail-modal__actions {
@@ -753,13 +753,13 @@
     border: none;
     border-radius: 0.75rem;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
     transition: background 0.2s, transform 0.15s;
 }
 .detail-modal__reserve:hover {
@@ -771,9 +771,9 @@
     border: none;
     border-radius: 0.75rem;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
     transition: background 0.2s;
 }
 
@@ -781,5 +781,5 @@
     .detail-modal { max-width: 100%; border-radius: 1rem; }
     .detail-modal__image { height: 180px; }
     .detail-modal__body { padding: 1.25rem; }
-    .detail-modal__title { font-size: 1.3rem; }
+    .detail-modal__title { font-size: var(--text-xl); }
 }

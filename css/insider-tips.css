@@ -3,7 +3,7 @@
     bottom: 90px;
     right: 20px;
     z-index: 99;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
 }
 
 .insider-tip-toggle {
@@ -14,7 +14,7 @@
     color: #fff;
     border: none;
     cursor: pointer;
-    font-size: 1.3rem;
+    font-size: var(--text-xl);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +74,7 @@
 
 .insider-tip-label {
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -83,7 +83,7 @@
     background: none;
     border: none;
     color: rgba(255,255,255,0.8);
-    font-size: 1.3rem;
+    font-size: var(--text-xl);
     cursor: pointer;
     line-height: 1;
 }
@@ -100,14 +100,14 @@
 }
 
 .insider-tip-icon {
-    font-size: 1.5rem;
+    font-size: var(--icon-lg);
     color: #b8860b;
     flex-shrink: 0;
     margin-top: 2px;
 }
 
 .insider-tip-text {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     line-height: 1.55;
     color: #f4efe2;
     margin: 0;
@@ -127,11 +127,11 @@
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     color: #14204a;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     cursor: pointer;
     text-align: right;
     transition: filter 0.2s ease;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
 }
 
 .insider-tip-next:hover {
@@ -154,6 +154,6 @@
     .insider-tip-toggle {
         width: 46px;
         height: 46px;
-        font-size: 1.1rem;
+        font-size: var(--text-lg);
     }
 }

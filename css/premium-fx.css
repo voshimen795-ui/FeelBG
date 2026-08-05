@@ -228,7 +228,7 @@ body {
     position: relative;
     display: inline-block;
     padding-bottom: 0.65rem;
-    font-size: 2rem;
+    font-size: var(--text-2xl);
     letter-spacing: 0.02em;
 }
 
@@ -249,7 +249,7 @@ body {
 }
 
 .footer-logo-section .footer__text {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
     max-width: 320px;
 }
 
@@ -720,7 +720,7 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 .place-card:hover .btn-details {
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-gold-glow);
 }
 
 /* ============================================
@@ -806,7 +806,7 @@ body.hero-kinetic-done .hero-kinetic {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: var(--text-base);
     z-index: 3;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
 }
@@ -856,7 +856,7 @@ body.hero-kinetic-done .hero-kinetic {
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
     border: none;
-    font-size: 22px;
+    font-size: var(--text-xl);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -919,7 +919,7 @@ body.hero-kinetic-done .hero-kinetic {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.05rem;
+    font-size: var(--text-base);
     cursor: pointer;
     z-index: 5;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -944,7 +944,7 @@ body.hero-kinetic-done .hero-kinetic {
     .events-nav {
         width: 38px;
         height: 38px;
-        font-size: 0.9rem;
+        font-size: var(--text-sm);
     }
     .events-nav--prev { left: 4px; }
     .events-nav--next { right: 4px; }
@@ -985,8 +985,8 @@ body.hero-kinetic-done .hero-kinetic {
     border: 1px solid rgba(255, 236, 170, 0.75);
     border-radius: 999px;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.05rem;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
     font-weight: 700;
     letter-spacing: 0.02em;
     color: #14204a;
@@ -1026,12 +1026,12 @@ body.hero-kinetic-done .hero-kinetic {
     border-radius: 50%;
     background: #14204a;
     color: #ffd700;
-    font-size: 0.85rem;
+    font-size: var(--icon-sm);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .hero-reserve-btn__arrow {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     transition: transform 0.25s ease;
 }
 
@@ -1044,8 +1044,8 @@ body.hero-kinetic-done .hero-kinetic {
     align-items: center;
     gap: 7px;
     margin: 0;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.85rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
     font-weight: 500;
     color: rgba(244, 239, 226, 0.92);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
@@ -1053,7 +1053,7 @@ body.hero-kinetic-done .hero-kinetic {
 
 .hero__reserve-note i {
     color: #25d366;
-    font-size: 1rem;
+    font-size: var(--icon-sm);
     filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.5));
 }
 
@@ -1063,10 +1063,10 @@ body.hero-kinetic-done .hero-kinetic {
     }
     .hero-reserve-btn {
         padding: 14px 28px;
-        font-size: 0.95rem;
+        font-size: var(--text-base);
     }
     .hero__reserve-note {
-        font-size: 0.78rem;
+        font-size: var(--text-xs);
     }
 }
 
@@ -1081,8 +1081,8 @@ body.hero-kinetic-done .hero-kinetic {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.82rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
     font-weight: 500;
     color: rgba(244, 239, 226, 0.85);
     text-decoration: underline;
@@ -1104,9 +1104,9 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 .nav__logo-brandtext {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.7rem;
+    font-size: var(--text-2xl);
     letter-spacing: 0.01em;
     line-height: 1;
     background: linear-gradient(135deg, #0a1129 0%, #14204a 35%, #1e3a8a 65%, #2b4cb0 100%);
@@ -1118,7 +1118,7 @@ body.hero-kinetic-done .hero-kinetic {
 
 @media (max-width: 767px) {
     .nav__logo-brandtext {
-        font-size: 1.4rem;
+        font-size: var(--text-xl);
     }
 }
 
@@ -1196,7 +1196,7 @@ body.hero-kinetic-done .hero-kinetic {
 @media (min-width: 768px) and (max-width: 1023px) {
     .nav__link {
         padding: 0.45rem 0.6rem;
-        font-size: 0.85rem;
+        font-size: var(--text-sm);
         gap: 0;
     }
 

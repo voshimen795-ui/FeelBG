@@ -1,0 +1,151 @@
+/* ============================================
+   FEELBG DESIGN TOKENS
+   Single source of truth for spacing, type, radius and shadow.
+
+   This file must be loaded FIRST on every page, before any other
+   stylesheet. Nothing in here paints anything — it only declares
+   custom properties that the rest of the CSS consumes.
+
+   Rules of the road:
+   - Never hardcode a spacing, font-size or radius value in a
+     component. Reach for a token. If no token fits, the design
+     needs a decision, not a new magic number.
+   - Breakpoints are 480px / 768px / 1024px. Nothing else.
+   ============================================ */
+
+:root {
+    /* ============================================
+       SPACING — 4px base, 10 steps
+       Use for padding, margin and gap. Everything else is a size.
+       ============================================ */
+    --space-0: 0;
+    --space-1: 0.25rem;   /*  4px */
+    --space-2: 0.5rem;    /*  8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.5rem;    /* 24px */
+    --space-6: 2rem;      /* 32px */
+    --space-7: 3rem;      /* 48px */
+    --space-8: 4rem;      /* 64px */
+    --space-9: 6rem;      /* 96px */
+
+    /* ============================================
+       FLUID LAYOUT
+       These scale with the viewport, which is why the site no
+       longer needs a media query for every vertical gap.
+       ============================================ */
+    --section-y: clamp(3rem, 8vw, 6rem);      /* vertical rhythm between sections */
+    --gutter: clamp(1rem, 4vw, 2rem);         /* horizontal page padding */
+    --card-pad: clamp(1.25rem, 4vw, 2rem);    /* inner padding of any card surface */
+    --grid-gap: clamp(1rem, 3vw, 2rem);       /* gap between cards in a grid */
+
+    /* Vertical rhythm inside a component (stacked text, list items) */
+    --stack-tight: var(--space-2);
+    --stack: var(--space-4);
+    --stack-loose: var(--space-6);
+
+    /* ============================================
+       TYPOGRAPHY — 1.25 ratio, fluid above --text-lg
+       The fluid steps replace the old per-breakpoint font-size
+       overrides: one declaration covers 320px through 1280px.
+       ============================================ */
+    /* Body steps are fixed: text this small should not drift with the
+       viewport, and these sizes are also reused by inline icons. */
+    --text-xs: 0.75rem;                            /* 12px — labels, nav captions */
+    --text-sm: 0.875rem;                           /* 14px — meta, badges */
+    --text-base: 1rem;                             /* 16px — body */
+    --text-lg: 1.125rem;                           /* 18px — lead paragraph */
+    --text-xl: 1.25rem;                            /* 20px — card titles */
+
+    /* Display steps are fluid: one declaration covers 320px to 1280px,
+       which is what removes the per-breakpoint font-size overrides. */
+    --text-2xl: clamp(1.5rem, 3vw, 1.875rem);      /* sub-headings */
+    --text-3xl: clamp(1.75rem, 4.5vw, 2.5rem);     /* section titles */
+    --text-4xl: clamp(2.25rem, 7vw, 3.5rem);       /* page hero titles */
+    --text-5xl: clamp(2.5rem, 9vw, 4.5rem);        /* home hero, mask reveal */
+
+    /* Icon sizes are deliberately separate from the type scale so a
+       glyph never inherits a heading's fluid growth curve. */
+    --icon-sm: 0.875rem;
+    --icon-md: 1.125rem;
+    --icon-lg: 1.5rem;
+    --icon-xl: 2rem;
+
+    --leading-none: 1;
+    --leading-tight: 1.2;
+    --leading-snug: 1.35;
+    --leading-normal: 1.6;
+    --leading-relaxed: 1.75;
+
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --weight-black: 900;
+
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.05em;
+    --tracking-wider: 0.12em;   /* uppercase eyebrow labels */
+
+    /* ============================================
+       RADIUS — 6 steps
+       ============================================ */
+    --radius-xs: 0.25rem;   /*  4px */
+    --radius-sm: 0.5rem;    /*  8px */
+    --radius-md: 0.75rem;   /* 12px */
+    --radius-lg: 1rem;      /* 16px */
+    --radius-xl: 1.5rem;    /* 24px */
+    --radius-2xl: 2rem;     /* 32px */
+    --radius-full: 999px;
+
+    /* ============================================
+       ELEVATION — 4 steps
+       ============================================ */
+    --shadow-1: 0 1px 3px rgba(10, 17, 40, 0.08), 0 1px 2px rgba(10, 17, 40, 0.06);
+    --shadow-2: 0 4px 12px rgba(10, 17, 40, 0.10), 0 2px 4px rgba(10, 17, 40, 0.06);
+    --shadow-3: 0 12px 28px rgba(10, 17, 40, 0.14), 0 4px 8px rgba(10, 17, 40, 0.08);
+    --shadow-4: 0 24px 56px rgba(10, 17, 40, 0.20), 0 8px 16px rgba(10, 17, 40, 0.10);
+
+    /* Brand-tinted elevation, for gold and blue surfaces */
+    --shadow-gold-glow: 0 8px 28px rgba(184, 134, 11, 0.28);
+    --shadow-blue-glow: 0 8px 28px rgba(30, 58, 138, 0.28);
+
+    /* ============================================
+       COMPONENT SURFACES
+       The card surface is a warm champagne rather than the old
+       full gold gradient: the brand warmth stays, but text now
+       sits on a calm surface instead of a moving gradient.
+       Gold moves to the border, the accent bar and the icons.
+       ============================================ */
+    --surface-card: linear-gradient(160deg, #fffaf0 0%, #fdf3dc 100%);
+    --surface-card-hover: linear-gradient(160deg, #fffdf7 0%, #fdf6e6 100%);
+    --surface-card-ink: #14204a;              /* text on a card surface */
+    --surface-card-ink-muted: rgba(20, 32, 74, 0.72);
+    --border-gold-hairline: rgba(184, 134, 11, 0.32);
+    --border-gold-strong: rgba(184, 134, 11, 0.55);
+
+    /* ============================================
+       CONTROL SIZES
+       Repeated icon buttons / avatars, so they stop drifting
+       between 45px, 50px, 60px and 65px across files.
+       ============================================ */
+    --control-sm: 2.25rem;   /* 36px */
+    --control-md: 2.75rem;   /* 44px — minimum comfortable touch target */
+    --control-lg: 3.25rem;   /* 52px */
+    --control-xl: 3.75rem;   /* 60px */
+
+    --layout-max: 1200px;
+
+    /* ============================================
+       LEGACY ALIASES
+       The old five-step scale, remapped onto the new one so any
+       rule not yet migrated keeps rendering correctly. Removed
+       once no stylesheet references them.
+       ============================================ */
+    --spacing-xs: var(--space-2);
+    --spacing-sm: var(--space-4);
+    --spacing-md: var(--space-6);
+    --spacing-lg: var(--space-7);
+    --spacing-xl: var(--section-y);
+}

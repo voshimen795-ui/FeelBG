@@ -33,14 +33,14 @@
 }
 
 .mobile-nav-item i {
-    font-size: 1.25rem !important;
+    font-size: var(--icon-md) !important;
     margin-bottom: 0.2rem !important;
     color: rgba(255, 255, 255, 0.9) !important;
     flex-shrink: 0 !important;
 }
 
 .mobile-nav-item span {
-    font-size: 0.6rem !important;
+    font-size: var(--text-xs) !important;
     font-weight: 600 !important;
     text-transform: capitalize !important;
     white-space: nowrap !important;
@@ -87,7 +87,7 @@
     }
 
     .mobile-nav-item span {
-        font-size: 0.55rem !important;
+        font-size: var(--text-xs) !important;
     }
 }
 
