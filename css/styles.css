@@ -308,7 +308,7 @@ input, textarea {
     top: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-2);
     z-index: var(--z-fixed);
@@ -316,7 +316,7 @@ input, textarea {
 }
 
 .header.scroll-header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     box-shadow: var(--shadow-3);
 }
 
@@ -476,13 +476,13 @@ input, textarea {
 }
 
 .nav__list {
-    display: none !important; /* Hide top navigation menu on all devices */
+    display: none; /* Hide top navigation menu on all devices */
     gap: var(--space-6);
     list-style: none;
 }
 
 .nav__link {
-    display: none !important; /* Hide all navigation links */
+    display: none; /* Hide all navigation links */
     align-items: center;
     gap: var(--space-2);
     font-weight: 500;
@@ -508,7 +508,7 @@ input, textarea {
 
 .nav__toggle,
 .nav__close {
-    display: none !important; /* Hide close button */
+    display: none; /* Hide close button */
     font-size: var(--text-xl);
     cursor: pointer;
     color: var(--white);
@@ -1968,14 +1968,8 @@ input, textarea {
     }
     
     /* Hide desktop nav, show mobile */
-    .nav__menu {
-        display: none !important;
-    }
-    
-    .nav__toggle {
-        display: none !important;
-    }
-    
+    .nav__menu,
+    .nav__toggle,
     .nav__close {
         display: none;
     }
@@ -2005,22 +1999,10 @@ input, textarea {
         margin: 0 auto;
     }
     
-    /* Stack category cards vertically on mobile - ONE BELOW THE OTHER */
-    .categories__grid {
-        grid-template-columns: 1fr !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: var(--space-5);
-        padding: 0 var(--space-4);
-        width: 100%;
-    }
-    
+    /* The grid is auto-fit minmax(240px), so it collapses to one column on
+       its own here — no need to override it into a flex column. */
     .category__card {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 100% !important;
-        min-height: 320px;
-        margin: 0 !important;
+        min-height: 280px;
     }
 }
 

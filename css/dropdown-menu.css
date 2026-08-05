@@ -105,9 +105,10 @@
     transform: rotate(90deg);
 }
 
-/* Toggle button always visible */
+/* Toggle button always visible. This file loads after styles.css, which
+   hides .nav__toggle, so plain source order is enough to win. */
 .nav__toggle {
-    display: flex !important;
+    display: flex;
     cursor: pointer;
 }
 

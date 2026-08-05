@@ -62,12 +62,12 @@
    is restored (hero-fullscreen.css disables it) since a lighter
    overlay alone isn't enough contrast for the heading. */
 .hero__background::before {
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(184, 134, 11, 0.45) 100%) !important;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(184, 134, 11, 0.45) 100%);
 }
 
 .hero__title,
 .hero-kinetic__title {
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================
@@ -91,11 +91,11 @@ body {
 .contact,
 .featured,
 .filters-section {
-    background: var(--page-bg-alt) !important;
+    background: var(--page-bg-alt);
 }
 
 .filters-section {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Gold shimmer sweep for section titles (index.html only) */
@@ -109,7 +109,7 @@ body {
 }
 
 .section__description {
-    color: var(--page-text-secondary) !important;
+    color: var(--page-text-secondary);
 }
 
 .mask-reveal__base-inner h2,
@@ -146,23 +146,23 @@ body {
 /* Header + footer become the FeelBG gold gradient on every page */
 .header,
 .header.scroll-header {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%) !important;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%);
 }
 
 .nav__actions .nav__toggle,
 .language-indicator {
-    background: rgba(10, 17, 40, 0.18) !important;
-    color: var(--primary-dark) !important;
-    border-color: rgba(10, 17, 40, 0.25) !important;
+    background: rgba(10, 17, 40, 0.18);
+    color: var(--primary-dark);
+    border-color: rgba(10, 17, 40, 0.25);
 }
 
 .nav__actions .nav__toggle:hover,
 .language-indicator:hover {
-    background: rgba(10, 17, 40, 0.3) !important;
+    background: rgba(10, 17, 40, 0.3);
 }
 
 .nav__logo-text {
-    color: var(--primary-dark) !important;
+    color: var(--primary-dark);
 }
 
 /* The FeelBG logo artwork is gold-on-transparent — give it a navy plate
@@ -190,35 +190,35 @@ body {
 }
 
 .footer {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 55%, #b8860b 100%) !important;
-    color: #14204a !important;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 55%, #b8860b 100%);
+    color: #14204a;
 }
 
 .footer__title {
-    background: none !important;
-    -webkit-text-fill-color: currentColor !important;
-    color: #0f1e4d !important;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: #0f1e4d;
 }
 
 .footer__subtitle {
-    color: #14204a !important;
+    color: #14204a;
 }
 
 .footer__text,
 .footer__trust span {
-    color: rgba(15, 30, 77, 0.8) !important;
+    color: rgba(15, 30, 77, 0.8);
 }
 
 .footer__links a {
-    color: rgba(15, 30, 77, 0.75) !important;
+    color: rgba(15, 30, 77, 0.75);
 }
 
 .footer__links a:hover {
-    color: #0f1e4d !important;
+    color: #0f1e4d;
 }
 
 .footer__trust i {
-    color: #0f1e4d !important;
+    color: #0f1e4d;
 }
 
 /* Footer wordmark: "Feel" in navy, "BG" as the bronze-gold accent,
@@ -244,7 +244,7 @@ body {
 }
 
 .footer-logo-section .logo-accent {
-    color: #b8860b !important;
+    color: #b8860b;
     font-weight: 800;
 }
 
@@ -254,16 +254,16 @@ body {
 }
 
 .footer__bottom {
-    border-top-color: rgba(15, 30, 77, 0.2) !important;
-    color: rgba(15, 30, 77, 0.65) !important;
+    border-top-color: rgba(15, 30, 77, 0.2);
+    color: rgba(15, 30, 77, 0.65);
 }
 
 .footer__bottom-links a {
-    color: rgba(15, 30, 77, 0.65) !important;
+    color: rgba(15, 30, 77, 0.65);
 }
 
 .footer__bottom-links a:hover {
-    color: #0f1e4d !important;
+    color: #0f1e4d;
 }
 
 /* No .social__link override here. This block styles the footer, but the
@@ -290,10 +290,16 @@ body {
     opacity: 1;
 }
 
+/* The weight, leading and tracking here came from Tailwind utilities on the
+   markup (font-black leading-none tracking-tight); they live with the rest
+   of the rule now that the CDN build is gone. */
 .hero-kinetic__title {
     margin: 0;
     font-family: 'Cormorant Garamond', 'Playfair Display', serif;
     font-size: clamp(3rem, 13vw, 11rem);
+    font-weight: var(--weight-black);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-tight);
     transform-origin: 50% 50%;
     white-space: nowrap;
 }
@@ -309,7 +315,7 @@ body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    text-shadow: none !important;
+    text-shadow: none;
     filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
 }
 
@@ -322,9 +328,57 @@ body {
 /* Fallback colors in case the Tailwind CDN script fails to load
    (network hiccup / ad-blocker) — matches the Tailwind utility values
    so the two never disagree when Tailwind does load. */
+/* These four rules replace the Tailwind utility classes that used to be
+   written inline on the mask-reveal markup (px-6 py-24 max-w-3xl mx-auto
+   text-center, the clamp() heading size, mb-4, text-lg md:text-xl). They
+   were the only Tailwind usage left on the site, and the CDN build was a
+   third spacing system competing with the tokens. */
+.mask-reveal__base,
+.mask-reveal__panel {
+    padding-inline: var(--space-5);
+    padding-block: var(--space-9);
+}
+
+.mask-reveal__base-inner,
+.mask-reveal__panel-inner {
+    max-width: 48rem;
+    margin-inline: auto;
+    text-align: center;
+}
+
 .mask-reveal__base-inner h2,
-.mask-reveal__base-inner p {
+.mask-reveal__panel-inner h2 {
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-black);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+}
+
+.mask-reveal__base-inner p,
+.mask-reveal__panel-inner p {
+    font-size: var(--text-xl);
+    line-height: var(--leading-normal);
+}
+
+/* The accent word keeps its gold gradient fill. */
+.mask-reveal__base-inner .accent {
+    background: linear-gradient(to bottom right, var(--accent-gold), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.mask-reveal__panel-inner .accent {
+    color: var(--secondary-color);
+}
+
+.mask-reveal__base-inner h2 {
     color: #ffffff;
+}
+
+.mask-reveal__base-inner p {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .mask-reveal__panel-inner h2 {
@@ -498,7 +552,7 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 .detail-modal__info-row {
-    color: #f4efe2 !important;
+    color: #f4efe2;
 }
 
 .detail-modal__info-row i {
@@ -546,39 +600,39 @@ body.hero-kinetic-done .hero-kinetic {
    anywhere on the site.
    ============================================ */
 .filter-search {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
 }
 
 .filter-search i {
-    color: #ffd700 !important;
+    color: #ffd700;
 }
 
 .filter-search input {
-    color: #f4efe2 !important;
+    color: #f4efe2;
 }
 
 .filter-search input::placeholder {
-    color: rgba(244, 239, 226, 0.55) !important;
+    color: rgba(244, 239, 226, 0.55);
 }
 
 .filter-pill {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
-    color: #f4efe2 !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    color: #f4efe2;
 }
 
 .filter-pill:hover {
-    border-color: #ffd700 !important;
+    border-color: #ffd700;
 }
 
 .filter-pill.active {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%) !important;
-    color: #14204a !important;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%);
+    color: #14204a;
 }
 
 .filter-select {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
-    color: #f4efe2 !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    color: #f4efe2;
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .filter-select option {
@@ -587,75 +641,75 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 .view-btn {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
-    color: #f4efe2 !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    color: #f4efe2;
 }
 
 /* Leftover from the pre-redesign light theme — var(--text-primary) is a
    dark charcoal meant for a white page background. On the site's dark
    navy background it rendered at ~1.3:1 contrast, effectively invisible. */
 .results-count {
-    color: #f4efe2 !important;
+    color: #f4efe2;
 }
 
 /* Same issue: var(--text-secondary) is a mid-gray tuned for white
    backgrounds, well under WCAG AA (~3.9:1) on dark navy. */
 .events-thumb {
-    color: #9aa8cc !important;
+    color: #9aa8cc;
 }
 
 .newsletter-input {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
-    color: #f4efe2 !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    color: #f4efe2;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .newsletter-input::placeholder {
-    color: rgba(244, 239, 226, 0.55) !important;
+    color: rgba(244, 239, 226, 0.55);
 }
 
 .newsletter-input:focus {
-    border-color: #ffd700 !important;
+    border-color: #ffd700;
     outline: none;
 }
 
 .view-btn.active {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%) !important;
-    color: #14204a !important;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%);
+    color: #14204a;
 }
 
 .place-card .btn-icon {
-    background: rgba(10, 17, 40, 0.3) !important;
+    background: rgba(10, 17, 40, 0.3);
 }
 
 .place-card__heart {
-    background: rgba(10, 17, 40, 0.35) !important;
+    background: rgba(10, 17, 40, 0.35);
     color: #f4efe2;
 }
 
 .place-card__heart:hover {
-    background: #14204a !important;
+    background: #14204a;
 }
 
 /* The contact info cards and the form panel take their surface from the
    shared card rule above; only the submit button needs a note. It is Royal
    Blue so it separates from the warm panel it sits on. */
 .contact__form button[type="submit"] {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
-    color: #fff !important;
-    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4) !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4);
 }
 
 /* Contact form (sits directly on the dark page background) */
 .form__input {
-    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: #f4efe2 !important;
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #f4efe2;
 }
 
 .form__input:focus {
-    background: linear-gradient(160deg, #14204a 0%, #0a1128 100%) !important;
-    border-color: #ffd700 !important;
+    background: linear-gradient(160deg, #14204a 0%, #0a1128 100%);
+    border-color: #ffd700;
 }
 
 .form__input::placeholder {
@@ -668,8 +722,8 @@ body.hero-kinetic-done .hero-kinetic {
 
 .form__input:focus ~ .form__label,
 .form__input:not(:placeholder-shown) ~ .form__label {
-    background: #0a1128 !important;
-    color: #ffd700 !important;
+    background: #0a1128;
+    color: #ffd700;
 }
 
 .form__input option {
@@ -686,9 +740,9 @@ body.hero-kinetic-done .hero-kinetic {
 .newsletter-input:-webkit-autofill,
 .newsletter-input:-webkit-autofill:hover,
 .newsletter-input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #f4efe2 !important;
-    -webkit-box-shadow: 0 0 0 1000px #0f1e4d inset !important;
-    box-shadow: 0 0 0 1000px #0f1e4d inset !important;
+    -webkit-text-fill-color: #f4efe2;
+    -webkit-box-shadow: 0 0 0 1000px #0f1e4d inset;
+    box-shadow: 0 0 0 1000px #0f1e4d inset;
     caret-color: #f4efe2;
     transition: background-color 9999s ease-in-out 0s;
 }
@@ -947,8 +1001,8 @@ body.hero-kinetic-done .hero-kinetic {
     .place-card__image,
     .section__title,
     .gold-shimmer::after {
-        transition: none !important;
-        animation: none !important;
+        transition: none;
+        animation: none;
     }
 }
 
@@ -1059,7 +1113,7 @@ body.hero-kinetic-done .hero-kinetic {
 
 @media (prefers-reduced-motion: reduce) {
     .hero-reserve-btn {
-        animation: none !important;
+        animation: none;
     }
 }
 
@@ -1112,12 +1166,12 @@ body.hero-kinetic-done .hero-kinetic {
 /* ============================================
    DESKTOP HEADER NAVIGATION (>= 768px)
 
-   styles.css hides .nav__list, .nav__link and .nav__toggle with
-   `display: none !important` at every width, and dropdown-menu.css parks
+   styles.css hides .nav__list, .nav__link and .nav__toggle at every width,
+   and dropdown-menu.css parks
    .nav__menu off-screen at `right: -100%` on index.html. With the hamburger
    hidden too, nothing could ever open that slide-out panel — so the mobile
    bottom bar was the site's only working navigation, which is why it had
-   been forced to render on desktop with !important.
+   been forced to render on desktop.
 
    A bottom tab bar is a mobile pattern, so desktop gets a real navbar
    instead: the same links, laid out inline in the header. Below 768px none
@@ -1128,23 +1182,23 @@ body.hero-kinetic-done .hero-kinetic {
        normal flex flow. Only index.html loads the rules being reversed here;
        on the category pages these are harmless no-ops. */
     .nav__menu {
-        position: static !important;
-        top: auto !important;
-        right: auto !important;
-        width: auto !important;
-        height: auto !important;
-        max-height: none !important;
-        padding: 0 !important;
-        background: none !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        overflow: visible !important;
-        transition: none !important;
-        z-index: auto !important;
+        position: static;
+        top: auto;
+        right: auto;
+        width: auto;
+        height: auto;
+        max-height: none;
+        padding: 0;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: visible;
+        transition: none;
+        z-index: auto;
     }
 
     .nav__list {
-        display: flex !important;
+        display: flex;
         align-items: center;
         gap: var(--space-1);
         margin: 0;
@@ -1155,12 +1209,12 @@ body.hero-kinetic-done .hero-kinetic {
        darkest stop of the header gradient, so it clears WCAG AA across the
        whole sweep rather than only over the bright middle. */
     .nav__link {
-        display: inline-flex !important;
+        display: inline-flex;
         align-items: center;
         gap: var(--space-2);
         padding: var(--space-2) var(--space-4);
         border-radius: 999px;
-        color: #14204a !important;
+        color: #14204a;
         font-weight: 600;
         white-space: nowrap;
         background: transparent;
@@ -1168,13 +1222,13 @@ body.hero-kinetic-done .hero-kinetic {
 
     .nav__link:hover,
     .nav__link.active-link {
-        background: #14204a !important;
-        color: #ffd700 !important;
+        background: #14204a;
+        color: #ffd700;
     }
 
     /* Redundant once the links themselves are visible. */
     .nav__actions .nav__toggle {
-        display: none !important;
+        display: none;
     }
 }
 

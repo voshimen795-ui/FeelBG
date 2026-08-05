@@ -1,68 +1,68 @@
 .mobile-bottom-nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
-    display: flex !important;
-    justify-content: space-around !important;
-    align-items: stretch !important;
-    padding: var(--space-2) var(--space-1) !important;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
-    z-index: 9999 !important;
-    border-top: 2px solid rgba(255, 215, 0, 0.3) !important;
-    transform: translateY(0px) !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: var(--space-2) var(--space-1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+    transform: translateY(0px);
 }
 
 .mobile-nav-item {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    max-width: 20% !important;
-    padding: var(--space-2) var(--space-1) !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-    text-decoration: none !important;
-    transition: all 0.3s ease !important;
-    border-radius: 0.5rem !important;
-    cursor: pointer !important;
-    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 20%;
+    padding: var(--space-2) var(--space-1);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .mobile-nav-item i {
-    font-size: var(--icon-md) !important;
-    margin-bottom: var(--space-1) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
-    flex-shrink: 0 !important;
+    font-size: var(--icon-md);
+    margin-bottom: var(--space-1);
+    color: rgba(255, 255, 255, 0.9);
+    flex-shrink: 0;
 }
 
 .mobile-nav-item span {
-    font-size: var(--text-xs) !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-    text-align: center !important;
-    line-height: 1.1 !important;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
+    line-height: 1.1;
 }
 
 .mobile-nav-item.active {
-    color: #ffd700 !important;
-    background: rgba(255, 215, 0, 0.15) !important;
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.15);
 }
 
 .mobile-nav-item.active i {
-    color: #ffd700 !important;
+    color: #ffd700;
 }
 
 .mobile-nav-item:hover {
-    transform: translateY(-2px) !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* The bottom nav is a mobile-only pattern, so the space it takes up is
@@ -71,35 +71,33 @@
    page for a bar that shouldn't render there at all. */
 @media (max-width: 767px) {
     body {
-        padding-bottom: var(--space-8) !important;
+        padding-bottom: var(--space-8);
     }
 
     main {
-        padding-bottom: var(--space-8) !important;
+        padding-bottom: var(--space-8);
     }
 
     .footer {
-        margin-bottom: var(--space-8) !important;
+        margin-bottom: var(--space-8);
     }
 
     .mobile-bottom-nav {
-        display: flex !important;
+        display: flex;
     }
 
     .mobile-nav-item span {
-        font-size: var(--text-xs) !important;
+        font-size: var(--text-xs);
     }
 }
 
 /* Desktop already has a full navbar in the header, so the bottom bar is a
-   redundant second navigation there. This rule has to live in this file to
-   work: mobile-optimized.css hides it at this breakpoint too, but that file
-   isn't loaded on the four category pages, and the `display: flex !important`
-   base rule above would out-rank it anyway. This block previously repeated
-   `display: flex !important` — an apparent copy-paste of the mobile block —
-   which is what forced the bar onto desktop across the whole site. */
+   redundant second navigation there. This file is the bottom nav's only
+   owner now, so a plain rule is enough — it used to need !important because
+   mobile-optimized.css carried a second, later-loading copy of the whole
+   component. */
 @media (min-width: 768px) {
     .mobile-bottom-nav {
-        display: none !important;
+        display: none;
     }
 }
