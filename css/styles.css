@@ -1075,8 +1075,8 @@ input, textarea {
 /* The parent flex column owns the gaps, so the icon carries no margin of
    its own — that is what kept the four tiles off a shared baseline. */
 .category__icon {
-    width: 5rem;
-    height: 5rem;
+    width: 6.25rem;
+    height: 6.25rem;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -349,7 +349,7 @@ body {
 .mask-reveal__base-inner h2,
 .mask-reveal__panel-inner h2 {
     font-size: var(--text-5xl);
-    font-weight: var(--weight-black);
+    font-weight: var(--weight-extrabold);
     line-height: var(--leading-tight);
     margin-bottom: var(--space-4);
 }
@@ -443,14 +443,13 @@ body.hero-kinetic-done .hero-kinetic {
    CARD SURFACE
    Every card-shaped surface on the site — business cards, the detail
    popup, category tiles, hidden-gem cards, event cards and the contact
-   panels — is one component with one surface, one radius, one border and
-   one elevation. Previously each family had its own, and premium-fx then
-   painted the same moving gold gradient over all of them with
-   !important, which is what read as unstandardised.
+   panels — shares the FeelBG gold texture, the same family as the header
+   and footer bars, with dark-navy text on top.
 
-   The gold is not gone; it moved. It is now the accent bar across the
-   top, the hairline border and the icon wells, instead of the background
-   that body copy had to sit on top of.
+   What changed is not the look but the bookkeeping: this used to be the
+   same gradient literal pasted into five separate blocks and forced with
+   !important, each family also disagreeing about radius and elevation.
+   It is declared once here, off one token.
    ============================================ */
 .place-card,
 .detail-modal,
@@ -459,23 +458,20 @@ body.hero-kinetic-done .hero-kinetic {
 .event-slide__inner,
 .contact__item,
 .contact__form {
-    background:
-        var(--gradient-secondary) top left / 100% var(--card-accent-bar) no-repeat,
-        var(--surface-card);
-    border: 1px solid var(--border-gold-hairline);
+    background: var(--surface-card);
+    background-size: var(--surface-card-size);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-2);
     color: var(--surface-card-ink);
 }
 
+/* The gold sweeps across on hover — the gradient is wider than the card,
+   so moving its position animates the shine. */
 .place-card:hover,
 .gem-card:hover,
 .category__card:hover,
 .contact__item:hover {
-    background:
-        var(--gradient-secondary) top left / 100% var(--card-accent-bar) no-repeat,
-        var(--surface-card-hover);
-    border-color: var(--border-gold-strong);
+    background-position: 100% 0;
     box-shadow: var(--shadow-3);
 }
 
@@ -511,24 +507,32 @@ body.hero-kinetic-done .hero-kinetic {
     color: var(--surface-card-ink);
 }
 
-/* Chips and icon wells: a tint of the ink colour, so they read as part of
-   the card rather than as a second surface pasted onto it. */
+/* Rating pills read lighter than the gold they sit on. */
 .place-card__rating,
-.detail-modal__rating,
+.detail-modal__rating {
+    background: var(--surface-card-chip);
+    color: var(--surface-card-ink);
+}
+
+/* Counters and icon wells read darker than it. */
 .category__count {
     background: var(--surface-card-well);
     color: var(--surface-card-ink);
 }
 
 .place-card__meta {
-    border-top-color: var(--surface-card-well-strong);
-    border-bottom-color: var(--surface-card-well-strong);
+    border-top-color: var(--surface-card-rule);
+    border-bottom-color: var(--surface-card-rule);
 }
 
-.place-card__heart,
 .btn-icon {
-    background: var(--surface-card-well);
+    background: var(--surface-card-well-strong);
     color: var(--surface-card-ink);
+}
+
+.place-card__heart {
+    background: rgba(10, 17, 40, 0.35);
+    color: var(--page-text);
 }
 
 .place-card__heart:hover,
@@ -568,30 +572,33 @@ body.hero-kinetic-done .hero-kinetic {
     background: rgba(10, 17, 40, 0.28);
 }
 
-/* The category tile's ::before is a scrim that existed to darken the gold
-   gradient underneath its label. The surface is light now, so the scrim
-   only has to lift the icon well off the card. */
+/* A navy scrim over the gold, so the tile's label holds contrast against
+   the bright middle of the gradient. It lifts on hover to let the gold
+   come through. */
 .category__card::before {
-    background: transparent;
+    background: rgba(10, 17, 40, 0.18);
 }
 
-/* Icon wells across the site are Royal Blue with a light glyph — the same
-   treatment the contact cards already used. A neutral tint read as a grey
-   smudge on the warm card surface. */
+.category__card:hover::before {
+    background: rgba(10, 17, 40, 0.05);
+}
+
+.category__card,
+.category__title,
+.category__description {
+    color: var(--surface-card-ink);
+}
+
 .category__icon {
-    background: var(--gradient-primary);
-    color: var(--white);
-    backdrop-filter: none;
+    background: rgba(10, 17, 40, 0.18);
 }
 
 .category__card:hover .category__icon {
-    background: var(--surface-card-ink);
-    color: var(--accent-gold);
+    background: var(--surface-card-well-hover);
 }
 
 .gem-badge {
-    background: var(--surface-card-ink);
-    color: var(--accent-gold);
+    background: rgba(10, 17, 40, 0.85);
 }
 
 /* ============================================
@@ -658,18 +665,23 @@ body.hero-kinetic-done .hero-kinetic {
     color: #9aa8cc;
 }
 
-.newsletter-input {
+/* Scoped through the form rather than matched on the class alone:
+   styles.css styles this field as `.newsletter-form-inline input`, which
+   out-ranks a bare `.newsletter-input`. That conflict used to be settled
+   with !important; the extra class settles it on specificity instead. */
+.newsletter-form-inline .newsletter-input {
     background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
-    color: #f4efe2;
+    color: var(--page-text);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.newsletter-input::placeholder {
+.newsletter-form-inline .newsletter-input::placeholder {
     color: rgba(244, 239, 226, 0.55);
 }
 
-.newsletter-input:focus {
-    border-color: #ffd700;
+.newsletter-form-inline .newsletter-input:focus {
+    background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
+    border-color: var(--accent-gold);
     outline: none;
 }
 
