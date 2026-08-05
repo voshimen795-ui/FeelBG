@@ -163,8 +163,8 @@ input, textarea {
 }
 
 .cursor-outline {
-    width: 40px;
-    height: 40px;
+    width: var(--control-sm);
+    height: var(--control-sm);
     border: 2px solid var(--secondary-color);
 }
 
@@ -512,8 +512,8 @@ input, textarea {
     font-size: var(--text-xl);
     cursor: pointer;
     color: var(--white);
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     display: flex;
@@ -857,8 +857,8 @@ input, textarea {
 }
 
 .search-btn {
-    width: 50px;
-    height: 50px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     background: var(--gradient-secondary);
     border: none;
     border-radius: var(--radius-xl);
@@ -1019,26 +1019,30 @@ input, textarea {
     background: var(--bg-primary);
 }
 
+/* 280px min left the fourth tile orphaned on its own row at desktop width
+   (4 x 280 + gaps overflowed the 1136px content box). 240px lets all four
+   sit in one row, and still drops to two, then one, as the page narrows. */
 .categories__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--grid-gap);
 }
 
+/* Content is top-aligned, not centred: with centring, a card whose title
+   wrapped to two lines pushed its icon out of line with its neighbours,
+   so the row never sat on a shared baseline. */
 .category__card {
     position: relative;
-    background: var(--gradient-mixed);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-2xl);
+    padding: var(--card-pad);
     text-align: center;
     overflow: hidden;
     transition: all var(--transition-normal);
     min-height: 300px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    color: var(--white);
+    gap: var(--stack);
     text-decoration: none;
 }
 
@@ -1068,35 +1072,34 @@ input, textarea {
     box-shadow: var(--shadow-4);
 }
 
+/* The parent flex column owns the gaps, so the icon carries no margin of
+   its own — that is what kept the four tiles off a shared baseline. */
 .category__icon {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto var(--spacing-md);
+    width: 5rem;
+    height: 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     font-size: var(--icon-xl);
     transition: all var(--transition-normal);
+    flex-shrink: 0;
 }
 
 .category__card:hover .category__icon {
     transform: scale(1.1) rotate(360deg);
-    background: rgba(255, 255, 255, 0.3);
 }
 
 .category__title {
     font-size: var(--text-2xl);
-    margin-bottom: var(--spacing-sm);
-    color: var(--white);
+    line-height: var(--leading-tight);
+    margin: 0;
 }
 
 .category__description {
     font-size: var(--text-base);
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: var(--spacing-sm);
+    line-height: var(--leading-normal);
+    margin: 0;
 }
 
 .category__count {
@@ -1340,8 +1343,8 @@ input, textarea {
 }
 
 .neighborhood__link {
-    width: 50px;
-    height: 50px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1474,8 +1477,8 @@ input, textarea {
 }
 
 .feature__icon {
-    width: 50px;
-    height: 50px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1620,8 +1623,8 @@ input, textarea {
 }
 
 .portfolio__link {
-    width: 50px;
-    height: 50px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1678,8 +1681,8 @@ input, textarea {
 }
 
 .contact__icon {
-    width: 60px;
-    height: 60px;
+    width: var(--control-xl);
+    height: var(--control-xl);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1708,8 +1711,8 @@ input, textarea {
 }
 
 .social__link {
-    width: 50px;
-    height: 50px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     display: flex;
     align-items: center;
     justify-content: center;

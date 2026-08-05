@@ -210,8 +210,8 @@ body {
     position: fixed;
     bottom: 90px;
     right: 20px;
-    width: 60px;
-    height: 60px;
+    width: var(--control-xl);
+    height: var(--control-xl);
     border-radius: 50%;
     background: linear-gradient(135deg, #b8860b, #ffd700);
     color: white;

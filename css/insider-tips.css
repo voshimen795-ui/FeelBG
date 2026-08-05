@@ -7,8 +7,8 @@
 }
 
 .insider-tip-toggle {
-    width: 52px;
-    height: 52px;
+    width: var(--control-lg);
+    height: var(--control-lg);
     border-radius: 50%;
     background: linear-gradient(135deg, #b8860b 0%, #d4a017 100%);
     color: #fff;
@@ -152,8 +152,8 @@
         right: -8px;
     }
     .insider-tip-toggle {
-        width: 46px;
-        height: 46px;
+        width: var(--control-md);
+        height: var(--control-md);
         font-size: var(--text-lg);
     }
 }

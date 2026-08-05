@@ -270,8 +270,8 @@
 }
 
 .view-btn {
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -350,8 +350,8 @@
     position: absolute;
     top: var(--spacing-sm);
     right: var(--spacing-sm);
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -457,8 +457,8 @@
 }
 
 .btn-icon {
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     display: flex;
     align-items: center;
     justify-content: center;

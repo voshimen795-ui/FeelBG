@@ -28,8 +28,8 @@
 
 /* Menu button on right side */
 .nav__actions .nav__toggle {
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     border: none;
@@ -49,8 +49,8 @@
 
 /* Language indicator styling */
 .language-indicator {
-    width: 45px;
-    height: 45px;
+    width: var(--control-md);
+    height: var(--control-md);
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -87,14 +87,14 @@
     }
     
     .nav__left .nav__toggle {
-        width: 40px;
-        height: 40px;
+        width: var(--control-sm);
+        height: var(--control-sm);
         font-size: var(--text-lg);
     }
     
     .language-indicator {
-        width: 40px;
-        height: 40px;
+        width: var(--control-sm);
+        height: var(--control-sm);
         font-size: var(--text-xl);
     }
 }

@@ -125,6 +125,15 @@
     --border-gold-hairline: rgba(184, 134, 11, 0.32);
     --border-gold-strong: rgba(184, 134, 11, 0.55);
 
+    /* The gold bar across the top of a card. This is where the brand gold
+       now lives: an accent with a job, rather than a gradient sitting
+       underneath body copy. */
+    --card-accent-bar: 3px;
+
+    /* Tint used for chips and icon wells sitting on a card surface. */
+    --surface-card-well: rgba(20, 32, 74, 0.07);
+    --surface-card-well-strong: rgba(20, 32, 74, 0.14);
+
     /* ============================================
        CONTROL SIZES
        Repeated icon buttons / avatars, so they stop drifting
