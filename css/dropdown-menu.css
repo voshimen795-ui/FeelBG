@@ -11,7 +11,7 @@
         max-height: calc(100vh - 100px);
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
         padding: var(--space-6);
-        border-radius: 1rem 0 0 1rem;
+        border-radius: var(--radius-lg) 0 0 var(--radius-lg);
         box-shadow: -5px 5px 30px rgba(0, 0, 0, 0.3);
         transition: right 0.4s ease;
         z-index: 999;
@@ -61,7 +61,7 @@
     padding: var(--space-4) var(--space-5);
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-md);
     transition: all 0.3s ease;
     font-size: var(--text-base);
     font-weight: 500;

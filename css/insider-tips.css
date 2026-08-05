@@ -47,7 +47,7 @@
     right: 0;
     width: 300px;
     background: linear-gradient(160deg, #0f1e4d 0%, #0a1128 100%);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     padding: 0;
     opacity: 0;

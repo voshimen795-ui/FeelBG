@@ -408,7 +408,7 @@ input, textarea {
 .language-indicator .flag-icon-img {
     width: 24px;
     height: auto;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
 }
 
 .language-dropdown-menu {
@@ -418,7 +418,7 @@ input, textarea {
     background: rgba(30, 41, 59, 0.95);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     padding: var(--space-3);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -448,7 +448,7 @@ input, textarea {
     padding: var(--space-2);
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -464,7 +464,7 @@ input, textarea {
 .language-option .flag-img {
     width: 40px;
     height: auto;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -2056,7 +2056,7 @@ input, textarea {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     padding: var(--space-1) var(--space-3);
-    border-radius: 2rem;
+    border-radius: var(--radius-2xl);
     font-family: var(--font-accent);
 }
 
@@ -2193,7 +2193,7 @@ input, textarea {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: var(--space-2) var(--space-4);
-    border-radius: 2rem;
+    border-radius: var(--radius-2xl);
     z-index: 2;
     font-family: var(--font-accent);
 }
@@ -2261,7 +2261,7 @@ input, textarea {
     font-size: var(--text-sm);
     font-weight: 700;
     padding: var(--space-1) var(--space-4);
-    border-radius: 2rem;
+    border-radius: var(--radius-2xl);
     letter-spacing: 0.04em;
 }
 
@@ -2331,7 +2331,7 @@ input, textarea {
 
 .events-thumb {
     padding: var(--space-2) var(--space-4);
-    border-radius: 2rem;
+    border-radius: var(--radius-2xl);
     font-size: var(--text-sm);
     font-weight: 700;
     font-family: var(--font-accent);

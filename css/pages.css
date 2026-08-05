@@ -303,11 +303,16 @@
     gap: var(--space-7);
 }
 
+/* Surface, border and radius come from the shared card rule in
+   premium-fx.css. What is specific to a business card is its layout: the
+   card fills its grid row, and the content column stretches so the footer
+   lands on the same line as its neighbours' regardless of how many lines
+   the description ran to. */
 .place-card {
-    background: var(--white);
-    border-radius: var(--radius-2xl);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     overflow: hidden;
-    box-shadow: var(--shadow-1);
     transition: all var(--transition-normal);
 }
 
@@ -379,7 +384,10 @@
 }
 
 .place-card__content {
-    padding: var(--space-6);
+    padding: var(--card-pad);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .place-card__header {
@@ -450,10 +458,13 @@
     font-size: var(--text-sm);
 }
 
+/* margin-top:auto pins the footer to the bottom of the stretched content
+   column, so every Details button in a row sits on one line. */
 .place-card__footer {
     display: flex;
     gap: var(--space-2);
     align-items: center;
+    margin-top: auto;
 }
 
 .btn-icon {
@@ -655,7 +666,7 @@
 
 .detail-modal {
     background: #fff;
-    border-radius: 1.25rem;
+    border-radius: var(--radius-lg);
     max-width: 420px;
     width: 100%;
     overflow: hidden;
@@ -706,7 +717,7 @@
 }
 .detail-modal__rating {
     padding: var(--space-1) var(--space-3);
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
     font-weight: 700;
     font-size: var(--text-base);
     white-space: nowrap;
@@ -723,7 +734,7 @@
 
 .detail-modal__info {
     padding: var(--space-4);
-    border-radius: 0.75rem;
+    border-radius: var(--radius-md);
     margin-bottom: var(--space-4);
     border: 1px solid transparent;
 }
@@ -751,7 +762,7 @@
     background: linear-gradient(135deg, #25d366, #128c7e);
     color: #fff;
     border: none;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-md);
     font-weight: 600;
     font-size: var(--text-base);
     cursor: pointer;
@@ -769,7 +780,7 @@
 .detail-modal__close-btn {
     padding: var(--space-3) var(--space-4);
     border: none;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-md);
     font-weight: 600;
     font-size: var(--text-base);
     cursor: pointer;
@@ -778,7 +789,7 @@
 }
 
 @media (max-width: 480px) {
-    .detail-modal { max-width: 100%; border-radius: 1rem; }
+    .detail-modal { max-width: 100%; border-radius: var(--radius-lg); }
     .detail-modal__image { height: 180px; }
     .detail-modal__body { padding: var(--space-4); }
     .detail-modal__title { font-size: var(--text-xl); }

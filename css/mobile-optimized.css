@@ -186,7 +186,7 @@ body {
     bottom: 70px;
     right: 20px;
     background: white;
-    border-radius: 1rem;
+    border-radius: var(--radius-lg);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     padding: var(--space-4);
     transform: scale(0) translateY(20px);
@@ -206,7 +206,7 @@ body {
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3);
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
     margin-bottom: var(--space-2);
     text-decoration: none;
     color: #1e3a8a;
@@ -231,7 +231,7 @@ body {
     justify-content: center;
     background: linear-gradient(135deg, #1e3a8a, #b8860b);
     color: white;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
     font-size: var(--icon-sm);
 }
 
@@ -330,7 +330,7 @@ body {
     width: 60px;
     height: 4px;
     background: linear-gradient(90deg, #1e3a8a, #b8860b);
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
 }
 
 /* ============================================
@@ -348,7 +348,7 @@ body {
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     color: white;
     padding: var(--space-4);
-    border-radius: 1rem;
+    border-radius: var(--radius-lg);
     text-align: center;
     text-decoration: none;
     box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
@@ -412,7 +412,7 @@ img[loading="lazy"].loaded {
 .tourist-info-bar {
     background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
     padding: var(--space-5);
-    border-radius: 1rem;
+    border-radius: var(--radius-lg);
     margin: var(--space-4);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -435,7 +435,7 @@ img[loading="lazy"].loaded {
     scroll-snap-align: start;
     background: white;
     padding: var(--space-4);
-    border-radius: 0.75rem;
+    border-radius: var(--radius-md);
     min-width: 140px;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -555,7 +555,7 @@ img[loading="lazy"].loaded {
     transform: translateX(-50%) translateY(-100px);
     background: white;
     padding: var(--space-4) var(--space-6);
-    border-radius: 2rem;
+    border-radius: var(--radius-2xl);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1001;
     opacity: 0;

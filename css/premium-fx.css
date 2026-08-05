@@ -170,14 +170,14 @@ body {
 .nav__logo-link {
     background: rgba(10, 17, 40, 0.85);
     padding: var(--space-2) var(--space-4);
-    border-radius: 0.85rem;
+    border-radius: var(--radius-md);
 }
 
 .footer-main-logo {
     display: inline-block;
     background: rgba(10, 17, 40, 0.9);
     padding: var(--space-4) var(--space-5);
-    border-radius: 1.25rem;
+    border-radius: var(--radius-lg);
 }
 
 /* Home page only: no static logo in the header — the kinetic FeelBG
@@ -239,7 +239,7 @@ body {
     bottom: 0;
     width: 46px;
     height: 3px;
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
     background: linear-gradient(90deg, #b8860b, #ffd700);
 }
 
@@ -803,7 +803,7 @@ body.hero-kinetic-done .hero-kinetic {
 
 .detail-modal.detail-modal--premium {
     max-width: 640px;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-xl);
     clip-path: circle(0% at 50% 50%);
     transform: none;
     transition: clip-path 0.65s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1024,7 +1024,7 @@ body.hero-kinetic-done .hero-kinetic {
     gap: var(--space-3);
     padding: var(--space-4) var(--space-6);
     border: 1px solid rgba(255, 236, 170, 0.75);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     cursor: pointer;
     font-family: var(--font-body);
     font-size: var(--text-base);
@@ -1213,7 +1213,7 @@ body.hero-kinetic-done .hero-kinetic {
         align-items: center;
         gap: var(--space-2);
         padding: var(--space-2) var(--space-4);
-        border-radius: 999px;
+        border-radius: var(--radius-full);
         color: #14204a;
         font-weight: 600;
         white-space: nowrap;
