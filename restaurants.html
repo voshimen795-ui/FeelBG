@@ -11,30 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-    <!-- Tailwind CSS (premium design system utilities) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        if (window.tailwind) {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            royal: { DEFAULT: '#1e3a8a', dark: '#0f1e4d', light: '#3b82f6' },
-                            bronze: { DEFAULT: '#b8860b', dark: '#996515', light: '#ffd700' }
-                        },
-                        fontFamily: {
-                            display: ['"Playfair Display"', 'serif'],
-                            body: ['Poppins', 'sans-serif']
-                        }
-                    }
-                }
-            };
-        }
-    </script>
-
+    <!-- Design system: tokens first, then base, then components, then theme.
+         This order is identical on every page — do not reshuffle it. -->
+    <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/header-layout.css">
+    <link rel="stylesheet" href="css/dropdown-menu.css">
+    <link rel="stylesheet" href="css/hero-fullscreen.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/mobile-optimized.css">
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />

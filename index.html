@@ -35,35 +35,16 @@
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-    <!-- Tailwind CSS (premium design system utilities) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        if (window.tailwind) {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            royal: { DEFAULT: '#1e3a8a', dark: '#0f1e4d', light: '#3b82f6' },
-                            bronze: { DEFAULT: '#b8860b', dark: '#996515', light: '#ffd700' }
-                        },
-                        fontFamily: {
-                            display: ['"Playfair Display"', 'serif'],
-                            body: ['Poppins', 'sans-serif']
-                        }
-                    }
-                }
-            };
-        }
-    </script>
-
-    <!-- Custom CSS -->
+    <!-- Design system: tokens first, then base, then components, then theme.
+         This order is identical on every page — do not reshuffle it. -->
+    <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/mobile-optimized.css">
-    <link rel="stylesheet" href="css/dropdown-menu.css">
+    <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/header-layout.css">
+    <link rel="stylesheet" href="css/dropdown-menu.css">
     <link rel="stylesheet" href="css/hero-fullscreen.css">
-    <link rel="stylesheet" href="css/remove-blank-space.css">
     <link rel="stylesheet" href="css/mobile-nav-fixed.css">
+    <link rel="stylesheet" href="css/mobile-optimized.css">
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
     <!-- MapLibre GL JS -->
@@ -76,7 +57,7 @@
 
     <!-- Kinetic Hero Title (Phase 1 — migrates into navbar logo on scroll) -->
     <div class="hero-kinetic" id="hero-kinetic" aria-hidden="true">
-        <h2 class="hero-kinetic__title font-display font-black leading-none tracking-tight" id="hero-kinetic-title"><span class="hero-kinetic__brand">FeelBG</span></h2>
+        <h2 class="hero-kinetic__title" id="hero-kinetic-title"><span class="hero-kinetic__brand">FeelBG</span></h2>
     </div>
 
     <!-- Header -->
@@ -300,20 +281,20 @@
 
         <!-- Mask Reveal Transition (Phase 3 — clip-path circle reveal, dark to light) -->
         <section class="mask-reveal" id="mask-reveal">
-            <div class="mask-reveal__base px-6 py-24">
-                <div class="mask-reveal__base-inner max-w-3xl mx-auto text-center">
-                    <h2 class="font-display font-extrabold leading-tight text-white text-[clamp(2rem,6vw,4.5rem)] mb-4">
-                        <span class="accent bg-gradient-to-br from-bronze-light to-bronze bg-clip-text text-transparent" data-i18n="mask.curatedAccent">Curated.</span> <span data-i18n="mask.curatedRest">Verified. Loved by locals.</span>
+            <div class="mask-reveal__base">
+                <div class="mask-reveal__base-inner">
+                    <h2>
+                        <span class="accent" data-i18n="mask.curatedAccent">Curated.</span> <span data-i18n="mask.curatedRest">Verified. Loved by locals.</span>
                     </h2>
-                    <p class="text-white/70 text-lg md:text-xl" data-i18n="mask.curatedDesc">Every restaurant, café and club on FeelBG is hand-checked so you never waste a night in Belgrade.</p>
+                    <p data-i18n="mask.curatedDesc">Every restaurant, café and club on FeelBG is hand-checked so you never waste a night in Belgrade.</p>
                 </div>
             </div>
-            <div class="mask-reveal__panel px-6 py-24" id="mask-reveal-panel">
-                <div class="mask-reveal__panel-inner max-w-3xl mx-auto text-center">
-                    <h2 class="font-display font-extrabold leading-tight text-royal text-[clamp(2rem,6vw,4.5rem)] mb-4">
+            <div class="mask-reveal__panel" id="mask-reveal-panel">
+                <div class="mask-reveal__panel-inner">
+                    <h2>
                         <span data-i18n="mask.gemLead">Now, go find your</span> <span class="accent text-bronze" data-i18n="mask.gemAccent">hidden gem</span>.
                     </h2>
-                    <p class="text-gray-500 text-lg md:text-xl" data-i18n="mask.gemDesc">Scroll on to discover the parks, viewpoints and secret corners locals actually love.</p>
+                    <p data-i18n="mask.gemDesc">Scroll on to discover the parks, viewpoints and secret corners locals actually love.</p>
                 </div>
             </div>
         </section>
