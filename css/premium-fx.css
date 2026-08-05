@@ -42,7 +42,7 @@
     z-index: 2;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
     .hero { min-height: 100svh; }
 }
 
@@ -169,14 +169,14 @@ body {
    so it stays legible against the new gold header/footer bars */
 .nav__logo-link {
     background: rgba(10, 17, 40, 0.85);
-    padding: 0.4rem 0.9rem;
+    padding: var(--space-2) var(--space-4);
     border-radius: 0.85rem;
 }
 
 .footer-main-logo {
     display: inline-block;
     background: rgba(10, 17, 40, 0.9);
-    padding: 1.25rem 1.75rem;
+    padding: var(--space-4) var(--space-5);
     border-radius: 1.25rem;
 }
 
@@ -227,7 +227,7 @@ body {
 .footer-logo-section .footer__title {
     position: relative;
     display: inline-block;
-    padding-bottom: 0.65rem;
+    padding-bottom: var(--space-3);
     font-size: var(--text-2xl);
     letter-spacing: 0.02em;
 }
@@ -813,7 +813,7 @@ body.hero-kinetic-done .hero-kinetic {
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 0.4rem;
+    gap: var(--space-2);
     z-index: 3;
 }
 
@@ -927,7 +927,7 @@ body.hero-kinetic-done .hero-kinetic {
     right: -23px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .events-nav {
         width: var(--control-sm);
         height: var(--control-sm);
@@ -956,19 +956,19 @@ body.hero-kinetic-done .hero-kinetic {
    HERO RESERVE BUTTON (gold CTA under the title)
    ============================================ */
 .hero__reserve {
-    margin-top: 2.2rem;
+    margin-top: var(--space-6);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.85rem;
+    gap: var(--space-3);
 }
 
 .hero-reserve-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 17px 38px;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
     border: 1px solid rgba(255, 236, 170, 0.75);
     border-radius: 999px;
     cursor: pointer;
@@ -1029,7 +1029,7 @@ body.hero-kinetic-done .hero-kinetic {
 .hero__reserve-note {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: var(--space-2);
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -1046,10 +1046,10 @@ body.hero-kinetic-done .hero-kinetic {
 
 @media (max-width: 767px) {
     .hero__reserve {
-        margin-top: 1.7rem;
+        margin-top: var(--space-5);
     }
     .hero-reserve-btn {
-        padding: 14px 28px;
+        padding: var(--space-3) var(--space-5);
         font-size: var(--text-base);
     }
     .hero__reserve-note {
@@ -1064,7 +1064,7 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 .hero__browse-link {
-    margin-top: 0.15rem;
+    margin-top: var(--space-1);
     background: none;
     border: none;
     cursor: pointer;
@@ -1086,7 +1086,7 @@ body.hero-kinetic-done .hero-kinetic {
    the logo artwork + dark plate — reads cleanly against the gold header. */
 .nav__logo-link--text {
     background: none;
-    padding: 0.2rem 0.3rem;
+    padding: var(--space-1) var(--space-1);
     border-radius: 0;
 }
 
@@ -1146,7 +1146,7 @@ body.hero-kinetic-done .hero-kinetic {
     .nav__list {
         display: flex !important;
         align-items: center;
-        gap: 0.25rem;
+        gap: var(--space-1);
         margin: 0;
         padding: 0;
     }
@@ -1157,8 +1157,8 @@ body.hero-kinetic-done .hero-kinetic {
     .nav__link {
         display: inline-flex !important;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0.9rem;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-4);
         border-radius: 999px;
         color: #14204a !important;
         font-weight: 600;
@@ -1182,7 +1182,7 @@ body.hero-kinetic-done .hero-kinetic {
    logo and the language picker still fit on one row without wrapping. */
 @media (min-width: 768px) and (max-width: 1023px) {
     .nav__link {
-        padding: 0.45rem 0.6rem;
+        padding: var(--space-2) var(--space-2);
         font-size: var(--text-sm);
         gap: 0;
     }

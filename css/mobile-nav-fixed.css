@@ -8,7 +8,7 @@
     display: flex !important;
     justify-content: space-around !important;
     align-items: stretch !important;
-    padding: 0.5rem 0.25rem !important;
+    padding: var(--space-2) var(--space-1) !important;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
     z-index: 9999 !important;
     border-top: 2px solid rgba(255, 215, 0, 0.3) !important;
@@ -23,7 +23,7 @@
     flex: 1 1 0 !important;
     min-width: 0 !important;
     max-width: 20% !important;
-    padding: 0.4rem 0.15rem !important;
+    padding: var(--space-2) var(--space-1) !important;
     color: rgba(255, 255, 255, 0.8) !important;
     text-decoration: none !important;
     transition: all 0.3s ease !important;
@@ -34,7 +34,7 @@
 
 .mobile-nav-item i {
     font-size: var(--icon-md) !important;
-    margin-bottom: 0.2rem !important;
+    margin-bottom: var(--space-1) !important;
     color: rgba(255, 255, 255, 0.9) !important;
     flex-shrink: 0 !important;
 }
@@ -71,15 +71,15 @@
    page for a bar that shouldn't render there at all. */
 @media (max-width: 767px) {
     body {
-        padding-bottom: 65px !important;
+        padding-bottom: var(--space-8) !important;
     }
 
     main {
-        padding-bottom: 65px !important;
+        padding-bottom: var(--space-8) !important;
     }
 
     .footer {
-        margin-bottom: 65px !important;
+        margin-bottom: var(--space-8) !important;
     }
 
     .mobile-bottom-nav {

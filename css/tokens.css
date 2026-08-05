@@ -146,15 +146,4 @@
 
     --layout-max: 1200px;
 
-    /* ============================================
-       LEGACY ALIASES
-       The old five-step scale, remapped onto the new one so any
-       rule not yet migrated keeps rendering correctly. Removed
-       once no stylesheet references them.
-       ============================================ */
-    --spacing-xs: var(--space-2);
-    --spacing-sm: var(--space-4);
-    --spacing-md: var(--space-6);
-    --spacing-lg: var(--space-7);
-    --spacing-xl: var(--section-y);
 }

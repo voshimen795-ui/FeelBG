@@ -38,7 +38,7 @@ body {
     right: 0;
     background: linear-gradient(180deg, rgba(30, 58, 138, 0.98) 0%, rgba(30, 58, 138, 1) 100%);
     backdrop-filter: blur(20px);
-    padding: 0.5rem 0;
+    padding: var(--space-2) 0;
     z-index: 1000;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -50,7 +50,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
+    padding: var(--space-2);
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     font-size: var(--text-xs);
@@ -61,7 +61,7 @@ body {
 
 .mobile-nav-item i {
     font-size: var(--icon-md);
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1);
     transition: all 0.3s ease;
 }
 
@@ -109,7 +109,7 @@ body {
    40px on desktop, where there is no bottom nav to make room for. */
 @media (max-width: 767px) {
     .hero {
-        padding-bottom: 80px;
+        padding-bottom: var(--space-8);
     }
 }
 
@@ -160,7 +160,7 @@ body {
     
     .hero__stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: var(--space-4);
     }
 }
 
@@ -186,7 +186,7 @@ body {
    ============================================ */
 @media (max-width: 767px) {
     .place-card {
-        margin-bottom: 1.5rem;
+        margin-bottom: var(--space-5);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
@@ -195,7 +195,7 @@ body {
     }
     
     .place-card__content {
-        padding: 1rem;
+        padding: var(--space-4);
     }
     
     .place-card__title {
@@ -253,7 +253,7 @@ body {
     background: white;
     border-radius: 1rem;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
+    padding: var(--space-4);
     transform: scale(0) translateY(20px);
     opacity: 0;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -269,10 +269,10 @@ body {
 .quick-access-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
+    gap: var(--space-3);
+    padding: var(--space-3);
     border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
     text-decoration: none;
     color: #1e3a8a;
     font-weight: 500;
@@ -309,7 +309,7 @@ body {
         top: 80px;
         z-index: 90;
         background: white;
-        padding: 1rem;
+        padding: var(--space-4);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
@@ -352,7 +352,7 @@ body {
    ============================================ */
 .mobile-logo-footer {
     text-align: center;
-    padding: 2rem 0;
+    padding: var(--space-6) 0;
 }
 
 .mobile-logo-footer img {
@@ -404,15 +404,15 @@ body {
 .quick-info-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    padding: 1rem;
-    margin-bottom: 80px; /* Bottom nav space */
+    gap: var(--space-3);
+    padding: var(--space-4);
+    margin-bottom: var(--space-8); /* Bottom nav space */
 }
 
 .quick-info-card {
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     color: white;
-    padding: 1.25rem;
+    padding: var(--space-4);
     border-radius: 1rem;
     text-align: center;
     text-decoration: none;
@@ -426,7 +426,7 @@ body {
 
 .quick-info-card i {
     font-size: var(--icon-xl);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
     display: block;
     color: #ffd700;
 }
@@ -476,16 +476,16 @@ img[loading="lazy"].loaded {
    ============================================ */
 .tourist-info-bar {
     background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-    padding: 1.5rem;
+    padding: var(--space-5);
     border-radius: 1rem;
-    margin: 1rem;
+    margin: var(--space-4);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .tourist-info-items {
     display: flex;
     overflow-x: auto;
-    gap: 1rem;
+    gap: var(--space-4);
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -499,7 +499,7 @@ img[loading="lazy"].loaded {
     flex-shrink: 0;
     scroll-snap-align: start;
     background: white;
-    padding: 1rem;
+    padding: var(--space-4);
     border-radius: 0.75rem;
     min-width: 140px;
     text-align: center;
@@ -509,14 +509,14 @@ img[loading="lazy"].loaded {
 .tourist-info-item i {
     font-size: var(--icon-xl);
     color: #b8860b;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
     display: block;
 }
 
 .tourist-info-item h5 {
     font-size: var(--text-sm);
     color: #1e3a8a;
-    margin: 0 0 0.25rem 0;
+    margin: 0 0 var(--space-1) 0;
     font-weight: 600;
 }
 
@@ -531,13 +531,13 @@ img[loading="lazy"].loaded {
    ============================================ */
 .swipe-indicator {
     text-align: center;
-    padding: 0.5rem 0;
+    padding: var(--space-2) 0;
     color: #6b7280;
     font-size: var(--text-xs);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
 }
 
 .swipe-indicator i {
@@ -619,7 +619,7 @@ img[loading="lazy"].loaded {
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
     background: white;
-    padding: 1rem 2rem;
+    padding: var(--space-4) var(--space-6);
     border-radius: 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1001;

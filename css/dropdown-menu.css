@@ -10,7 +10,7 @@
         height: auto;
         max-height: calc(100vh - 100px);
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-        padding: 2rem;
+        padding: var(--space-6);
         border-radius: 1rem 0 0 1rem;
         box-shadow: -5px 5px 30px rgba(0, 0, 0, 0.3);
         transition: right 0.4s ease;
@@ -32,7 +32,7 @@
         width: 80%;
         height: 100vh;
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-        padding: 2rem;
+        padding: var(--space-6);
         transition: right 0.4s ease;
         z-index: 9999;
         overflow-y: auto;
@@ -51,14 +51,14 @@
 }
 
 .nav__item {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
 }
 
 .nav__link {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     border-radius: 0.75rem;
@@ -114,7 +114,7 @@
 /* Show menu on desktop and mobile */
 @media (min-width: 768px) {
     .nav__list {
-        padding-top: 1rem;
+        padding-top: var(--space-4);
     }
 }
 

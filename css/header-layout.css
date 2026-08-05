@@ -14,7 +14,7 @@
 .nav__logo-link {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
     text-decoration: none;
 }
 
@@ -77,13 +77,13 @@
 .nav__actions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
 }
 
 /* Mobile adjustments */
 @media (max-width: 767px) {
     .nav__left {
-        gap: 0.75rem;
+        gap: var(--space-3);
     }
     
     .nav__left .nav__toggle {
