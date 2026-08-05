@@ -81,6 +81,7 @@
     --weight-medium: 500;
     --weight-semibold: 600;
     --weight-bold: 700;
+    --weight-extrabold: 800;
     --weight-black: 900;
 
     --tracking-tight: -0.02em;
@@ -102,37 +103,37 @@
     /* ============================================
        ELEVATION — 4 steps
        ============================================ */
-    --shadow-1: 0 1px 3px rgba(10, 17, 40, 0.08), 0 1px 2px rgba(10, 17, 40, 0.06);
-    --shadow-2: 0 4px 12px rgba(10, 17, 40, 0.10), 0 2px 4px rgba(10, 17, 40, 0.06);
-    --shadow-3: 0 12px 28px rgba(10, 17, 40, 0.14), 0 4px 8px rgba(10, 17, 40, 0.08);
-    --shadow-4: 0 24px 56px rgba(10, 17, 40, 0.20), 0 8px 16px rgba(10, 17, 40, 0.10);
+    --shadow-1: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-3: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --shadow-4: 0 12px 48px rgba(0, 0, 0, 0.25);
 
     /* Brand-tinted elevation, for gold and blue surfaces */
-    --shadow-gold-glow: 0 8px 28px rgba(184, 134, 11, 0.28);
-    --shadow-blue-glow: 0 8px 28px rgba(30, 58, 138, 0.28);
+    --shadow-gold-glow: 0 8px 32px rgba(184, 134, 11, 0.3);
+    --shadow-blue-glow: 0 8px 32px rgba(30, 58, 138, 0.3);
 
     /* ============================================
        COMPONENT SURFACES
-       The card surface is a warm champagne rather than the old
-       full gold gradient: the brand warmth stays, but text now
-       sits on a calm surface instead of a moving gradient.
-       Gold moves to the border, the accent bar and the icons.
+       Cards carry the FeelBG gold texture — the same family as the
+       header and footer bars — with dark-navy text on top. Every card
+       family shares these, so the surface is defined once here instead
+       of being repeated per component.
        ============================================ */
-    --surface-card: linear-gradient(160deg, #fffaf0 0%, #fdf3dc 100%);
-    --surface-card-hover: linear-gradient(160deg, #fffdf7 0%, #fdf6e6 100%);
+    --surface-card: linear-gradient(135deg, #b8860b 0%, #ffe9a8 30%, #ffd700 50%, #ffe9a8 70%, #b8860b 100%);
+    --surface-card-size: 220% 220%;           /* room for the hover sweep */
     --surface-card-ink: #14204a;              /* text on a card surface */
-    --surface-card-ink-muted: rgba(20, 32, 74, 0.72);
-    --border-gold-hairline: rgba(184, 134, 11, 0.32);
-    --border-gold-strong: rgba(184, 134, 11, 0.55);
+    --surface-card-ink-muted: rgba(20, 32, 74, 0.8);
 
-    /* The gold bar across the top of a card. This is where the brand gold
-       now lives: an accent with a job, rather than a gradient sitting
-       underneath body copy. */
-    --card-accent-bar: 3px;
+    /* Chips that sit on the gold and need to read lighter than it. */
+    --surface-card-chip: rgba(255, 255, 255, 0.4);
 
-    /* Tint used for chips and icon wells sitting on a card surface. */
-    --surface-card-well: rgba(20, 32, 74, 0.07);
-    --surface-card-well-strong: rgba(20, 32, 74, 0.14);
+    /* Icon wells and counters, which read darker than the gold. */
+    --surface-card-well: rgba(10, 17, 40, 0.2);
+    --surface-card-well-strong: rgba(10, 17, 40, 0.3);
+    --surface-card-well-hover: rgba(10, 17, 40, 0.28);
+
+    /* Hairline dividers inside a card. */
+    --surface-card-rule: rgba(20, 32, 74, 0.2);
 
     /* ============================================
        CONTROL SIZES
