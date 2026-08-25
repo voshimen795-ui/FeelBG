@@ -4,6 +4,12 @@
     left: 0;
     right: 0;
     width: 100%;
+    /* Pinned to --control-lg (52px) so the clearance reserved for this bar
+       below can reference the same token instead of guessing a spacing
+       step that happened to be close. It previously had no explicit
+       height, rendered at ~51px, while the reserved clearance was 64px
+       (--space-8) — 13px of dead space at the bottom of every mobile page. */
+    height: var(--control-lg);
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     display: flex;
     justify-content: space-around;
@@ -71,15 +77,15 @@
    page for a bar that shouldn't render there at all. */
 @media (max-width: 767px) {
     body {
-        padding-bottom: var(--space-8);
+        padding-bottom: var(--control-lg);
     }
 
     main {
-        padding-bottom: var(--space-8);
+        padding-bottom: var(--control-lg);
     }
 
     .footer {
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--control-lg);
     }
 
     .mobile-bottom-nav {

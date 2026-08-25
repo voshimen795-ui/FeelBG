@@ -136,7 +136,11 @@ button {
     font-family: inherit;
 }
 
-input, textarea {
+/* select is included deliberately: unlike input/textarea it doesn't
+   inherit font-family from its parent, so leaving it out rendered every
+   dropdown on the site (price, area, sort filters) in the browser's
+   default UI font instead of Poppins. */
+input, textarea, select {
     font-family: inherit;
 }
 

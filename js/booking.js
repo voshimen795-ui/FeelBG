@@ -273,7 +273,10 @@ class BookingChatbot {
 .bcb-typing-dot:nth-child(3){animation-delay:.3s}
 @keyframes bcbTypingBounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
 .bcb-input-area{display:flex;padding:12px;gap:8px;background:#fffdf9;border-top:1px solid rgba(184,134,11,.2);flex-shrink:0}
-.bcb-input{flex:1;border:1px solid #d9d2c2;border-radius:24px;padding:10px 16px;font-size:14px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif;background:#fff;color:#1f2937}
+/* font-size must stay >=16px: iOS Safari auto-zooms the page on focus for
+   any input below that, which is what made the reservation chat feel
+   broken on phones. */
+.bcb-input{flex:1;border:1px solid #d9d2c2;border-radius:24px;padding:10px 16px;font-size:16px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif;background:#fff;color:#1f2937}
 .bcb-input:focus{border-color:#1e3a8a}
 .bcb-send{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#b8860b 0%,#ffd700 100%);color:#14204a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:transform .15s}
 .bcb-send:hover{transform:scale(1.1)}
