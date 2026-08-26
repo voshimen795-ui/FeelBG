@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="css/mobile-optimized.css">
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
-    <!-- MapLibre GL JS -->
+    <link rel="stylesheet" href="css/card-stack.css">
 </head>
 <body class="page-home">
     <!-- Cursor Effect Container -->
@@ -230,50 +230,60 @@
                     </p>
                 </div>
                 
-                <div class="categories__grid">
-                    <a href="restaurants.html" class="category__card scroll-reveal ripple bounce-on-tap">
-                        <div class="category__icon">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        <h3 class="category__title" data-i18n="categories.restaurants">Restaurants</h3>
-                        <p class="category__description" data-i18n="categories.restaurantsDesc">
-                            Discover amazing Serbian and international cuisine
-                        </p>
-                        <div class="category__overlay"></div>
-                    </a>
-                    
-                    <a href="cafes.html" class="category__card scroll-reveal ripple bounce-on-tap">
-                        <div class="category__icon">
-                            <i class="fas fa-coffee"></i>
-                        </div>
-                        <h3 class="category__title" data-i18n="categories.cafes">Cafes & Bars</h3>
-                        <p class="category__description" data-i18n="categories.cafesDesc">
-                            Cozy cafes and trendy bars for every mood
-                        </p>
-                        <div class="category__overlay"></div>
-                    </a>
-                    
-                    <a href="nightlife.html" class="category__card scroll-reveal ripple bounce-on-tap">
-                        <div class="category__icon">
-                            <i class="fas fa-glass-cheers"></i>
-                        </div>
-                        <h3 class="category__title" data-i18n="categories.nightlife">Nightlife</h3>
-                        <p class="category__description" data-i18n="categories.nightlifeDesc">
-                            Experience the city that never sleeps
-                        </p>
-                        <div class="category__overlay"></div>
-                    </a>
-                    
-                    <a href="attractions.html" class="category__card scroll-reveal ripple bounce-on-tap">
-                        <div class="category__icon">
-                            <i class="fas fa-landmark"></i>
-                        </div>
-                        <h3 class="category__title" data-i18n="categories.attractions">Attractions</h3>
-                        <p class="category__description" data-i18n="categories.attractionsDesc">
-                            Historic sites and modern landmarks
-                        </p>
-                        <div class="category__overlay"></div>
-                    </a>
+                <!-- Category card stack. The links below are the real,
+                     scrollable content; js/card-stack.js layers a decorative
+                     3D stack on top of them. With no JS, or with reduced
+                     motion, this stays a plain snap-scrolling row. -->
+                <div class="card-stack" id="categories-stack" data-card-stack>
+                    <div class="card-stack__scroller">
+                        <a href="restaurants.html" class="card-stack__link">
+                            <div class="card-stack__card" style="background-image: url('slike/temperament.jpg');">
+                                <div class="card-stack__body">
+                                    <span class="card-stack__icon"><i class="fas fa-utensils"></i></span>
+                                    <span class="card-stack__title" data-i18n="categories.restaurants">Restaurants</span>
+                                    <span class="card-stack__desc" data-i18n="categories.restaurantsDesc">
+                                        Discover amazing Serbian and international cuisine
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="cafes.html" class="card-stack__link">
+                            <div class="card-stack__card" style="background-image: url('assets/images/restorani/dekstop.jpg');">
+                                <div class="card-stack__body">
+                                    <span class="card-stack__icon"><i class="fas fa-coffee"></i></span>
+                                    <span class="card-stack__title" data-i18n="categories.cafes">Cafes &amp; Bars</span>
+                                    <span class="card-stack__desc" data-i18n="categories.cafesDesc">
+                                        Cozy cafes and trendy bars for every mood
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="nightlife.html" class="card-stack__link">
+                            <div class="card-stack__card" style="background-image: url('assets/images/money-club.jpg');">
+                                <div class="card-stack__body">
+                                    <span class="card-stack__icon"><i class="fas fa-glass-cheers"></i></span>
+                                    <span class="card-stack__title" data-i18n="categories.nightlife">Nightlife</span>
+                                    <span class="card-stack__desc" data-i18n="categories.nightlifeDesc">
+                                        Experience the city that never sleeps
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="attractions.html" class="card-stack__link">
+                            <div class="card-stack__card" style="background-image: url('assets/images/kalemegdan-fortress.jpg');">
+                                <div class="card-stack__body">
+                                    <span class="card-stack__icon"><i class="fas fa-landmark"></i></span>
+                                    <span class="card-stack__title" data-i18n="categories.attractions">Attractions</span>
+                                    <span class="card-stack__desc" data-i18n="categories.attractionsDesc">
+                                        Historic sites and modern landmarks
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -711,6 +721,7 @@
     <script src="js/mobile-interactions.js"></script>
     <script src="js/script.js"></script>
     <script src="js/insider-tips.js"></script>
+    <script src="js/card-stack.js" defer></script>
     
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
