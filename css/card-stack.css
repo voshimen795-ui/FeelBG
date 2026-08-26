@@ -25,18 +25,26 @@
 .card-stack {
     position: relative;
     width: 100%;
-    max-width: 34rem;
     margin: 0 auto;
-    /* Portrait on phones where width is scarce, square from tablet up.
-       aspect-ratio (not a fixed height) is what keeps the 3D maths
-       proportional as the container scales. */
+    /* aspect-ratio (not a fixed height) is what keeps the 3D maths
+       proportional as the container scales. It gets wider — and the cards
+       within it correspondingly bigger — at each breakpoint, so the stack
+       fills the section instead of floating in the middle of it. */
+    max-width: 30rem;
     aspect-ratio: 4 / 5;
 }
 
 @media (min-width: 768px) {
     .card-stack {
-        max-width: 38rem;
-        aspect-ratio: 1 / 1;
+        max-width: 52rem;
+        aspect-ratio: 3 / 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-stack {
+        max-width: 68rem;
+        aspect-ratio: 16 / 9;
     }
 }
 
@@ -117,17 +125,32 @@
     gap: var(--space-2);
 }
 
-.card-stack__icon {
-    width: var(--control-md);
-    height: var(--control-md);
+/* Rating + neighbourhood, above the venue name. */
+.card-stack__meta {
     display: flex;
     align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+}
+
+.card-stack__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-full);
     background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%);
     color: #14204a;
-    font-size: var(--text-lg);
-    margin-bottom: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 700;
+}
+
+.card-stack__area {
+    font-size: var(--text-xs);
+    color: rgba(244, 239, 226, 0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
 }
 
 .card-stack__title {
@@ -166,12 +189,15 @@
     perspective: var(--card-stack-perspective, 60rem);
 }
 
+/* Width is a percentage of the stack, and every horizontal offset in the
+   JS is a percentage of the card's own width — so widening the card
+   widens the whole fan proportionally and the maths still holds. */
 .card-stack__visual {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 40%;
-    height: calc(100% - var(--space-6));
+    width: 62%;
+    height: calc(100% - var(--space-5));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,13 +206,29 @@
     /* transform / z-index / opacity are all written by JS per frame. */
 }
 
+@media (min-width: 768px) {
+    .card-stack__visual {
+        width: 38%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-stack__visual {
+        width: 30%;
+    }
+}
+
 .card-stack__visual-inner {
     /* Must be positioned: the ::after scrim below is inset:0 against this
        box. Without it the scrim resolves against .card-stack__visual and
        spills over the whole wrapper. */
     position: relative;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    /* Deliberately shorter than its wrapper. The wrapper is the rotation
+       box; this is the visible card. The headroom absorbs the ~1.26x
+       perspective magnification from translateZ, so the front card never
+       spills past the stack and into the pager dots below. */
+    height: 74%;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background-color: var(--page-bg-alt);
