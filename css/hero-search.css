@@ -39,18 +39,18 @@
     content: '';
     position: absolute;
     /* Bleeds past the text so the falloff happens off the glyphs. */
-    inset: calc(var(--space-6) * -1) calc(var(--space-7) * -1);
+    inset: calc(var(--space-4) * -1) calc(var(--space-5) * -1);
     z-index: -1;
     background: radial-gradient(
         ellipse at center,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.32) 50%,
-        rgba(0, 0, 0, 0) 78%
+        rgba(0, 0, 0, 0.38) 0%,
+        rgba(0, 0, 0, 0.2) 45%,
+        rgba(0, 0, 0, 0) 70%
     );
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 46%, transparent 76%);
-    mask-image: radial-gradient(ellipse at center, #000 0%, #000 46%, transparent 76%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
+    mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
     pointer-events: none;
 }
 

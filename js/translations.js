@@ -1,6 +1,7 @@
 'use strict';
 window.FEELBG_TRANSLATIONS = {
 en: {
+'heroSearch.placeholder':'Search venues',
 'nav.home':'Home','nav.restaurants':'Restaurants','nav.cafes':'Cafes','nav.nightlife':'Nightlife','nav.attractions':'Attractions','nav.about':'About',
 'hero.welcome':'Welcome to Belgrade','hero.title':'Discover the Heart','hero.of':'of','hero.titleAccent':'SERBIA',
 'hero.description':"Experience Belgrade's finest restaurants, hidden cafes, vibrant nightlife, and unforgettable attractions. Your personal guide to the city's best kept secrets.",
@@ -75,6 +76,7 @@ en: {
 },
 
 sr: {
+'heroSearch.placeholder':'Pretraži lokale',
 'nav.home':'Početna','nav.restaurants':'Restorani','nav.cafes':'Kafići','nav.nightlife':'Noćni život','nav.attractions':'Atrakcije','nav.about':'O nama',
 'hero.welcome':'Dobrodošli u Beograd','hero.title':'Otkrijte srce','hero.of':'','hero.titleAccent':'SRBIJE',
 'hero.description':'Doživite najbolje beogradske restorane, skrivene kafiće, vibrantan noćni život i nezaboravne atrakcije. Vaš lični vodič kroz najbolje tajne grada.',
@@ -149,6 +151,7 @@ sr: {
 },
 
 tr: {
+'heroSearch.placeholder':'Mekan ara',
 'nav.home':'Ana Sayfa','nav.restaurants':'Restoranlar','nav.cafes':'Kafeler','nav.nightlife':'Gece Hayatı','nav.attractions':'Gezilecek Yerler','nav.about':'Hakkında',
 'hero.welcome':'Belgrad\'a Hoş Geldiniz','hero.title':'Keşfedin','hero.of':'','hero.titleAccent':'SIRBİSTAN',
 'hero.description':'Belgrad\'ın en iyi restoranlarını, gizli kafelerini, canlı gece hayatını ve unutulmaz mekanlarını deneyimleyin. Şehrin en iyi sırlarına kişisel rehberiniz.',
@@ -223,6 +226,7 @@ tr: {
 },
 
 de: {
+'heroSearch.placeholder':'Locations suchen',
 'nav.home':'Startseite','nav.restaurants':'Restaurants','nav.cafes':'Cafés','nav.nightlife':'Nachtleben','nav.attractions':'Sehenswürdigkeiten','nav.about':'Über uns',
 'hero.welcome':'Willkommen in Belgrad','hero.title':'Entdecken Sie das Herz','hero.of':'von','hero.titleAccent':'SERBIEN',
 'hero.description':'Erleben Sie Belgrads beste Restaurants, versteckte Cafés, lebhaftes Nachtleben und unvergessliche Attraktionen.',
@@ -297,6 +301,7 @@ de: {
 },
 
 fr: {
+'heroSearch.placeholder':'Rechercher un lieu',
 'nav.home':'Accueil','nav.restaurants':'Restaurants','nav.cafes':'Cafés','nav.nightlife':'Vie nocturne','nav.attractions':'Attractions','nav.about':'À propos',
 'hero.welcome':'Bienvenue à Belgrade','hero.title':'Découvrez le cœur','hero.of':'de la','hero.titleAccent':'SERBIE',
 'hero.description':'Découvrez les meilleurs restaurants, cafés cachés, vie nocturne vibrante et attractions inoubliables de Belgrade.',
@@ -371,6 +376,7 @@ fr: {
 },
 
 it: {
+'heroSearch.placeholder':'Cerca locali',
 'nav.home':'Home','nav.restaurants':'Ristoranti','nav.cafes':'Caffè','nav.nightlife':'Vita notturna','nav.attractions':'Attrazioni','nav.about':'Chi siamo',
 'hero.welcome':'Benvenuti a Belgrado','hero.title':'Scoprite il cuore','hero.of':'della','hero.titleAccent':'SERBIA',
 'hero.description':'Scoprite i migliori ristoranti, caffè nascosti, vita notturna vibrante e attrazioni indimenticabili di Belgrado.',
@@ -428,6 +434,7 @@ it: {
 },
 
 ru: {
+'heroSearch.placeholder':'Поиск заведений',
 'nav.home':'Главная','nav.restaurants':'Рестораны','nav.cafes':'Кафе','nav.nightlife':'Ночная жизнь','nav.attractions':'Достопримечательности','nav.about':'О нас',
 'hero.welcome':'Добро пожаловать в Белград','hero.title':'Откройте сердце','hero.of':'','hero.titleAccent':'СЕРБИИ',
 'hero.description':'Откройте лучшие рестораны, скрытые кафе, яркую ночную жизнь и незабываемые достопримечательности Белграда.',
@@ -485,6 +492,7 @@ ru: {
 },
 
 el: {
+'heroSearch.placeholder':'Αναζήτηση χώρων',
 'nav.home':'Αρχική','nav.restaurants':'Εστιατόρια','nav.cafes':'Καφέ','nav.nightlife':'Νυχτερινή ζωή','nav.attractions':'Αξιοθέατα','nav.about':'Σχετικά',
 'hero.welcome':'Καλώς ήρθατε στο Βελιγράδι','hero.title':'Ανακαλύψτε την καρδιά','hero.of':'της','hero.titleAccent':'ΣΕΡΒΙΑΣ',
 'hero.description':'Ζήστε τα καλύτερα εστιατόρια, κρυμμένα καφέ, ζωντανή νυχτερινή ζωή και αξέχαστα αξιοθέατα του Βελιγραδίου.',
@@ -530,6 +538,7 @@ el: {
 },
 
 he: {
+'heroSearch.placeholder':'חיפוש מקומות',
 'nav.home':'דף הבית','nav.restaurants':'מסעדות','nav.cafes':'בתי קפה','nav.nightlife':'חיי לילה','nav.attractions':'אטרקציות','nav.about':'אודות',
 'hero.welcome':'ברוכים הבאים לבלגרד','hero.title':'גלו את הלב','hero.of':'של','hero.titleAccent':'סרביה',
 'hero.description':'חוו את המסעדות הטובות ביותר, בתי קפה נסתרים, חיי לילה תוססים ואטרקציות בלתי נשכחות בבלגרד.',
