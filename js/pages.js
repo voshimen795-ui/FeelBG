@@ -191,19 +191,6 @@ class LoadMoreFeature {
     }
 }
 
-class MapToggle {
-    constructor() {
-        this.mapToggleBtn = document.getElementById('map-toggle');
-        this.init();
-    }
-    init() {
-        if (!this.mapToggleBtn) return;
-        this.mapToggleBtn.addEventListener('click', () => {
-            if (window.belgradeMap) window.belgradeMap.openMap();
-        });
-    }
-}
-
 class PlaceDetails {
     constructor() {
         this.budgetRanges = {
@@ -414,14 +401,13 @@ class PlaceDetails {
         const routeBtn = modal.querySelector('.detail-modal__route-btn');
         if (routeBtn) {
             routeBtn.addEventListener('click', () => {
-                closeModal();
                 const destLat = parseFloat(routeBtn.dataset.routeLat);
                 const destLng = parseFloat(routeBtn.dataset.routeLng);
-                const destName = routeBtn.dataset.routeName;
-                if (window.belgradeMap) {
-                    window.belgradeMap.openMap();
-                    setTimeout(() => window.belgradeMap.showRouteTo(destLat, destLng, destName), 600);
-                }
+                window.open(
+                    `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}`,
+                    '_blank',
+                    'noopener'
+                );
             });
         }
     }
@@ -439,6 +425,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window._placeFilteringInstance = new PlaceFiltering();
     new LoadMoreFeature();
-    new MapToggle();
     window._placeDetailsInstance = new PlaceDetails();
 });

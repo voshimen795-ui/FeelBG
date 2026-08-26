@@ -212,7 +212,9 @@ class ReservePicker {
 .rvp-chip--active i{opacity:1}
 .rvp-search{position:relative;margin:14px 22px 12px;flex-shrink:0}
 .rvp-search i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#b8860b;font-size:14px;pointer-events:none}
-.rvp-search input{width:100%;padding:12px 16px 12px 42px;font-family:'Poppins',sans-serif;font-size:14px;color:#f4efe2;background:rgba(10,17,41,.85);border:1px solid rgba(255,215,0,.22);border-radius:12px;outline:none;transition:border-color .2s,box-shadow .2s}
+/* font-size must stay >=16px: iOS Safari auto-zooms the page on focus for
+   any input below that. */
+.rvp-search input{width:100%;padding:12px 16px 12px 42px;font-family:'Poppins',sans-serif;font-size:16px;color:#f4efe2;background:rgba(10,17,41,.85);border:1px solid rgba(255,215,0,.22);border-radius:12px;outline:none;transition:border-color .2s,box-shadow .2s}
 .rvp-search input::placeholder{color:#6f7ea8}
 .rvp-search input:focus{border-color:rgba(255,215,0,.6);box-shadow:0 0 0 3px rgba(255,215,0,.12)}
 .rvp-list{flex:1;overflow-y:auto;padding:2px 16px 12px;min-height:120px;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,.4) transparent}
