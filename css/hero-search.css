@@ -17,6 +17,7 @@
 }
 
 .hero__text {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,6 +26,32 @@
     /* Grid items default to min-width:auto, so this refuses to shrink below
        its min-content and spills out of its track on narrow phones. */
     min-width: 0;
+}
+
+/* Soft dark blur behind the hero copy, so the title stays readable over
+   whichever frame of the background video happens to be playing.
+
+   The mask is doing the important work: backdrop-filter applies to the
+   element's whole rectangle, which would leave a visible blurred box edge
+   over the video. Fading the element out towards its edges fades the blur
+   with it, so it reads as a soft pool of shadow rather than a panel. */
+.hero__text::before {
+    content: '';
+    position: absolute;
+    /* Bleeds past the text so the falloff happens off the glyphs. */
+    inset: calc(var(--space-6) * -1) calc(var(--space-7) * -1);
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.32) 50%,
+        rgba(0, 0, 0, 0) 78%
+    );
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 46%, transparent 76%);
+    mask-image: radial-gradient(ellipse at center, #000 0%, #000 46%, transparent 76%);
+    pointer-events: none;
 }
 
 .hero__title {
@@ -125,19 +152,82 @@
     box-shadow: var(--shadow-3);
 }
 
-/* Sits under the bar without shifting it: the hint only appears when the
-   search finds nothing, and the field should not jump when it does. */
-.hero-search__hint {
-    position: absolute;
-    top: calc(100% + var(--space-3));
-    left: 0;
-    right: 0;
-    margin: 0;
-    text-align: center;
+/* ============================================
+   RESULTS DROPDOWN
+   ============================================ */
+/* Fixed, and moved to <body> by hero-search.js, because .hero clips its
+   overflow for the background video and would otherwise slice this off a
+   few pixels down. left/top/width/max-height are written by the script. */
+.hero-search__results {
+    position: fixed;
+    z-index: 120;
+    overflow-y: auto;
+    padding: var(--space-2);
+    background: rgba(10, 17, 40, 0.95);
+    border: 1px solid rgba(255, 215, 0, 0.28);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: left;
+}
+
+.hero-search__results[hidden] {
+    display: none;
+}
+
+.hero-search__result {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-2);
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--page-text);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition-normal);
+}
+
+.hero-search__result:hover,
+.hero-search__result.is-active {
+    background: rgba(255, 215, 0, 0.14);
+}
+
+.hero-search__result-thumb {
+    flex-shrink: 0;
+    width: var(--control-md);
+    height: var(--control-md);
+    border-radius: var(--radius-md);
+    background-color: var(--page-bg-alt);
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-search__result-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.hero-search__result-name {
+    font-weight: 700;
     font-size: var(--text-base);
-    color: rgba(244, 239, 226, 0.85);
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
-    min-height: 1.5em;
+    line-height: 1.3;
+    /* Long venue names truncate rather than wrapping the row to two lines. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hero-search__result-meta {
+    font-size: var(--text-sm);
+    color: rgba(244, 239, 226, 0.65);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media (max-width: 480px) {

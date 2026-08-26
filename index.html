@@ -211,13 +211,14 @@
                                    name="q"
                                    placeholder="Pretraži lokale"
                                    data-i18n-placeholder="heroSearch.placeholder"
-                                   list="hero-search-venues"
-                                   aria-describedby="hero-search-hint">
-                            <datalist id="hero-search-venues"></datalist>
+                                   role="combobox"
+                                   aria-expanded="false"
+                                   aria-controls="hero-search-results"
+                                   aria-autocomplete="list">
                             <button type="submit" class="hero-search__submit" data-i18n-aria="heroSearch.submit" aria-label="Search">
                                 <i class="fas fa-arrow-right" aria-hidden="true"></i>
                             </button>
-                            <p class="hero-search__hint" id="hero-search-hint" role="status" aria-live="polite"></p>
+                            <div class="hero-search__results" id="hero-search-results" role="listbox" hidden></div>
                         </form>
                     </div>
                 </div>
@@ -680,6 +681,7 @@
     <script src="js/mobile-interactions.js"></script>
     <script src="js/script.js"></script>
     <script src="js/insider-tips.js"></script>
+    <script src="js/pages.js" defer></script>
     <script src="js/card-stack.js" defer></script>
     <script src="js/hero-search.js" defer></script>
     
