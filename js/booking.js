@@ -275,8 +275,15 @@ class BookingChatbot {
 .bcb-input-area{display:flex;padding:12px;gap:8px;background:#fffdf9;border-top:1px solid rgba(184,134,11,.2);flex-shrink:0}
 /* font-size must stay >=16px: iOS Safari auto-zooms the page on focus for
    any input below that, which is what made the reservation chat feel
-   broken on phones. */
-.bcb-input{flex:1;border:1px solid #d9d2c2;border-radius:24px;padding:10px 16px;font-size:16px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif;background:#fff;color:#1f2937}
+   broken on phones.
+
+   min-width:0 is load-bearing. A flex item defaults to min-width:auto, and
+   for an <input> that resolves to its intrinsic width (roughly 20
+   characters), so the field refuses to shrink below it and pushes the send
+   button out of the container, which clips it. It only showed on some
+   phones because it depends on how much room is left: narrow screens, or
+   any screen once Android's accessibility font scaling is turned up. */
+.bcb-input{flex:1;min-width:0;border:1px solid #d9d2c2;border-radius:24px;padding:10px 16px;font-size:16px;outline:none;transition:border .2s;font-family:'Poppins',sans-serif;background:#fff;color:#1f2937}
 .bcb-input:focus{border-color:#1e3a8a}
 .bcb-send{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#b8860b 0%,#ffd700 100%);color:#14204a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:transform .15s}
 .bcb-send:hover{transform:scale(1.1)}
