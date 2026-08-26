@@ -35,7 +35,34 @@ class CardRenderer {
         var key = 'venue.' + slug + '.' + field;
         var val = this.t(key);
         if (val !== key) return val;
-        return field === 'desc' ? venue.description : venue.cuisineLabel;
+        // No translation for this language: fall back to the English copy that
+        // lives on the venue object itself. desc/cuisine are stored under
+        // different property names; everything else matches its field name.
+        if (field === 'desc') return venue.description;
+        if (field === 'cuisine') return venue.cuisineLabel;
+        return venue[field] || '';
+    }
+
+    // Pills arrive either as an array (English, from venues.js) or as a
+    // pipe-separated string (every other language, from the translation file).
+    static pillsFor(venue) {
+        var val = this.getTranslated(venue, 'pills');
+        if (Array.isArray(val)) return val;
+        return String(val || '').split('|').map(function(p) { return p.trim(); }).filter(Boolean);
+    }
+
+    static escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    static pillsHtml(venue) {
+        var pills = this.pillsFor(venue);
+        if (!pills.length) return '';
+        return '<div class="place-card__pills">' + pills.map(function(p) {
+            return '<span class="pill">' + CardRenderer.escapeHtml(p) + '</span>';
+        }).join('') + '</div>';
     }
 
     static renderCard(venue) {
@@ -50,8 +77,13 @@ class CardRenderer {
         var priceHtml = isAttraction ? '' : '<div class="place-card__meta"><span class="price-range">' + translatedPrice + '</span></div>';
         var reserveHtml = isAttraction ? '' : '<button class="btn-icon btn-reserve" title="' + this.t('popup.reserve') + '" data-booking=""><i class="fas fa-calendar-check"></i></button>';
 
-        var desc = this.getTranslated(venue, 'desc');
+        // Attractions carry editorial copy. The hook is the sharper opening
+        // line, so on the card it stands in for the flat description; venues
+        // without one (restaurants, nightlife) are unchanged.
+        var hook = this.getTranslated(venue, 'hook');
+        var desc = hook || this.getTranslated(venue, 'desc');
         var cuisineLabel = this.getTranslated(venue, 'cuisine');
+        var pillsHtml = this.pillsHtml(venue);
 
         return '\
             <div class="place-card" data-cuisine="' + venue.cuisine + '" data-price="' + (venue.price || 'free') + '" data-area="' + venue.area.toLowerCase().replace(/[^a-z]/g, '-') + '" data-rating="' + venue.rating + '" data-lat="' + venue.lat + '" data-lng="' + venue.lng + '" data-name="' + venue.name.replace(/"/g, '&quot;') + '">\
@@ -67,6 +99,7 @@ class CardRenderer {
                     <p class="place-card__cuisine"><i class="fas fa-tag"></i> ' + cuisineLabel + '</p>\
                     <p class="place-card__location"><i class="fas fa-map-marker-alt"></i> ' + this.translateArea(venue.area) + '</p>\
                     <p class="place-card__description">' + desc + '</p>\
+                    ' + pillsHtml + '\
                     ' + priceHtml + '\
                     <div class="place-card__footer">\
                         <button class="btn-icon btn-directions" title="' + this.t('ui.directions') + '"><i class="fas fa-directions"></i></button>\
