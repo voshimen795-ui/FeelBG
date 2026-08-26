@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
     <link rel="stylesheet" href="css/card-stack.css">
+    <link rel="stylesheet" href="css/hero-search.css">
 </head>
 <body class="page-home">
     <!-- Cursor Effect Container -->
@@ -200,20 +201,24 @@
                                 </span>
                             </span>
                         </h1>
-                        <div class="hero__reserve" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
-                            <button class="hero-reserve-btn" id="hero-reserve-btn" type="button" data-adventure>
-                                <span class="hero-reserve-btn__icon"><i class="fas fa-wand-magic-sparkles"></i></span>
-                                <span class="hero-reserve-btn__label" data-i18n="adventure.heroBtn">Create My Belgrade Story</span>
-                                <span class="hero-reserve-btn__arrow"><i class="fas fa-arrow-right"></i></span>
+                        <form class="hero-search" id="hero-search" role="search" autocomplete="off"
+                              data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+                            <label class="hero-search__label" for="hero-search-input" data-i18n="heroSearch.label">Search venues</label>
+                            <i class="fas fa-search hero-search__icon" aria-hidden="true"></i>
+                            <input type="search"
+                                   id="hero-search-input"
+                                   class="hero-search__input"
+                                   name="q"
+                                   placeholder="Pretraži lokale"
+                                   data-i18n-placeholder="heroSearch.placeholder"
+                                   list="hero-search-venues"
+                                   aria-describedby="hero-search-hint">
+                            <datalist id="hero-search-venues"></datalist>
+                            <button type="submit" class="hero-search__submit" data-i18n-aria="heroSearch.submit" aria-label="Search">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
                             </button>
-                            <p class="hero__reserve-note">
-                                <i class="fab fa-whatsapp"></i>
-                                <span data-i18n="reserve.heroNote">Free instant reservations at Belgrade's finest venues</span>
-                            </p>
-                            <button class="hero__browse-link" type="button" data-venue-browser>
-                                <span data-i18n="adventure.browseAll">Or browse all venues</span>
-                            </button>
-                        </div>
+                            <p class="hero-search__hint" id="hero-search-hint" role="status" aria-live="polite"></p>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -676,6 +681,7 @@
     <script src="js/script.js"></script>
     <script src="js/insider-tips.js"></script>
     <script src="js/card-stack.js" defer></script>
+    <script src="js/hero-search.js" defer></script>
     
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
