@@ -442,6 +442,41 @@
     margin-bottom: var(--space-4);
 }
 
+/* Editorial tags — three per attraction, on the card and in the modal.
+   They sit on both the light card surface and the modal body, so the colour
+   comes from the bronze accent rather than from either background. */
+.place-card__pills,
+.detail-modal__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.pill {
+    padding: 0.25rem 0.7rem;
+    border: 1px solid rgba(184, 134, 11, 0.35);
+    border-radius: var(--radius-full);
+    background: rgba(184, 134, 11, 0.1);
+    color: var(--secondary-color);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Long-form sections in the detail modal: what you see, why it's worth it,
+   and the one thing that isn't on the map. */
+.detail-modal__story {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    margin: 0 0 var(--space-3);
+}
+
+.detail-modal__story--insider {
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--secondary-color);
+}
+
 .place-card__meta {
     display: flex;
     justify-content: space-between;

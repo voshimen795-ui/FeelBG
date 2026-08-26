@@ -250,6 +250,9 @@ class PlaceDetails {
 
     showDetailsForVenue(venue) {
         const pageType = this.typeToPageType(venue.type);
+        // Same rule as the grid card: an attraction leads with its hook.
+        const lead = (window.CardRenderer && window.CardRenderer.getTranslated(venue, 'hook'))
+            || venue.desc || venue.description || '';
         const card = document.createElement('div');
         card.dataset.price = venue.priceLabel ? (venue.price || 'moderate') : 'none';
         card.dataset.lat = venue.lat;
@@ -258,7 +261,7 @@ class PlaceDetails {
             <div class="place-card__image" style="background-image:url('${venue.image || ''}')"></div>
             <div class="place-card__rating"><i class="fas fa-star"></i> ${venue.rating || ''}</div>
             <div class="place-card__location"><i class="fas fa-map-marker-alt"></i> ${venue.area || ''}</div>
-            <div class="place-card__description">${venue.desc || venue.description || ''}</div>
+            <div class="place-card__description">${lead}</div>
             <div class="place-card__cuisine">${venue.cuisineLabel || ''}</div>
         `;
         this.showDetails(venue.name, card, pageType);
@@ -320,6 +323,27 @@ class PlaceDetails {
         const lng = card.dataset.lng;
         const hasCoords = lat && lng;
 
+        // Editorial copy for attractions: the card already carries the hook as
+        // its description, so the modal picks up from there with the longer
+        // sections. Venues without this copy render exactly as before.
+        const CR = window.CardRenderer;
+        const story = (venue && CR) ? {
+            about: CR.getTranslated(venue, 'about'),
+            why: CR.getTranslated(venue, 'why'),
+            insider: CR.getTranslated(venue, 'insider'),
+            pills: CR.pillsFor(venue)
+        } : { about: '', why: '', insider: '', pills: [] };
+        const esc = (s) => CR ? CR.escapeHtml(s) : String(s);
+        const sectionTitle = 'detail-modal__section-title font-display text-base text-royal mt-5 mb-2 flex items-center gap-2';
+        const storyHtml = `
+            ${story.pills.length ? `<div class="detail-modal__pills">${story.pills.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>` : ''}
+            ${story.about ? `<p class="detail-modal__story">${story.about}</p>` : ''}
+            ${story.why ? `<h4 class="${sectionTitle}"><i class="fas fa-star"></i> ${t('attraction.why')}</h4>
+                           <p class="detail-modal__story">${story.why}</p>` : ''}
+            ${story.insider ? `<h4 class="${sectionTitle}"><i class="fas fa-lightbulb"></i> ${t('attraction.insider')}</h4>
+                               <p class="detail-modal__story detail-modal__story--insider">${story.insider}</p>` : ''}
+        `;
+
         const slidesHtml = galleryImages.map(src =>
             `<div class="modal-gallery__slide" style="background-image:url('${src}')"></div>`
         ).join('');
@@ -348,8 +372,9 @@ class PlaceDetails {
                     </div>
                     <p class="detail-modal__location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
                     ${description ? `<p class="detail-modal__desc">${description}</p>` : ''}
+                    ${storyHtml}
 
-                    <h4 class="detail-modal__section-title font-display text-base text-royal mt-5 mb-2 flex items-center gap-2"><i class="fas fa-circle-info"></i> ${t('popup.information')}</h4>
+                    <h4 class="${sectionTitle}"><i class="fas fa-circle-info"></i> ${t('popup.information')}</h4>
                     <div class="detail-modal__info">
                         <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-clock"></i><span>${t('popup.open')} ${hours}</span></div>
                         ${isAttraction ? '' : `<div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>`}
