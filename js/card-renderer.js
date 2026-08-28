@@ -30,7 +30,26 @@ class CardRenderer {
         return key;
     }
 
+    /* Which key carries this venue's category label. The older venues each
+       have their own venue.<slug>.cuisine string; the newer ones share one
+       key per label (see js/venue-labels.js), so a repeated label like
+       "Shopping Centre" is translated once rather than once per venue.
+       Returns '' when neither exists — the caller falls back to the raw
+       English label on the venue object. */
+    static cuisineKey(venue) {
+        var own = 'venue.' + this.venueSlug(venue.name) + '.cuisine';
+        if (this.t(own) !== own) return own;
+        if (!venue.cuisineLabel) return '';
+        var shared = 'label.' + this.venueSlug(venue.cuisineLabel);
+        return this.t(shared) !== shared ? shared : '';
+    }
+
     static getTranslated(venue, field) {
+        if (field === 'cuisine') {
+            var cuisineKey = this.cuisineKey(venue);
+            if (cuisineKey) return this.t(cuisineKey);
+            return venue.cuisineLabel || '';
+        }
         var slug = this.venueSlug(venue.name);
         var key = 'venue.' + slug + '.' + field;
         var val = this.t(key);
@@ -123,7 +142,10 @@ class CardRenderer {
     static renderAll(containerId) {
         var venues = window.FEELBG_VENUES;
         if (!venues) return;
-        var all = [].concat(venues.restaurants, venues.cafes, venues.nightlife, venues.attractions);
+        var all = [].concat(
+            venues.restaurants || [], venues.cafes || [],
+            venues.nightlife || [], venues.attractions || []
+        );
         this.renderGrid(all, containerId);
     }
 

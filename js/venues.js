@@ -159,6 +159,133 @@ var FEELBG_VENUES = {
         },
     ],
 
+    cafes: [
+        {
+            name: "Smokvica",
+            cuisine: "coffee",
+            cuisineLabel: "Specialty Coffee",
+            price: "moderate",
+            priceLabel: "€8–16 per person",
+            area: "Dorćol",
+            address: "Kralja Petra 73, Dorćol",
+            rating: 4.6,
+            badge: "popular",
+            description:
+                "Courtyard cafe and all-day brunch spot behind a quiet Dorcol facade",
+            lat: 44.8218,
+            lng: 20.4562,
+            image: "slike/logo/smokvica.jpg"
+        },
+        {
+            name: "Supermarket Concept Store",
+            cuisine: "coffee",
+            cuisineLabel: "Specialty Coffee",
+            price: "moderate",
+            priceLabel: "€9–18 per person",
+            area: "Vračar",
+            address: "Višnjićeva 10, Vračar",
+            rating: 4.5,
+            description:
+                "Concept store, cafe and healthy kitchen under one roof",
+            lat: 44.8039,
+            lng: 20.4712,
+            image: "slike/logo/supermarket.jpg"
+        },
+        {
+            name: "Manufaktura",
+            cuisine: "coffee",
+            cuisineLabel: "Cafe · Garden",
+            price: "moderate",
+            priceLabel: "€10–20 per person",
+            area: "Stari Grad",
+            address: "Kralja Petra 13-15, Stari Grad",
+            rating: 4.5,
+            badge: "trending",
+            description:
+                "Famous red-umbrella courtyard, coffee by day and rakija by night",
+            lat: 44.8205,
+            lng: 20.456,
+            image: "slike/logo/manufaktura.jpg"
+        },
+        {
+            name: "Comunale Caffe",
+            cuisine: "coffee",
+            cuisineLabel: "Cafe · Bar",
+            price: "budget",
+            priceLabel: "€5–12 per person",
+            area: "Vračar",
+            address: "Njegoševa, Vračar",
+            rating: 4.4,
+            description:
+                "Neighbourhood cafe bar that runs from morning coffee straight into evening drinks",
+            lat: 44.802,
+            lng: 20.469,
+            image: "slike/logo/comunale.jpg"
+        },
+        {
+            name: "Kafeterija",
+            cuisine: "coffee",
+            cuisineLabel: "Specialty Coffee",
+            price: "budget",
+            priceLabel: "€4–10 per person",
+            area: "Stari Grad",
+            address: "Kralja Petra, Stari Grad",
+            rating: 4.6,
+            badge: "topRated",
+            description:
+                "Small-batch roasters and the reference point for third-wave coffee in Belgrade",
+            lat: 44.8188,
+            lng: 20.4553,
+            image: ""
+        },
+        {
+            name: "Pržionica D59B",
+            cuisine: "coffee",
+            cuisineLabel: "Coffee Roastery",
+            price: "budget",
+            priceLabel: "€4–10 per person",
+            area: "Dorćol",
+            address: "Dobračina 59b, Dorćol",
+            rating: 4.6,
+            description:
+                "Working roastery with a counter — the coffee is roasted in the room you drink it in",
+            lat: 44.8234,
+            lng: 20.4626,
+            image: ""
+        },
+        {
+            name: "Hotel Moskva",
+            cuisine: "cocktail",
+            cuisineLabel: "Cafe · Patisserie",
+            price: "upscale",
+            priceLabel: "€10–22 per person",
+            area: "Stari Grad",
+            address: "Balkanska 1, Stari Grad",
+            rating: 4.6,
+            badge: "popular",
+            description:
+                "1908 hotel cafe famous for its Moskva schnitte cake and marble room",
+            lat: 44.8123,
+            lng: 20.4585,
+            image: "slike/logo/hotel moskva.jpg"
+        },
+        {
+            name: "Frans",
+            cuisine: "wine",
+            cuisineLabel: "Cafe · Wine Bar",
+            price: "moderate",
+            priceLabel: "€12–24 per person",
+            area: "Vračar",
+            address: "Bulevar oslobođenja, Vračar",
+            rating: 4.4,
+            description:
+                "French-leaning cafe that turns into a wine bar after dark",
+            lat: 44.7962,
+            lng: 20.4696,
+            image: "slike/logo/frans.jpg"
+        },
+    ],
+
     nightlife: [
         {
             name: "Money",
@@ -192,6 +319,83 @@ var FEELBG_VENUES = {
             lng: 20.4200,
             image: "slike/lasta.jpg",
         },
+        {
+            name: "Drugstore",
+            cuisine: "electronic",
+            cuisineLabel: "Club · Techno",
+            price: "moderate",
+            priceLabel: "€6–14 entry",
+            area: "Savski Venac",
+            address: "Bulevar despota Stefana 115, Savski Venac",
+            rating: 4.6,
+            badge: "trending",
+            description:
+                "Former slaughterhouse turned techno institution, no dress code and no small talk",
+            lat: 44.821,
+            lng: 20.479,
+            image: ""
+        },
+        {
+            name: "Klub 20/44",
+            cuisine: "electronic",
+            cuisineLabel: "Splav · Electronic",
+            price: "moderate",
+            priceLabel: "€5–12 entry",
+            area: "Novi Beograd",
+            address: "Savski kej, Novi Beograd",
+            rating: 4.7,
+            badge: "popular",
+            description:
+                "The river barge that put Belgrade on the underground electronic map",
+            lat: 44.8143,
+            lng: 20.4386,
+            image: ""
+        },
+        {
+            name: "Freestyler",
+            cuisine: "mainstream",
+            cuisineLabel: "Splav · Party",
+            price: "moderate",
+            priceLabel: "€8–18 entry",
+            area: "Novi Beograd",
+            address: "Brodarska bb, Novi Beograd",
+            rating: 4.3,
+            description:
+                "The biggest of the Sava rafts — commercial hits, foam parties and a young crowd",
+            lat: 44.8121,
+            lng: 20.431,
+            image: ""
+        },
+        {
+            name: "Stefan Braun",
+            cuisine: "mainstream",
+            cuisineLabel: "Club · Rooftop",
+            price: "upscale",
+            priceLabel: "€10–20 entry",
+            area: "Stari Grad",
+            address: "Nemanjina 4, 9th floor",
+            rating: 4.4,
+            description:
+                "Ninth-floor club with a city view, domestic hits and a strict door",
+            lat: 44.8062,
+            lng: 20.4586,
+            image: ""
+        },
+        {
+            name: "Ben Akiba",
+            cuisine: "mainstream",
+            cuisineLabel: "Bar · Living Room",
+            price: "moderate",
+            priceLabel: "€6–14 per person",
+            area: "Stari Grad",
+            address: "Nušićeva 8, Stari Grad",
+            rating: 4.5,
+            description:
+                "Hidden apartment bar up an unmarked staircase — ring the bell and walk into someone's flat",
+            lat: 44.8135,
+            lng: 20.463,
+            image: ""
+        }
     ],
 
     attractions: [
@@ -422,6 +626,233 @@ var FEELBG_VENUES = {
                 "The outdoor artillery is free and always open — if you only have twenty minutes, walk the rampart line and skip the interior.",
             pills: ["outdoor tanks", "F-117 wreckage", "inside the fortress"]
         },
+        {
+            name: "Museum of Yugoslavia",
+            cuisine: "museum",
+            cuisineLabel: "History Museum",
+            area: "Savski Venac",
+            address: "Mihaila Mike Jankovića 6, Dedinje",
+            rating: 4.7,
+            badge: "popular",
+            description:
+                "Tito's mausoleum and the relay batons, gifts and objects of a country that no longer exists",
+            lat: 44.788,
+            lng: 20.451,
+            image: ""
+        },
+        {
+            name: "Museum of Contemporary Art",
+            cuisine: "museum",
+            cuisineLabel: "Modern Art Museum",
+            area: "Novi Beograd",
+            address: "Ušće 10, Novi Beograd",
+            rating: 4.6,
+            description:
+                "Yugoslav modernist landmark at the confluence, holding 20th-century art of the region",
+            lat: 44.8155,
+            lng: 20.4415,
+            image: ""
+        },
+        {
+            name: "Ethnographic Museum",
+            cuisine: "museum",
+            cuisineLabel: "Ethnographic Museum",
+            area: "Stari Grad",
+            address: "Studentski trg 13, Stari Grad",
+            rating: 4.5,
+            description:
+                "Folk costume, craft and village life across the Balkans, floor by floor",
+            lat: 44.818,
+            lng: 20.457,
+            image: ""
+        },
+        {
+            name: "Ružica Church",
+            cuisine: "religious",
+            cuisineLabel: "Orthodox Church",
+            area: "Stari Grad",
+            address: "Kalemegdan, Stari Grad",
+            rating: 4.7,
+            badge: "trending",
+            description:
+                "Ivy-covered church inside the fortress walls, with chandeliers made from spent shell casings",
+            lat: 44.8241,
+            lng: 20.4535,
+            image: ""
+        },
+        {
+            name: "St. Petka Chapel",
+            cuisine: "religious",
+            cuisineLabel: "Chapel · Holy Spring",
+            area: "Stari Grad",
+            address: "Kalemegdan, Stari Grad",
+            rating: 4.6,
+            description:
+                "Mosaic-lined chapel built over a spring people still queue to drink from",
+            lat: 44.8243,
+            lng: 20.4538,
+            image: ""
+        },
+        {
+            name: "Saborna Crkva",
+            cuisine: "religious",
+            cuisineLabel: "Cathedral Church",
+            area: "Stari Grad",
+            address: "Kralja Petra 5, Stari Grad",
+            rating: 4.6,
+            description:
+                "Belgrade's 1840 cathedral, burial place of Serbian princes and Vuk Karadžić",
+            lat: 44.8199,
+            lng: 20.4525,
+            image: ""
+        },
+        {
+            name: "St. Mark's Church",
+            cuisine: "religious",
+            cuisineLabel: "Orthodox Church",
+            area: "Palilula",
+            address: "Bulevar kralja Aleksandra 17, Tašmajdan",
+            rating: 4.7,
+            badge: "popular",
+            description:
+                "Serbo-Byzantine church modelled on Gračanica, holding Emperor Dušan's tomb",
+            lat: 44.8107,
+            lng: 20.4707,
+            image: ""
+        },
+        {
+            name: "Alexander Nevsky Church",
+            cuisine: "religious",
+            cuisineLabel: "Orthodox Church",
+            area: "Dorćol",
+            address: "Cara Dušana 63a, Dorćol",
+            rating: 4.5,
+            description:
+                "Quiet Dorcol parish church with a Russian dedication and a shaded churchyard",
+            lat: 44.8258,
+            lng: 20.4614,
+            image: ""
+        },
+        {
+            name: "Tašmajdan Park",
+            cuisine: "nature",
+            cuisineLabel: "City Park",
+            area: "Palilula",
+            address: "Beogradska, Tašmajdan",
+            rating: 4.6,
+            description:
+                "Park built over a Roman quarry and a wartime shelter, now benches, chess and fountains",
+            lat: 44.8103,
+            lng: 20.4713,
+            image: ""
+        },
+        {
+            name: "Košutnjak Forest",
+            cuisine: "nature",
+            cuisineLabel: "Forest Park",
+            area: "Čukarica",
+            address: "Košutnjak, Čukarica",
+            rating: 4.7,
+            badge: "popular",
+            description:
+                "330 hectares of oak and beech forest with running trails and the old royal hunting ground",
+            lat: 44.769,
+            lng: 20.43,
+            image: ""
+        },
+        {
+            name: "Jevremovac Botanical Garden",
+            cuisine: "nature",
+            cuisineLabel: "Botanical Garden",
+            area: "Stari Grad",
+            address: "Takovska 43, Stari Grad",
+            rating: 4.6,
+            description:
+                "University garden from 1889 with a cast-iron glasshouse and a Japanese section",
+            lat: 44.8177,
+            lng: 20.4747,
+            image: ""
+        },
+        {
+            name: "Ušće Shopping Center",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Novi Beograd",
+            address: "Bulevar Mihajla Pupina 4, Novi Beograd",
+            rating: 4.5,
+            badge: "popular",
+            description:
+                "The largest mall in the region, at the confluence next to Ušće Tower",
+            lat: 44.8162,
+            lng: 20.4373,
+            image: ""
+        },
+        {
+            name: "Galerija Belgrade",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Savski Venac",
+            address: "Bulevar Vudroa Vilsona 14, Belgrade Waterfront",
+            rating: 4.5,
+            badge: "trending",
+            description:
+                "Waterfront mall with a rooftop terrace over the Sava and 300-plus shops",
+            lat: 44.8098,
+            lng: 20.4463,
+            image: ""
+        },
+        {
+            name: "Rajićeva Shopping Center",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Stari Grad",
+            address: "Kneza Mihaila 54, Stari Grad",
+            rating: 4.4,
+            description:
+                "Glass mall dropped into the old town, its entrance right on the pedestrian street",
+            lat: 44.8168,
+            lng: 20.4573,
+            image: ""
+        },
+        {
+            name: "Delta City",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Novi Beograd",
+            address: "Jurija Gagarina 16, Novi Beograd",
+            rating: 4.4,
+            description:
+                "New Belgrade's long-standing mall, cinema and food court included",
+            lat: 44.8074,
+            lng: 20.4014,
+            image: ""
+        },
+        {
+            name: "BEO Shopping Center",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Voždovac",
+            address: "Vojislava Ilića 141, Voždovac",
+            rating: 4.3,
+            description:
+                "Voždovac mall with a supermarket, cinema and the neighbourhood's weekend crowd",
+            lat: 44.7794,
+            lng: 20.49,
+            image: ""
+        },
+        {
+            name: "Stadion Shopping Center",
+            cuisine: "shopping",
+            cuisineLabel: "Shopping Centre",
+            area: "Voždovac",
+            address: "Zaplanjska 32, Voždovac",
+            rating: 4.3,
+            description:
+                "Mall built into the stand of a football stadium — the pitch sits on its roof",
+            lat: 44.7717,
+            lng: 20.477,
+            image: ""
+        }
     ],
 };
 

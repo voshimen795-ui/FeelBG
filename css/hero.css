@@ -129,3 +129,17 @@
         letter-spacing: 0.09em;
     }
 }
+
+/* ============================================
+   PARALLAX HEADROOM
+   ============================================ */
+/* js/script.js parallaxes .hero__background upward by half the scroll
+   distance. With the element exactly the hero's height, that exposed a band
+   of empty page at the bottom of the hero as soon as you scrolled — the
+   "empty block" between the hero and the first section. Half again as tall
+   gives the parallax somewhere to move into: the maximum offset inside the
+   hero is half its height, which is exactly the headroom added here. */
+.hero__background {
+    bottom: auto;
+    height: 150%;
+}
