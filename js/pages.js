@@ -67,7 +67,24 @@ class PlaceFiltering {
             });
         });
         this.initHeartButtons();
+        this.applyFilterFromUrl();
         this.updateResultsCount();
+    }
+
+    /* ?filter=museum arrives from the home page's "see all museums" links.
+       Museums, churches, parks and shopping centres are all attractions
+       separated by venue.cuisine, so they share one page and land on it with
+       the matching pill already selected. Ignored when no pill matches. */
+    applyFilterFromUrl() {
+        const wanted = new URLSearchParams(window.location.search).get('filter');
+        if (!wanted) return;
+        const pill = Array.from(this.filterPills)
+            .find(p => p.dataset.filter === wanted);
+        if (!pill) return;
+        this.filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        this.currentFilters.cuisine = wanted;
+        this.applyFilters();
     }
 
     refreshCards() {
@@ -243,8 +260,15 @@ class PlaceDetails {
         return 'restaurants';
     }
 
+    // Callers use either the singular venue type or the plural venues.js
+    // collection name, so both are accepted.
     typeToPageType(type) {
-        const map = { restaurant: 'restaurants', cafe: 'cafes', nightlife: 'nightlife', attraction: 'attractions' };
+        const map = {
+            restaurant: 'restaurants', restaurants: 'restaurants',
+            cafe: 'cafes', cafes: 'cafes',
+            nightlife: 'nightlife',
+            attraction: 'attractions', attractions: 'attractions'
+        };
         return map[type] || 'restaurants';
     }
 

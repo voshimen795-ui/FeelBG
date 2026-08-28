@@ -85,7 +85,17 @@
             ease: 'none',
             duration: 1
         }, 0);
-        tl.to(wrap, { opacity: 0, ease: 'none', duration: 0.35 }, 0.65);
+        /* The fade has to finish before the section below the hero scrolls up
+           into the space the wordmark and motto occupy. .hero-kinetic is
+           fixed and covers the viewport, so anything still painted here sits
+           on top of that section's heading. The first section's top reaches
+           the motto at about 0.67 of the hero's scroll distance, so the fade
+           ends at 0.65 — start 0.35 plus duration 0.3.
+
+           The transform tween above still spans the whole scrubbed range
+           (duration: 1), so the shrink toward the navbar continues after this
+           fade completes; only its last third is invisible. */
+        tl.to(wrap, { opacity: 0, ease: 'none', duration: 0.3 }, 0.35);
     }
 
     /* ============================================

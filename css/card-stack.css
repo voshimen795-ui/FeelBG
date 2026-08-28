@@ -308,3 +308,136 @@
         scroll-behavior: auto;
     }
 }
+
+/* ============================================
+   VENUES WITHOUT A PHOTOGRAPH
+
+   Some venues have no image in the repository yet. Rather than a blank
+   rectangle, the card becomes a tinted panel carrying the venue's initial
+   as a watermark — deliberately obviously a placeholder, not a fake photo.
+   Drop an image into the venue's `image` field and this stops applying.
+   ============================================ */
+.card-stack__card--no-photo {
+    background-image: linear-gradient(150deg, #1b2a5e 0%, #14204a 55%, #0d1733 100%);
+}
+
+/* One tint per category, so a stack of placeholders still reads as a set
+   rather than as seven identical grey cards. */
+.card-stack__card--no-photo[data-cuisine="shopping"] {
+    background-image: linear-gradient(150deg, #1f3a63 0%, #16294a 55%, #0d1733 100%);
+}
+
+.card-stack__card--no-photo[data-cuisine="religious"] {
+    background-image: linear-gradient(150deg, #4a3410 0%, #2a2038 55%, #0d1733 100%);
+}
+
+.card-stack__card--no-photo[data-cuisine="nature"] {
+    background-image: linear-gradient(150deg, #17402f 0%, #13293f 55%, #0d1733 100%);
+}
+
+.card-stack__card--no-photo[data-cuisine="museum"] {
+    background-image: linear-gradient(150deg, #2e2551 0%, #1a2148 55%, #0d1733 100%);
+}
+
+.card-stack__card--no-photo[data-cuisine="electronic"],
+.card-stack__card--no-photo[data-cuisine="mainstream"] {
+    background-image: linear-gradient(150deg, #46184d 0%, #241c4e 55%, #0d1733 100%);
+}
+
+.card-stack__card--no-photo[data-cuisine="coffee"],
+.card-stack__card--no-photo[data-cuisine="cocktail"],
+.card-stack__card--no-photo[data-cuisine="wine"] {
+    background-image: linear-gradient(150deg, #4a3316 0%, #2b2438 55%, #0d1733 100%);
+}
+
+/* ::after is already the scrim on both card layers, so the watermark uses
+   ::before. It sits under the scrim and under the text, which is why it can
+   be this large without competing with the venue name. */
+.card-stack__card--no-photo::before {
+    content: attr(data-initial);
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', var(--font-heading), serif;
+    font-size: 9rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(255, 215, 0, 0.13);
+    pointer-events: none;
+}
+
+.card-stack__visual-inner.card-stack__card--no-photo::before {
+    font-size: 6rem;
+}
+
+/* ============================================
+   STACK BLOCK — heading + "see all" above each stack
+   ============================================ */
+.stack-block {
+    margin-bottom: var(--space-9);
+}
+
+.stack-block:last-child {
+    margin-bottom: 0;
+}
+
+/* Baseline-aligned rather than centred: the "see all" link is a secondary
+   action and reads better sitting on the same line as the heading than
+   stacked under it. It wraps to its own line on narrow phones. */
+.stack-block__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    max-width: 68rem;
+    margin: 0 auto var(--space-5);
+}
+
+.stack-block__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: #ffd700;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.stack-block__all {
+    flex-shrink: 0;
+    color: rgba(244, 239, 226, 0.85);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.45);
+    padding-bottom: 2px;
+    transition: color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.stack-block__all:hover,
+.stack-block__all:focus-visible {
+    color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+/* One line to introduce the seven stacks. */
+.explore-intro {
+    max-width: 46rem;
+    margin: 0 auto var(--space-8);
+    color: rgba(244, 239, 226, 0.85);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    text-align: center;
+    text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+    .stack-block {
+        margin-bottom: var(--space-8);
+    }
+
+    .stack-block__title {
+        font-size: var(--text-xl);
+    }
+}

@@ -25,12 +25,15 @@
 (function () {
     var MAX_CARDS_ON_ONE_SIDE = 5;
 
-    /* Which venue.js collection each card links through to. Attractions are
-       deliberately excluded — this stack is about places you go out to. */
+    /* The page each collection belongs to. This is only the no-JS fallback
+       target for the card's href — with JS the card opens the venue's detail
+       popup instead (see openDetails). The visible "see all" link in the
+       markup is what actually takes people to these pages. */
     var TYPE_PAGES = {
         restaurants: 'restaurants.html',
         cafes: 'cafes.html',
-        nightlife: 'nightlife.html'
+        nightlife: 'nightlife.html',
+        attractions: 'attractions.html'
     };
 
     function prefersReducedMotion() {
@@ -55,17 +58,40 @@
         return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     }
 
-    /* Collect the venues across the listed types, keeping venues.js order. */
-    function collectVenues(types) {
+    /* Collect the venues across the listed types, keeping venues.js order.
+
+       `cuisines` narrows an existing collection rather than requiring a new
+       array in venues.js: museums, churches, parks and shopping centres are
+       all attractions, distinguished only by venue.cuisine, so each of those
+       stacks is a filtered view of the same list the attractions page
+       renders. One source of truth, no duplicated venues. */
+    function collectVenues(types, cuisines) {
         var data = window.FEELBG_VENUES || {};
         var out = [];
         types.forEach(function (type) {
             (data[type] || []).forEach(function (venue) {
                 if (!venue || !venue.name) return;
+                if (cuisines && cuisines.indexOf(venue.cuisine) === -1) return;
                 out.push({ venue: venue, type: type });
             });
         });
         return out;
+    }
+
+    /* Opens the venue's own popup, the same one the category pages show.
+       Returns false when the popup isn't available (js/pages.js not loaded,
+       or it hasn't initialised yet) so the caller can let the link navigate
+       to the category page instead of doing nothing at all. */
+    function openDetails(entry) {
+        var details = window._placeDetailsInstance;
+        if (!details || typeof details.showDetailsForVenue !== 'function') return false;
+        var venue = {};
+        for (var key in entry.venue) {
+            if (Object.prototype.hasOwnProperty.call(entry.venue, key)) venue[key] = entry.venue[key];
+        }
+        venue.type = entry.type;
+        details.showDetailsForVenue(venue);
+        return true;
     }
 
     function el(tag, className) {
@@ -99,17 +125,18 @@
         title.textContent = venue.name;
         body.appendChild(title);
 
-        /* cuisineLabel has a per-venue translation key, the same one the
-           category pages use, so the label follows the language switch. */
-        var label = venue.cuisineLabel || '';
-        var key = 'venue.' + slug + '.cuisine';
-        var translated = t(key);
+        /* The category label is translated through the same key the category
+           pages use — a per-venue one where it exists, otherwise the shared
+           label.* key — so it follows the language switch. data-i18n is what
+           lets js/language-selector.js re-translate it in place. */
+        var key = window.CardRenderer ? window.CardRenderer.cuisineKey(venue) : ('venue.' + slug + '.cuisine');
+        var translated = key ? t(key) : '';
         var desc = el('span', 'card-stack__desc');
         if (translated) {
             desc.setAttribute('data-i18n', key);
             desc.textContent = translated;
         } else {
-            desc.textContent = label;
+            desc.textContent = venue.cuisineLabel || '';
         }
         if (desc.textContent) body.appendChild(desc);
 
@@ -129,7 +156,11 @@
             .map(function (s) { return s.trim(); })
             .filter(function (s) { return s in TYPE_PAGES; });
 
-        this.entries = collectVenues(types);
+        var cuisines = root.dataset.venueCuisines
+            ? root.dataset.venueCuisines.split(',').map(function (s) { return s.trim(); })
+            : null;
+
+        this.entries = collectVenues(types, cuisines);
         this.cardCount = this.entries.length;
         if (!this.cardCount) return;
 
@@ -153,11 +184,24 @@
 
         this.links = this.entries.map(function (entry) {
             var link = el('a', 'card-stack__link');
+            /* The href is the fallback: without JS the card is still a real
+               link to the category page. With JS the click opens the venue's
+               own popup instead — see the handler below. */
             link.href = TYPE_PAGES[entry.type];
+            link.addEventListener('click', function (event) {
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+                if (openDetails(entry)) event.preventDefault();
+            });
 
             var card = el('div', 'card-stack__card');
             if (entry.venue.image) {
                 card.style.backgroundImage = 'url("' + entry.venue.image.replace(/"/g, '\\"') + '")';
+            } else {
+                /* No photograph for this venue yet — the card falls back to a
+                   tinted panel rather than a blank rectangle. */
+                card.classList.add('card-stack__card--no-photo');
+                card.dataset.cuisine = entry.venue.cuisine || '';
+                card.dataset.initial = entry.venue.name.charAt(0).toUpperCase();
             }
             card.appendChild(buildBody(entry));
 
@@ -181,7 +225,13 @@
 
             var visual = el('div', 'card-stack__visual');
             var inner = el('div', 'card-stack__visual-inner');
-            if (card.style.backgroundImage) inner.style.backgroundImage = card.style.backgroundImage;
+            if (card.style.backgroundImage) {
+                inner.style.backgroundImage = card.style.backgroundImage;
+            } else {
+                inner.classList.add('card-stack__card--no-photo');
+                inner.dataset.cuisine = card.dataset.cuisine || '';
+                inner.dataset.initial = card.dataset.initial || '';
+            }
 
             var body = link.querySelector('.card-stack__body');
             if (body) inner.appendChild(body.cloneNode(true));
