@@ -228,7 +228,10 @@
     max-width: min(48ch, 90vw);
     color: rgba(244, 239, 226, 0.88);
     font-family: 'Poppins', sans-serif;
-    font-size: var(--text-base);
+    /* Deliberately off the token scale: --text-lg is only 12% above
+       --text-base, and this wanted closer to 20% to hold its own under the
+       title without reading as a second heading. */
+    font-size: 1.1875rem;
     font-weight: 300;
     line-height: 1.65;
     text-align: center;
@@ -260,7 +263,7 @@
     }
 
     .hero__lede {
-        font-size: var(--text-sm);
+        font-size: 1.0625rem;
         margin-top: var(--space-4);
     }
 }
