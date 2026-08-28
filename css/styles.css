@@ -749,52 +749,11 @@ input, textarea, select {
     vertical-align: baseline;
 }
 
-.hero__title-serbia .letter {
-    display: inline-block;
-    animation: strongWindWave 2.5s ease-in-out infinite;
-    background: linear-gradient(to bottom, 
-        #FF5555 0%, 
-        #FF5555 33.333333%, 
-        #003D82 33.333333%, 
-        #003D82 66.666667%, 
-        #FFFFFF 66.666667%, 
-        #FFFFFF 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transform-origin: center center;
-}
-
-@keyframes strongWindWave {
-    0% {
-        transform: perspective(600px) translateX(0) rotateY(0deg) rotateX(0deg) skewY(0deg);
-    }
-    12% {
-        transform: perspective(600px) translateX(-4px) rotateY(-10deg) rotateX(3deg) skewY(-4deg);
-    }
-    25% {
-        transform: perspective(600px) translateX(-6px) rotateY(-12deg) rotateX(-2deg) skewY(-6deg);
-    }
-    37% {
-        transform: perspective(600px) translateX(-4px) rotateY(-8deg) rotateX(2deg) skewY(-3deg);
-    }
-    50% {
-        transform: perspective(600px) translateX(0) rotateY(0deg) rotateX(0deg) skewY(0deg);
-    }
-    62% {
-        transform: perspective(600px) translateX(4px) rotateY(10deg) rotateX(-3deg) skewY(4deg);
-    }
-    75% {
-        transform: perspective(600px) translateX(6px) rotateY(12deg) rotateX(2deg) skewY(6deg);
-    }
-    87% {
-        transform: perspective(600px) translateX(4px) rotateY(8deg) rotateX(-2deg) skewY(3deg);
-    }
-    100% {
-        transform: perspective(600px) translateX(0) rotateY(0deg) rotateX(0deg) skewY(0deg);
-    }
-}
+/* The per-letter flag fill and its wave animation lived here. Both are
+   gone: the gradient clip cropped the letterforms and the wave slid them
+   into one another, which is what made the word unreadable over the hero
+   photograph. The flag colours are now a hairline rule under the word —
+   see .hero__title-serbia::after in css/hero.css. */
 
 .serbia-red,
 .serbia-blue,

@@ -55,14 +55,6 @@
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
-    <!-- Kinetic Hero Title (Phase 1 — migrates into the navbar monogram on scroll).
-         The wordmark itself is aria-hidden: it duplicates the header logo. The
-         motto under it is real content, so it is not hidden. -->
-    <div class="hero-kinetic" id="hero-kinetic">
-        <h2 class="hero-kinetic__title" id="hero-kinetic-title" aria-hidden="true"><span class="hero-kinetic__brand">FeelBG</span></h2>
-        <p class="hero-motto" data-i18n="hero.motto">Everything Belgrade knows about itself.</p>
-    </div>
-
     <!-- Header -->
     
     <header class="header" id="header">
@@ -195,16 +187,20 @@
             
             <div class="hero__container container">
                 <div class="hero__content">
+                    <!-- Wordmark, hairline, motto, title, lede — one block, in
+                         document flow. Nothing here is fixed or scroll-driven:
+                         the hero scrolls away with the rest of the page. -->
                     <div class="hero__text">
-                        <h1 class="hero__title" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                        <p class="hero__wordmark">FeelBG</p>
+                        <p class="hero-motto" data-i18n="hero.motto">Everything Belgrade knows about itself.</p>
+                        <h1 class="hero__title">
                             <span data-i18n="hero.title">Discover the Heart</span>
                             <span class="hero__title-of">
-                                <span data-i18n="hero.of">of</span> 
-                                <span class="hero__title-serbia">
-                                    <span class="letter" style="animation-delay: 0s">S</span><span class="letter" style="animation-delay: 0.1s">E</span><span class="letter" style="animation-delay: 0.2s">R</span><span class="letter" style="animation-delay: 0.3s">B</span><span class="letter" style="animation-delay: 0.4s">I</span><span class="letter" style="animation-delay: 0.5s">A</span>
-                                </span>
+                                <span data-i18n="hero.of">of</span>
+                                <span class="hero__title-serbia" data-i18n="hero.titleAccent">SERBIA</span>
                             </span>
                         </h1>
+                        <p class="hero__lede" data-i18n="hero.lede">A guide to Belgrade's best restaurants, clubs and hidden corners. We only list places locals actually go.</p>
                     </div>
                 </div>
             </div>
