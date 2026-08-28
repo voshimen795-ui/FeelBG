@@ -180,13 +180,35 @@ body {
     border-radius: var(--radius-lg);
 }
 
-/* Home page only: no static logo in the header — the kinetic FeelBG
-   title (Phase 1) already carries the branding there. opacity (not
-   display:none) keeps the element's layout box intact so the kinetic
-   title's scroll animation can still measure it as its landing target. */
+/* Home page: the F monogram is the header mark, and it is what the kinetic
+   FeelBG title shrinks into on scroll. The wordmark artwork next to it would
+   just repeat the giant wordmark below, so only that part is hidden. The
+   monogram carries its own navy disc, so it needs no plate behind it. */
 .page-home .nav__logo-link {
-    opacity: 0;
-    pointer-events: none;
+    background: none;
+    padding: 0;
+}
+
+.page-home .nav__logo-ornamental,
+.page-home .nav__logo-text {
+    display: none;
+}
+
+/* The monogram is a circle: sizing it by height alone would let a
+   momentarily unloaded image collapse the header. */
+.nav__logo-monogram {
+    height: var(--control-lg);
+    width: var(--control-lg);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* The scrolled-state class this codebase actually sets is `scroll-header`
+   (js/script.js) — the `.scrolled` selectors further up in styles.css never
+   match anything. */
+.header.scroll-header .nav__logo-monogram {
+    height: var(--control-md);
+    width: var(--control-md);
 }
 
 .footer {
@@ -278,28 +300,35 @@ body {
    "Discover the Heart of Serbia" tagline stays put
    underneath — both are always visible, no overlap.
    ============================================ */
+/* Sits immediately under the header rather than at an arbitrary 14vh.
+   --header-h is measured from the real header by js/script.js and updated on
+   resize; the 80px fallback covers the frame before that first runs. */
 .hero-kinetic {
     position: fixed;
     inset: 0;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 14vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: calc(var(--header-h, 80px) + var(--space-7));
     pointer-events: none;
     z-index: 90;
     opacity: 1;
 }
 
-/* The weight, leading and tracking here came from Tailwind utilities on the
-   markup (font-black leading-none tracking-tight); they live with the rest
-   of the rule now that the CDN build is gone. */
+/* The wordmark previously inherited Tailwind's font-black + tracking-tight.
+   Cormorant Garamond at weight 900 with negative tracking closes up the
+   counters and flattens the stroke contrast that makes this face elegant in
+   the first place — at hero size it read as a heavy slab. Weight 600 is the
+   face's display sweet spot, and letting the letters breathe (rather than
+   pulling them together) is what reads as a wordmark instead of a headline. */
 .hero-kinetic__title {
     margin: 0;
     font-family: 'Cormorant Garamond', 'Playfair Display', serif;
-    font-size: clamp(3rem, 13vw, 11rem);
-    font-weight: var(--weight-black);
-    line-height: var(--leading-none);
-    letter-spacing: var(--tracking-tight);
+    font-size: clamp(3.25rem, 13vw, 11rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.012em;
     transform-origin: 50% 50%;
     white-space: nowrap;
 }
@@ -402,8 +431,10 @@ body.hero-kinetic-done .hero-kinetic {
 }
 
 @media (max-width: 767px) {
+    /* Same rule as desktop — header height plus a gap — just a tighter gap,
+       because there is far less vertical room on a phone. */
     .hero-kinetic {
-        padding-top: 10vh;
+        padding-top: calc(var(--header-h, 80px) + var(--space-6));
     }
     .hero-kinetic__title {
         font-size: clamp(2.5rem, 18vw, 5rem);

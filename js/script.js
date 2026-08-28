@@ -855,7 +855,28 @@ class LiveEventsInit {
     }
 }
 
+// Publishes the header's real height as --header-h so CSS can sit things
+// directly below it. The header is fixed and its height depends on the logo
+// artwork, the scrolled state and the viewport, so a hard-coded number in the
+// stylesheet would drift; this measures it and keeps it in sync on resize.
+function trackHeaderHeight() {
+    const header = document.getElementById('header');
+    if (!header) return;
+    const apply = () => {
+        const h = Math.round(header.getBoundingClientRect().height);
+        if (h > 0) document.documentElement.style.setProperty('--header-h', h + 'px');
+    };
+    apply();
+    window.addEventListener('resize', debounce(apply, 100));
+    // The logo images change the header's height once they decode.
+    header.querySelectorAll('img').forEach(img => {
+        if (!img.complete) img.addEventListener('load', apply, { once: true });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    trackHeaderHeight();
+
     // Initialize all components
     new CustomCursor();
     new Header();

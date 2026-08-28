@@ -48,16 +48,19 @@
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
     <link rel="stylesheet" href="css/card-stack.css">
-    <link rel="stylesheet" href="css/hero-search.css">
+    <link rel="stylesheet" href="css/hero.css">
 </head>
 <body class="page-home">
     <!-- Cursor Effect Container -->
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
-    <!-- Kinetic Hero Title (Phase 1 — migrates into navbar logo on scroll) -->
-    <div class="hero-kinetic" id="hero-kinetic" aria-hidden="true">
-        <h2 class="hero-kinetic__title" id="hero-kinetic-title"><span class="hero-kinetic__brand">FeelBG</span></h2>
+    <!-- Kinetic Hero Title (Phase 1 — migrates into the navbar monogram on scroll).
+         The wordmark itself is aria-hidden: it duplicates the header logo. The
+         motto under it is real content, so it is not hidden. -->
+    <div class="hero-kinetic" id="hero-kinetic">
+        <h2 class="hero-kinetic__title" id="hero-kinetic-title" aria-hidden="true"><span class="hero-kinetic__brand">FeelBG</span></h2>
+        <p class="hero-motto" data-i18n="hero.motto">Everything Belgrade knows about itself.</p>
     </div>
 
     <!-- Header -->
@@ -67,6 +70,7 @@
             <div class="nav__left">
                 <div class="nav__logo" data-aos="fade-right" data-aos-duration="1000">
                     <a href="index.html" class="nav__logo-link">
+                        <img src="assets/images/logo/feelbg-monogram-f.png" alt="" class="nav__logo-img nav__logo-monogram" aria-hidden="true">
                         <img src="assets/images/logo/headerlogo.png" alt="FeelBG Ornament" class="nav__logo-img nav__logo-ornamental">
                         <img src="assets/images/feelbgslicica.png" alt="FeelBG" class="nav__logo-img nav__logo-text">
                     </a>
@@ -201,25 +205,6 @@
                                 </span>
                             </span>
                         </h1>
-                        <form class="hero-search" id="hero-search" role="search" autocomplete="off"
-                              data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
-                            <label class="hero-search__label" for="hero-search-input" data-i18n="heroSearch.label">Search venues</label>
-                            <i class="fas fa-search hero-search__icon" aria-hidden="true"></i>
-                            <input type="search"
-                                   id="hero-search-input"
-                                   class="hero-search__input"
-                                   name="q"
-                                   placeholder="Search venues"
-                                   data-i18n="heroSearch.placeholder"
-                                   role="combobox"
-                                   aria-expanded="false"
-                                   aria-controls="hero-search-results"
-                                   aria-autocomplete="list">
-                            <button type="submit" class="hero-search__submit" data-i18n-aria="heroSearch.submit" aria-label="Search">
-                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                            </button>
-                            <div class="hero-search__results" id="hero-search-results" role="listbox" hidden></div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -684,7 +669,6 @@
     <script src="js/insider-tips.js"></script>
     <script src="js/pages.js" defer></script>
     <script src="js/card-stack.js" defer></script>
-    <script src="js/hero-search.js" defer></script>
     
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
@@ -715,8 +699,9 @@
         <img src="assets/images/logo/feelbg-high-resolution-logo-grayscale.png" alt="FeelBG" loading="lazy">
     </div>
     <script src="js/venues.js"></script>
-    <!-- CardRenderer is not used to build a grid here, but the detail popup
-         opened from the hero search reads its translation helpers. -->
+    <!-- CardRenderer builds no grid here; it is loaded because PlaceDetails
+         (js/pages.js) reads its translation helpers whenever a venue popup is
+         opened from this page. -->
     <script src="js/card-renderer.js"></script>
 
     <!-- GSAP + ScrollTrigger (premium scroll animations) -->

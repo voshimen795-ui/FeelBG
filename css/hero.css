@@ -1,0 +1,131 @@
+/* ============================================
+   HERO — brand block and tagline
+
+   Scoped to the home page hero. Spacing, type, radius and shadow all come
+   from css/tokens.css.
+
+   The FeelBG wordmark and the motto sit in .hero-kinetic (see premium-fx.css
+   for its position and the gold treatment); .hero__text below carries the
+   "Discover the Heart of Serbia" tagline.
+   ============================================ */
+
+/* styles.css sets `grid-template-columns: 1.5fr 1fr` on .hero__content at
+   >=768px, for a second column holding .hero__image. That image has since
+   been hidden, so the column survived as dead space and pinned all hero
+   content to the left 1.5fr — nothing in the hero was actually centred on
+   desktop. One column, so the content can centre. */
+@media (min-width: 768px) {
+    .hero__content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.hero__text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    /* Grid items default to min-width:auto, so this refuses to shrink below
+       its min-content and spills out of its track on narrow phones. */
+    min-width: 0;
+}
+
+/* Soft dark blur behind the hero copy, so the title stays readable over
+   whichever frame of the background video happens to be playing.
+
+   The mask is doing the important work: backdrop-filter applies to the
+   element's whole rectangle, which would leave a visible blurred box edge
+   over the video. Fading the element out towards its edges fades the blur
+   with it, so it reads as a soft pool of shadow rather than a panel. */
+.hero__text::before {
+    content: '';
+    position: absolute;
+    /* Bleeds past the text so the falloff happens off the glyphs. */
+    inset: calc(var(--space-4) * -1) calc(var(--space-5) * -1);
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.38) 0%,
+        rgba(0, 0, 0, 0.2) 45%,
+        rgba(0, 0, 0, 0) 70%
+    );
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
+    mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
+    pointer-events: none;
+}
+
+.hero__title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    margin: 0 auto;
+    /* 18ch keeps the line length readable on wide screens; max-width caps
+       it to the container so it can't push the hero wider than the phone. */
+    max-width: min(18ch, 100%);
+}
+
+/* ============================================
+   MOTTO
+   ============================================ */
+/* Sits directly under the FeelBG wordmark, inside .hero-kinetic, so the two
+   read as one brand block and fade together on scroll. The wordmark is the
+   loud element — this one is deliberately quiet: small, wide-tracked, and
+   in the warm off-white the rest of the site uses for body copy on dark. */
+.hero-motto {
+    position: relative;
+    margin: var(--space-4) auto 0;
+    /* Wide enough for the longest translation to hold one line on desktop
+       (Turkish and Greek are the long ones) and to break cleanly on phones. */
+    max-width: min(52ch, 88vw);
+    color: #f4efe2;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.875rem, 1.6vw, 1.125rem);
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-align: center;
+    /* The longer translations wrap on a phone; balance stops the second line
+       being a single orphaned word. Ignored by browsers that lack it, which
+       just get the normal greedy break. */
+    text-wrap: balance;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+
+/* A hairline gold rule above the motto, the width of a few characters —
+   it separates the two without adding another block of colour. */
+.hero-motto::before {
+    content: '';
+    display: block;
+    width: 3.5rem;
+    height: 1px;
+    margin: 0 auto var(--space-4);
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+}
+
+/* The wordmark is heavy enough to hold its own against the video; the motto
+   is not, and it can land on a bright frame. Same feathered scrim the tagline
+   below uses, sized to the line rather than to a box. */
+.hero-motto::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--space-3) * -1) calc(var(--space-7) * -1);
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.28) 50%,
+        rgba(0, 0, 0, 0) 78%
+    );
+    pointer-events: none;
+}
+
+@media (max-width: 767px) {
+    .hero-motto {
+        letter-spacing: 0.09em;
+    }
+}
