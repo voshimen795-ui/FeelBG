@@ -1,20 +1,82 @@
 /* ============================================
-   HERO — brand block and tagline
+   HERO — one block, one viewport
 
-   Scoped to the home page hero. Spacing, type, radius and shadow all come
-   from css/tokens.css.
+   Order, top to bottom: FeelBG wordmark, gold hairline, motto, title,
+   lede. All of it is ordinary content inside .hero__text — nothing here is
+   fixed, and nothing is driven by scroll position, so the whole block
+   scrolls away with the hero instead of travelling up the page.
 
-   The FeelBG wordmark and the motto sit in .hero-kinetic (see premium-fx.css
-   for its position and the gold treatment); .hero__text below carries the
-   "Discover the Heart of Serbia" tagline.
+   Loaded last, so the plain-selector rules below win over the same
+   selectors in styles.css / hero-fullscreen.css, including the ones inside
+   their media queries. Spacing, type and radii come from css/tokens.css.
    ============================================ */
 
-/* styles.css sets `grid-template-columns: 1.5fr 1fr` on .hero__content at
-   >=768px, for a second column holding .hero__image. That image has since
-   been hidden, so the column survived as dead space and pinned all hero
-   content to the left 1.5fr — nothing in the hero was actually centred on
-   desktop. One column, so the content can centre. */
+/* Tall enough to hold the block without scrolling, but not fixed: `height`
+   is dropped in favour of a minimum so a long translation or a large
+   accessibility font size makes the hero grow rather than clip its own
+   content (hero-fullscreen.css sets `overflow: hidden`).
+
+   svh, not vh: on phones vh is the tallest the viewport ever gets, so a
+   100vh hero sits partly under the browser's own toolbar. */
+.hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Top-aligned rather than centred, so the block sits high in the frame
+       and the skyline gets the room underneath it. The header is fixed and
+       paints over the hero's top, so the padding starts below it —
+       --header-h is measured from the real header by js/script.js. */
+    align-items: flex-start;
+    padding-top: calc(var(--header-h, 80px) + var(--space-7));
+    padding-bottom: var(--space-7);
+}
+
+/* One even wash instead of the old diagonal blue-to-gold gradient, which
+   left the top washed out and the bottom over-tinted. Darkest at the very
+   top (under the header) and at the bottom (where the section below meets
+   it), lightest across the middle where the title sits.
+
+   It hangs off .hero rather than off .hero__background on purpose: the
+   background is both taller than the hero and moved by the parallax, so an
+   overlay inside it would be stretched over 150% of the height and would
+   slide away from the frame it is supposed to be grading. Anchored here it
+   stays exactly the hero's box. z-index 2 puts it over the background
+   (z-index 1) and under .hero__container (z-index 10). */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 20, 50, 0.75) 0%,
+        rgba(10, 20, 50, 0.45) 40%,
+        rgba(10, 20, 50, 0.85) 100%
+    );
+}
+
+/* The old diagonal wash, now replaced by the rule above. */
+.hero__background::before {
+    background: transparent;
+}
+
+/* js/script.js parallaxes .hero__background upward by half the scroll
+   distance. With the element exactly the hero's height, that exposed a band
+   of empty page at the bottom of the hero as soon as you scrolled. Half
+   again as tall gives the parallax somewhere to move into: the maximum
+   offset inside the hero is half its height, which is exactly the headroom
+   added here. */
+.hero__background {
+    bottom: auto;
+    height: 150%;
+}
+
 @media (min-width: 768px) {
+    /* styles.css sets `grid-template-columns: 1.5fr 1fr` on .hero__content
+       at >=768px, for a second column holding .hero__image. That image has
+       since been hidden, so the column survived as dead space and pinned all
+       hero content to the left 1.5fr. One column, so it can centre. */
     .hero__content {
         grid-template-columns: 1fr;
     }
@@ -32,54 +94,47 @@
     min-width: 0;
 }
 
-/* Soft dark blur behind the hero copy, so the title stays readable over
-   whichever frame of the background video happens to be playing.
+/* ============================================
+   WORDMARK
+   ============================================ */
+/* A soft brushed-gold ramp rather than the old five-stop one, which ran
+   from near-white to dark bronze and read as cheap chrome. Three stops, all
+   within a narrow range, so it looks like one metal catching light.
 
-   The mask is doing the important work: backdrop-filter applies to the
-   element's whole rectangle, which would leave a visible blurred box edge
-   over the video. Fading the element out towards its edges fades the blur
-   with it, so it reads as a soft pool of shadow rather than a panel. */
-.hero__text::before {
-    content: '';
-    position: absolute;
-    /* Bleeds past the text so the falloff happens off the glyphs. */
-    inset: calc(var(--space-4) * -1) calc(var(--space-5) * -1);
-    z-index: -1;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.38) 0%,
-        rgba(0, 0, 0, 0.2) 45%,
-        rgba(0, 0, 0, 0) 70%
-    );
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
-    mask-image: radial-gradient(ellipse at center, #000 0%, #000 34%, transparent 68%);
-    pointer-events: none;
-}
-
-.hero__title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    text-align: center;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
-    margin: 0 auto;
-    /* 18ch keeps the line length readable on wide screens; max-width caps
-       it to the container so it can't push the hero wider than the phone. */
-    max-width: min(18ch, 100%);
+   line-height and the padding are load-bearing: background-clip: text crops
+   the fill to the glyph box, so a tight line box slices the descender of
+   the g. */
+.hero__wordmark {
+    display: inline-block;
+    margin: 0;
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+    font-size: clamp(3.25rem, 13vw, 10rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: 0.035em;
+    padding-bottom: 0.06em;
+    white-space: nowrap;
+    background: linear-gradient(175deg, #E8C766 0%, #F5E1A4 46%, #C9A227 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* text-shadow would paint over a transparent fill, so the separation
+       from the photograph comes from drop-shadows on the rendered glyphs:
+       one tight dark edge to define them, one wide warm glow to lift them. */
+    filter:
+        drop-shadow(0 1px 1px rgba(10, 20, 50, 0.55))
+        drop-shadow(0 6px 26px rgba(232, 199, 102, 0.22));
 }
 
 /* ============================================
    MOTTO
    ============================================ */
-/* Sits directly under the FeelBG wordmark, inside .hero-kinetic, so the two
-   read as one brand block and fade together on scroll. The wordmark is the
-   loud element — this one is deliberately quiet: small, wide-tracked, and
-   in the warm off-white the rest of the site uses for body copy on dark. */
+/* Sits under the wordmark, above the title. Deliberately quiet: small,
+   uppercase and wide-tracked, so it supports the wordmark rather than
+   competing with it. */
 .hero-motto {
-    position: relative;
-    margin: var(--space-4) auto 0;
-    /* Wide enough for the longest translation to hold one line on desktop
-       (Turkish and Greek are the long ones) and to break cleanly on phones. */
+    margin: var(--space-4) auto var(--space-6);
     max-width: min(52ch, 88vw);
     color: #f4efe2;
     font-family: 'Poppins', sans-serif;
@@ -88,16 +143,12 @@
     line-height: 1.5;
     letter-spacing: 0.12em;
     text-align: center;
-    /* The longer translations wrap on a phone; balance stops the second line
-       being a single orphaned word. Ignored by browsers that lack it, which
-       just get the normal greedy break. */
-    text-wrap: balance;
     text-transform: uppercase;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    text-wrap: balance;
 }
 
-/* A hairline gold rule above the motto, the width of a few characters —
-   it separates the two without adding another block of colour. */
+/* The gold hairline between the wordmark and the motto. */
 .hero-motto::before {
     content: '';
     display: block;
@@ -107,39 +158,109 @@
     background: linear-gradient(90deg, transparent, #D4AF37, transparent);
 }
 
-/* The wordmark is heavy enough to hold its own against the video; the motto
-   is not, and it can land on a bright frame. Same feathered scrim the tagline
-   below uses, sized to the line rather than to a box. */
-.hero-motto::after {
-    content: '';
-    position: absolute;
-    inset: calc(var(--space-3) * -1) calc(var(--space-7) * -1);
-    z-index: -1;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.28) 50%,
-        rgba(0, 0, 0, 0) 78%
-    );
-    pointer-events: none;
+/* ============================================
+   TITLE
+   ============================================ */
+.hero__title {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    line-height: 1.15;
+    text-align: center;
+    margin: 0 auto;
+    max-width: min(18ch, 100%);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 767px) {
-    .hero-motto {
-        letter-spacing: 0.09em;
-    }
+.hero__title-of {
+    display: block;
+    margin-top: var(--space-2);
+}
+
+/* SERBIA / SRBIJE used to be six separate letters, each filled with a
+   red-blue-white gradient clipped to the glyphs and each running a 3D wave
+   animation on a stagger. Between the clip cropping the letterforms and the
+   wave sliding them plus or minus 6px into one another, the word was
+   unreadable over a photograph — and the red and blue simply disappeared
+   against it.
+
+   It is now one word in the same warm off-white as the rest of the title,
+   at a heavier weight so it carries the line, with the flag colours moved
+   into a hairline rule underneath where they stay legible. */
+.hero__title-serbia {
+    display: inline-block;
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: 1.15em;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* Both of these keep the glyph box clear of the letterforms: without
+       them the cap-height and the underline collide. */
+    line-height: 1.25;
+    padding-bottom: 0.08em;
+    color: #fff8e7;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 0 30px rgba(255, 215, 0, 0.18);
+}
+
+.hero__title-serbia::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(
+        90deg,
+        #C6363C 0%, #C6363C 33.333%,
+        #0C4076 33.333%, #0C4076 66.666%,
+        #f4efe2 66.666%, #f4efe2 100%
+    );
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
 /* ============================================
-   PARALLAX HEADROOM
+   LEDE
    ============================================ */
-/* js/script.js parallaxes .hero__background upward by half the scroll
-   distance. With the element exactly the hero's height, that exposed a band
-   of empty page at the bottom of the hero as soon as you scrolled — the
-   "empty block" between the hero and the first section. Half again as tall
-   gives the parallax somewhere to move into: the maximum offset inside the
-   hero is half its height, which is exactly the headroom added here. */
-.hero__background {
-    bottom: auto;
-    height: 150%;
+/* Same register as the motto — light, subtle, smaller — but sentence case
+   and a comfortable measure, because this one is meant to be read. */
+.hero__lede {
+    margin: var(--space-5) auto 0;
+    max-width: min(48ch, 90vw);
+    color: rgba(244, 239, 226, 0.88);
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.65;
+    text-align: center;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+    .hero {
+        padding-top: calc(var(--header-h, 80px) + var(--space-7));
+        padding-bottom: var(--space-6);
+    }
+
+    /* hero-fullscreen.css turns the container into its own centring flex box
+       with min-height: 80vh below 768px, which re-centred the block inside
+       the hero and undid the top alignment above. */
+    .hero__container {
+        display: block;
+        min-height: 0;
+    }
+
+    .hero__wordmark {
+        font-size: clamp(2.75rem, 17vw, 5rem);
+    }
+
+    .hero-motto {
+        margin-bottom: var(--space-5);
+        letter-spacing: 0.09em;
+    }
+
+    .hero__lede {
+        font-size: var(--text-sm);
+        margin-top: var(--space-4);
+    }
 }

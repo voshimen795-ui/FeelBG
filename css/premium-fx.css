@@ -4,8 +4,6 @@
    ============================================ */
 
 /* Reduce layout thrash on animated elements */
-.hero-kinetic,
-.hero-kinetic__title,
 .card-scatter-stage .place-card,
 .mask-reveal__panel,
 .mask-reveal__circle {
@@ -65,8 +63,7 @@
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(184, 134, 11, 0.45) 100%);
 }
 
-.hero__title,
-.hero-kinetic__title {
+.hero__title {
     text-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -294,66 +291,6 @@ body {
    navy-on-navy tint rendered them invisible. They keep the gold treatment
    from styles.css. */
 
-/* ============================================
-   PHASE 1 — KINETIC HERO TITLE
-   FeelBG shrinks into the navbar logo while the
-   "Discover the Heart of Serbia" tagline stays put
-   underneath — both are always visible, no overlap.
-   ============================================ */
-/* Sits immediately under the header rather than at an arbitrary 14vh.
-   --header-h is measured from the real header by js/script.js and updated on
-   resize; the 80px fallback covers the frame before that first runs. */
-.hero-kinetic {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: calc(var(--header-h, 80px) + var(--space-7));
-    pointer-events: none;
-    z-index: 90;
-    opacity: 1;
-}
-
-/* The wordmark previously inherited Tailwind's font-black + tracking-tight.
-   Cormorant Garamond at weight 900 with negative tracking closes up the
-   counters and flattens the stroke contrast that makes this face elegant in
-   the first place — at hero size it read as a heavy slab. Weight 600 is the
-   face's display sweet spot, and letting the letters breathe (rather than
-   pulling them together) is what reads as a wordmark instead of a headline. */
-.hero-kinetic__title {
-    margin: 0;
-    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
-    font-size: clamp(3.25rem, 13vw, 11rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.012em;
-    transform-origin: 50% 50%;
-    white-space: nowrap;
-}
-
-/* FeelBG in the hero: a clean top-to-bottom metallic gold gradient with
-   no inner shading — text-shadow is reset because it's inherited from
-   .hero-kinetic__title and was reading as a dark inset/overlay on top of
-   the transparent glyph fill. Only a soft outer drop-shadow remains, to
-   separate the word from the video background. */
-.hero-kinetic__brand {
-    background: linear-gradient(to bottom, #FFF2B3 0%, #F5D76E 25%, #D4AF37 50%, #B8860B 75%, #8B6A00 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    text-shadow: none;
-    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
-}
-
-/* Brighten the flag-colored SERBIA / SRBIJE word without changing its
-   red/blue/white identity. */
-.hero__title-serbia .letter {
-    filter: brightness(1.35) saturate(1.15) drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
-}
-
 /* Fallback colors in case the Tailwind CDN script fails to load
    (network hiccup / ad-blocker) — matches the Tailwind utility values
    so the two never disagree when Tailwind does load. */
@@ -420,28 +357,6 @@ body {
 
 .detail-modal__category-tag {
     color: #ffffff;
-}
-
-body.hero-kinetic-done .hero-kinetic {
-    visibility: hidden;
-}
-
-.hero__container {
-    margin-top: 32vh;
-}
-
-@media (max-width: 767px) {
-    /* Same rule as desktop — header height plus a gap — just a tighter gap,
-       because there is far less vertical room on a phone. */
-    .hero-kinetic {
-        padding-top: calc(var(--header-h, 80px) + var(--space-6));
-    }
-    .hero-kinetic__title {
-        font-size: clamp(2.5rem, 18vw, 5rem);
-    }
-    .hero__container {
-        margin-top: 24vh;
-    }
 }
 
 /* ============================================
@@ -1039,7 +954,6 @@ body.hero-kinetic-done .hero-kinetic {
    REDUCED MOTION
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-    .hero-kinetic,
     .mask-reveal__panel,
     .place-card,
     .place-card__image,
