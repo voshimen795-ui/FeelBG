@@ -9,6 +9,7 @@
         width: 300px;
         height: auto;
         max-height: calc(100vh - 100px);
+        max-height: calc(100dvh - 100px);
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
         padding: var(--space-6);
         border-radius: var(--radius-lg) 0 0 var(--radius-lg);
@@ -30,7 +31,12 @@
         top: 0;
         right: -100%;
         width: 80%;
+        /* dvh, not vh: with the browser's toolbar showing, 100vh is taller
+           than what the phone actually displays, so the last menu item ends
+           up underneath the toolbar and cannot be tapped. */
         height: 100vh;
+        height: 100dvh;
+        padding-bottom: max(var(--space-6), env(safe-area-inset-bottom));
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
         padding: var(--space-6);
         transition: right 0.4s ease;

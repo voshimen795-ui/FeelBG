@@ -79,9 +79,20 @@
     letter-spacing: 0.08em;
 }
 
+/* The glyph is small; the button around it must not be. At 11×19 this was
+   less than half the minimum target on either axis, and it is the only way
+   to dismiss the widget. */
 .insider-tip-close {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    margin: -6px -6px -6px 0;
+    padding: 0;
     background: none;
     border: none;
+    border-radius: 50%;
     color: rgba(255,255,255,0.8);
     font-size: var(--text-xl);
     cursor: pointer;

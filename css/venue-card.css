@@ -1,0 +1,615 @@
+/* ============================================================
+   VENUE CARD — the panel that opens when a place is tapped
+
+   Written for a visitor who does not read Serbian, is on a phone,
+   and is deciding in about eight seconds whether to walk there.
+
+   So the card holds one screen: photograph, name, three numbers
+   that matter, two sentences, three buttons. Everything else —
+   the map, what is nearby, the menu — is one tap away and folded
+   until asked for. Nothing on the card explains the card.
+
+   One palette, the site's night blue. FeelBG does not offer a
+   light theme, so the card does not carry one either.
+
+   Sizing is driven by container queries rather than viewport
+   width: the card is the same component inside a 380px phone and
+   a 900px dialog, and it should lay itself out from its own width,
+   not from the window's.
+   ============================================================ */
+
+.vcard-overlay {
+    --paper: #141b31;
+    --paper-sunk: #0e1526;
+    --ink: #f0ece2;
+    --ink-soft: #a7aec4;
+    --ink-faint: #737b94;
+    --rule: #262f4a;
+    --rule-firm: #333d5c;
+    --gold: #e6c171;
+    --gold-line: #b08d2e;
+    --gold-wash: rgba(230, 193, 113, 0.09);
+    --vcard-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 24px 60px rgba(0, 0, 0, 0.5);
+    --vcard-serif: 'Playfair Display', 'Iowan Old Style', Georgia, serif;
+    --vcard-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --vcard-radius: 6px;
+
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /* Bottom padding clears the phone's home indicator and the site's own
+       fixed mobile bar; top padding keeps the close button off the notch. */
+    padding: max(16px, env(safe-area-inset-top)) 16px
+             max(16px, env(safe-area-inset-bottom));
+    background: rgba(2, 5, 14, 0.72);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    transition: opacity 0.28s ease;
+}
+
+.vcard-overlay.is-open { opacity: 1; }
+
+/* Centre the card while it is short enough to fit, and let it scroll from
+   the top once it is not — `align-items: center` alone clips the head of a
+   tall card in a scroll container. */
+@media (min-height: 560px) {
+    .vcard-overlay { align-items: center; }
+    .vcard-overlay::before,
+    .vcard-overlay::after { content: ''; flex: 0 0 auto; }
+}
+
+.vcard {
+    container-type: inline-size;
+    container-name: vcard;
+    position: relative;
+    width: 100%;
+    max-width: 880px;
+    margin: auto;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--vcard-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    border-radius: var(--vcard-radius);
+    box-shadow: var(--vcard-shadow);
+    overflow: hidden;
+    transform: translateY(14px) scale(0.985);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vcard-overlay.is-open .vcard { transform: none; }
+
+.vcard *,
+.vcard *::before,
+.vcard *::after { box-sizing: border-box; }
+
+/* ---------- photograph ---------- */
+
+.vcard__shot-wrap { position: relative; }
+
+/* The photograph is capped, not free-running. At 16:9 across an 880px card
+   it eats the whole screen and pushes the name, the numbers and the buttons
+   below the fold — the one thing this card cannot afford. */
+.vcard__shots {
+    display: flex;
+    width: 100%;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vcard__shot {
+    flex: 0 0 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 300px;
+    background-color: var(--paper-sunk);
+    background-size: cover;
+    background-position: center;
+}
+
+@container vcard (max-width: 560px) {
+    .vcard__shot { aspect-ratio: 4 / 3; max-height: 230px; }
+}
+
+/* No photograph: a tinted plate carrying the venue's initial, the same
+   fallback the grid cards use, rather than an empty grey box. */
+.vcard__shot--none {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(150deg, #1b2545, #0e1526);
+}
+
+.vcard__shot--none::before {
+    content: attr(data-initial);
+    font-family: var(--vcard-serif);
+    font-size: clamp(3rem, 14cqi, 5.5rem);
+    font-weight: 700;
+    color: rgba(230, 193, 113, 0.16);
+    line-height: 1;
+}
+
+.vcard__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(12, 16, 30, 0.6);
+    color: #fff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition: background 0.18s;
+    z-index: 2;
+}
+
+.vcard__close:hover { background: rgba(12, 16, 30, 0.85); }
+.vcard__close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* A thumbnail strip needs thumbnails. One quiet chip instead — it works
+   whether the venue has two photographs or twenty. */
+.vcard__photos {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(12, 16, 30, 0.6);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-family: var(--vcard-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.18s;
+    z-index: 2;
+}
+
+.vcard__photos:hover { background: rgba(12, 16, 30, 0.85); }
+.vcard__photos:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.vcard__photos svg { width: 14px; height: 14px; flex: 0 0 auto; }
+
+/* ---------- the essentials ---------- */
+
+.vcard__head { padding: clamp(20px, 4cqi, 34px) clamp(20px, 4cqi, 34px) 0; }
+
+.vcard__kind {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.vcard__name {
+    font-family: var(--vcard-serif);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 5.4cqi, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    color: var(--ink);
+    text-wrap: balance;
+}
+
+/* One line of numbers, divided by hairlines rather than bullets. */
+.vcard__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.vcard__stats li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-right: 16px;
+    margin-right: 16px;
+    border-right: 1px solid var(--rule-firm);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    /* A long area name must wrap inside its own cell, not push the row wide. */
+    min-width: 0;
+}
+
+.vcard__stats li:last-child { border-right: 0; padding-right: 0; margin-right: 0; }
+.vcard__stats .star { color: var(--gold); font-size: 13px; }
+.vcard__stats .quiet { color: var(--ink-soft); }
+
+.vcard__lead {
+    margin: 0 0 22px;
+    max-width: 62ch;
+    font-size: clamp(15px, 1.9cqi, 17px);
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--ink-soft);
+}
+
+/* ---------- editorial copy (attractions) ---------- */
+
+.vcard__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.vcard__pills li {
+    padding: 5px 12px;
+    border: 1px solid var(--rule-firm);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+}
+
+.vcard__note {
+    margin: 0 0 18px;
+    padding-left: 16px;
+    border-left: 2px solid var(--gold-line);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink-soft);
+}
+
+.vcard__note b {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* ---------- actions ---------- */
+
+.vcard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 clamp(20px, 4cqi, 34px) clamp(20px, 4cqi, 30px);
+}
+
+.vcard__btn {
+    flex: 1 1 auto;
+    /* 130px is the widest a button can be and still let two sit side by side
+       inside a 320px card; below that they stack, which is correct. */
+    min-width: 130px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    /* 46px tall at the smallest, so it clears the 44px touch minimum. */
+    min-height: 46px;
+    padding: 13px 18px;
+    font-family: var(--vcard-sans);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 4px;
+    border: 1px solid var(--rule-firm);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, color 0.18s;
+}
+
+.vcard__btn:hover { border-color: var(--gold-line); }
+.vcard__btn:focus-visible { outline: 2px solid var(--gold-line); outline-offset: 2px; }
+.vcard__btn svg { width: 16px; height: 16px; flex: 0 0 auto; }
+
+.vcard__btn--primary {
+    background: var(--gold-line);
+    border-color: var(--gold-line);
+    color: #14100a;
+}
+
+.vcard__btn--primary:hover { filter: brightness(1.08); }
+
+/* ---------- folded detail ---------- */
+
+.vcard__folds { border-top: 1px solid var(--rule); }
+.vcard__fold { border-bottom: 1px solid var(--rule); }
+
+.vcard__fold summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 14px clamp(20px, 4cqi, 34px);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.18s;
+}
+
+.vcard__fold summary::-webkit-details-marker { display: none; }
+.vcard__fold summary:hover { background: var(--paper-sunk); }
+.vcard__fold summary:focus-visible { outline: 2px solid var(--gold-line); outline-offset: -2px; }
+
+.vcard__fold .sub {
+    color: var(--ink-faint);
+    font-weight: 300;
+    /* The separator belongs to the inline layout. Once the sub-line drops to
+       its own row (below), a leading "·" reads as a stray bullet. */
+    /* The address can be long; it truncates rather than shoving the chevron
+       off the row. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.vcard__fold .sub::before { content: '· '; }
+.vcard__fold .chev { margin-left: auto; flex: 0 0 auto; color: var(--ink-faint); transition: transform 0.2s ease; }
+.vcard__fold[open] summary .chev { transform: rotate(180deg); }
+.vcard__fold-body { padding: 4px clamp(20px, 4cqi, 34px) 24px; }
+
+@container vcard (max-width: 420px) {
+    /* No room for address and chevron on one line — the address moves under
+       the label instead of being cut to three words. */
+    .vcard__fold summary { flex-wrap: wrap; gap: 4px 12px; padding-top: 12px; padding-bottom: 12px; }
+    .vcard__fold .sub { flex: 1 0 100%; white-space: normal; order: 3; }
+    .vcard__fold .sub::before { content: none; }
+    .vcard__fold .chev { order: 2; }
+}
+
+.vcard__map {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    background: var(--paper-sunk);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.vcard__map canvas { display: block; width: 100%; height: 100%; }
+
+.vcard__addr { margin: 0 0 12px; font-size: 14px; color: var(--ink-soft); font-weight: 300; }
+.vcard__addr b { color: var(--ink); font-weight: 600; }
+
+.vcard__facts { list-style: none; margin: 0; padding: 0; }
+
+.vcard__facts li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+}
+
+.vcard__facts li:last-child { border-bottom: 0; }
+
+.vcard__facts .k {
+    flex: 0 0 auto;
+    min-width: 8rem;
+    color: var(--ink-faint);
+    font-weight: 300;
+}
+
+.vcard__facts .v { flex: 1 1 12rem; min-width: 0; color: var(--ink); overflow-wrap: anywhere; }
+.vcard__facts a { color: var(--gold); text-decoration: none; }
+.vcard__facts a:hover { text-decoration: underline; }
+
+.vcard__near { list-style: none; margin: 0; padding: 0; }
+
+.vcard__near li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+}
+
+.vcard__near li:last-child { border-bottom: 0; }
+
+.vcard__near .m {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 3.6rem;
+    flex: 0 0 auto;
+}
+
+.vcard__near .n { flex: 1 1 8rem; min-width: 0; color: var(--ink); }
+.vcard__near .t { color: var(--ink-faint); font-size: 13px; }
+
+/* ============================================================
+   MENU SHEET
+   ============================================================ */
+
+.vsheet {
+    /* `min()` against 100% keeps the sheet inside a 320px screen; the dialog
+       is centred by the UA, so no margin work is needed. */
+    width: min(600px, calc(100vw - 24px));
+    max-width: 600px;
+    /* The site's reset sets `* { margin: 0 }`, which cancels the UA's
+       `margin: auto` on <dialog> and pins the sheet to the left edge. */
+    margin: auto;
+    max-height: min(86vh, 820px);
+    max-height: min(86dvh, 820px);
+    padding: 0;
+    border: 0;
+    border-radius: var(--vcard-radius, 6px);
+    background: #141b31;
+    color: #f0ece2;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 24px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.vsheet::backdrop { background: rgba(2, 5, 14, 0.72); }
+.vsheet *, .vsheet *::before, .vsheet *::after { box-sizing: border-box; }
+
+.vsheet__inner { display: flex; flex-direction: column; max-height: inherit; }
+
+.vsheet__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid #262f4a;
+}
+
+.vsheet__head h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    margin: 0 0 3px;
+    letter-spacing: -0.01em;
+    color: #f0ece2;
+}
+
+.vsheet__head p { margin: 0; font-size: 13px; color: #737b94; font-weight: 300; }
+
+.vsheet__close {
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border: 1px solid #333d5c;
+    border-radius: 50%;
+    background: transparent;
+    color: #a7aec4;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.vsheet__close:hover { border-color: #b08d2e; color: #f0ece2; }
+.vsheet__close:focus-visible { outline: 2px solid #b08d2e; outline-offset: 2px; }
+
+.vsheet__scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 6px 24px 22px;
+}
+
+.vsheet__course { margin-top: 22px; }
+.vsheet__course:first-child { margin-top: 12px; }
+
+.vsheet__course h3 {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #e6c171;
+}
+
+.vsheet__course ul { list-style: none; margin: 0; padding: 0; }
+
+.vsheet__course li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 18px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid #262f4a;
+}
+
+.vsheet__course li:last-child { border-bottom: 0; }
+
+/* Without this the dish column refuses to shrink below its longest word and
+   the price is pushed off the right edge on a narrow phone. */
+.vsheet__dish { min-width: 0; font-size: 15px; font-weight: 500; }
+
+/* Class, not `.vsheet__dish span`: the marks wrapper is also a span, and
+   the descendant selector was winning over its own `display: inline-flex`
+   and dropping the dot onto a line of its own. */
+.vsheet__gloss {
+    display: block;
+    font-size: 13px;
+    font-weight: 300;
+    color: #737b94;
+    margin-top: 2px;
+}
+
+.vsheet__meta {
+    display: inline-flex;
+    gap: 6px;
+    margin-left: 7px;
+    vertical-align: 1px;
+}
+
+.vsheet__mark {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.vsheet__mark--pork { background: #b0472e; }
+.vsheet__mark--half { background: linear-gradient(90deg, #b08d2e 50%, transparent 50%); box-shadow: inset 0 0 0 1px #b08d2e; }
+
+.vsheet__price {
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: #f0ece2;
+}
+
+.vsheet__unit { display: block; font-size: 12px; font-weight: 300; color: #737b94; text-align: right; }
+
+.vsheet__foot {
+    padding: 13px 24px calc(13px + env(safe-area-inset-bottom));
+    border-top: 1px solid #262f4a;
+    background: #0e1526;
+    font-size: 12px;
+    color: #737b94;
+    font-weight: 300;
+}
+
+.vsheet__foot p { margin: 0 0 4px; }
+.vsheet__foot p:last-child { margin-bottom: 0; }
+
+@media (max-width: 480px) {
+    .vsheet { width: 100vw; max-width: 100vw; max-height: 92dvh; border-radius: 12px 12px 0 0; }
+    .vsheet__head { padding: 18px 18px 14px; }
+    .vsheet__scroll { padding: 6px 18px 20px; }
+    .vsheet__foot { padding-left: 18px; padding-right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vcard-overlay, .vcard, .vcard__shots { transition: none; }
+}
