@@ -16,6 +16,7 @@
 
     var labels = {
 en: {
+'label.riverside_park':'Riverside Park','label.nature_reserve':'Nature Reserve',
 'label.historic_fortress':'Historic Fortress','label.bohemian_street':'Bohemian Street','label.beach_recreation':'Beach · Recreation','label.science_museum':'Science Museum','label.royal_park':'Royal Park','label.historic_tower':'Historic Tower','label.art_history_museum':'Art & History Museum','label.riverside_walk':'Riverside Walk','label.military_museum':'Military Museum',
 'label.specialty_coffee':'Specialty Coffee','label.coffee_roastery':'Coffee Roastery',
 'label.cafe_garden':'Cafe · Garden','label.cafe_bar':'Cafe · Bar',
@@ -31,6 +32,7 @@ en: {
 'label.shopping_centre':'Shopping Centre',
 },
 sr: {
+'label.riverside_park':'Park uz reku','label.nature_reserve':'Rezervat prirode',
 'label.historic_fortress':'Istorijska tvrđava','label.bohemian_street':'Boemska ulica','label.beach_recreation':'Plaža · Rekreacija','label.science_museum':'Muzej nauke','label.royal_park':'Kraljevski park','label.historic_tower':'Istorijska kula','label.art_history_museum':'Muzej umetnosti i istorije','label.riverside_walk':'Šetalište uz reku','label.military_museum':'Vojni muzej',
 'label.specialty_coffee':'Specialty kafa','label.coffee_roastery':'Pržionica kafe',
 'label.cafe_garden':'Kafić · Bašta','label.cafe_bar':'Kafić · Bar',
@@ -46,6 +48,7 @@ sr: {
 'label.shopping_centre':'Tržni centar',
 },
 tr: {
+'label.riverside_park':'Nehir Kıyısı Parkı','label.nature_reserve':'Doğa Rezervi',
 'label.historic_fortress':'Tarihi Kale','label.bohemian_street':'Bohem Sokak','label.beach_recreation':'Plaj · Rekreasyon','label.science_museum':'Bilim Müzesi','label.royal_park':'Kraliyet Parkı','label.historic_tower':'Tarihi Kule','label.art_history_museum':'Sanat ve Tarih Müzesi','label.riverside_walk':'Nehir Kıyısı Yürüyüşü','label.military_museum':'Askeri Müze',
 'label.specialty_coffee':'Specialty Kahve','label.coffee_roastery':'Kahve Kavurma Atölyesi',
 'label.cafe_garden':'Kafe · Bahçe','label.cafe_bar':'Kafe · Bar',
@@ -61,6 +64,7 @@ tr: {
 'label.shopping_centre':'Alışveriş Merkezi',
 },
 de: {
+'label.riverside_park':'Uferpark','label.nature_reserve':'Naturreservat',
 'label.historic_fortress':'Historische Festung','label.bohemian_street':'Bohème-Straße','label.beach_recreation':'Strand · Freizeit','label.science_museum':'Wissenschaftsmuseum','label.royal_park':'Königlicher Park','label.historic_tower':'Historischer Turm','label.art_history_museum':'Kunst- und Geschichtsmuseum','label.riverside_walk':'Uferpromenade','label.military_museum':'Militärmuseum',
 'label.specialty_coffee':'Specialty Coffee','label.coffee_roastery':'Kaffeerösterei',
 'label.cafe_garden':'Café · Garten','label.cafe_bar':'Café · Bar',
@@ -76,6 +80,7 @@ de: {
 'label.shopping_centre':'Einkaufszentrum',
 },
 fr: {
+'label.riverside_park':'Parc au bord du fleuve','label.nature_reserve':'Réserve naturelle',
 'label.historic_fortress':'Forteresse historique','label.bohemian_street':'Rue bohème','label.beach_recreation':'Plage · Loisirs','label.science_museum':'Musée des sciences','label.royal_park':'Parc royal','label.historic_tower':'Tour historique','label.art_history_museum':'Musée d\'art et d\'histoire','label.riverside_walk':'Promenade fluviale','label.military_museum':'Musée militaire',
 'label.specialty_coffee':'Café de spécialité','label.coffee_roastery':'Torréfacteur',
 'label.cafe_garden':'Café · Jardin','label.cafe_bar':'Café · Bar',
@@ -91,6 +96,7 @@ fr: {
 'label.shopping_centre':'Centre commercial',
 },
 it: {
+'label.riverside_park':'Parco sul fiume','label.nature_reserve':'Riserva naturale',
 'label.historic_fortress':'Fortezza storica','label.bohemian_street':'Via bohémien','label.beach_recreation':'Spiaggia · Svago','label.science_museum':'Museo della scienza','label.royal_park':'Parco reale','label.historic_tower':'Torre storica','label.art_history_museum':'Museo d\'arte e storia','label.riverside_walk':'Lungofiume','label.military_museum':'Museo militare',
 'label.specialty_coffee':'Caffè specialty','label.coffee_roastery':'Torrefazione',
 'label.cafe_garden':'Caffè · Giardino','label.cafe_bar':'Caffè · Bar',
@@ -106,6 +112,7 @@ it: {
 'label.shopping_centre':'Centro commerciale',
 },
 ru: {
+'label.riverside_park':'Парк на берегу','label.nature_reserve':'Природный заповедник',
 'label.historic_fortress':'Историческая крепость','label.bohemian_street':'Богемная улица','label.beach_recreation':'Пляж · Отдых','label.science_museum':'Музей науки','label.royal_park':'Королевский парк','label.historic_tower':'Историческая башня','label.art_history_museum':'Музей искусства и истории','label.riverside_walk':'Набережная','label.military_museum':'Военный музей',
 'label.specialty_coffee':'Спешелти-кофе','label.coffee_roastery':'Обжарочная кофе',
 'label.cafe_garden':'Кафе · Сад','label.cafe_bar':'Кафе · Бар',
@@ -121,6 +128,7 @@ ru: {
 'label.shopping_centre':'Торговый центр',
 },
 el: {
+'label.riverside_park':'Παραποτάμιο πάρκο','label.nature_reserve':'Φυσικό καταφύγιο',
 'label.historic_fortress':'Ιστορικό φρούριο','label.bohemian_street':'Μποέμ δρόμος','label.beach_recreation':'Παραλία · Αναψυχή','label.science_museum':'Μουσείο Επιστημών','label.royal_park':'Βασιλικό πάρκο','label.historic_tower':'Ιστορικός πύργος','label.art_history_museum':'Μουσείο Τέχνης και Ιστορίας','label.riverside_walk':'Παραποτάμιος περίπατος','label.military_museum':'Στρατιωτικό Μουσείο',
 'label.specialty_coffee':'Specialty καφές','label.coffee_roastery':'Καφεκοπτείο',
 'label.cafe_garden':'Καφέ · Κήπος','label.cafe_bar':'Καφέ · Μπαρ',
@@ -136,6 +144,7 @@ el: {
 'label.shopping_centre':'Εμπορικό κέντρο',
 },
 he: {
+'label.riverside_park':'פארק על הנהר','label.nature_reserve':'שמורת טבע',
 'label.historic_fortress':'מצודה היסטורית','label.bohemian_street':'רחוב בוהמייני','label.beach_recreation':'חוף · פנאי','label.science_museum':'מוזיאון מדע','label.royal_park':'פארק מלכותי','label.historic_tower':'מגדל היסטורי','label.art_history_museum':'מוזיאון אמנות והיסטוריה','label.riverside_walk':'טיילת נהר','label.military_museum':'מוזיאון צבאי',
 'label.specialty_coffee':'קפה בוטיק','label.coffee_roastery':'קלייה מקומית',
 'label.cafe_garden':'בית קפה · גינה','label.cafe_bar':'בית קפה · בר',
