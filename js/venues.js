@@ -852,7 +852,87 @@ var FEELBG_VENUES = {
             lat: 44.7717,
             lng: 20.477,
             image: ""
-        }
+        },
+        {
+            name: "Avala",
+            cuisine: "nature",
+            cuisineLabel: "Forest Park",
+            area: "Voždovac",
+            address: "Avala, Beli Potok",
+            rating: 4.8,
+            badge: "popular",
+            description:
+                "Forested hill south of the city with the Monument to the Unknown Hero and the Avala Tower at the top",
+            lat: 44.6897,
+            lng: 20.515,
+            image: "assets/images/avala-mountain.jpg"
+            },
+        {
+            name: "Ušće Park",
+            cuisine: "nature",
+            cuisineLabel: "Riverside Park",
+            area: "Novi Beograd",
+            address: "Ušće, Novi Beograd",
+            rating: 4.6,
+            description:
+                "Flat riverside park where the Sava meets the Danube, with cycle paths, fountains and summer concerts",
+            lat: 44.818,
+            lng: 20.444,
+            image: ""
+            },
+        {
+            name: "Zvezdara Forest",
+            cuisine: "nature",
+            cuisineLabel: "Forest Park",
+            area: "Zvezdara",
+            address: "Zvezdarska šuma, Zvezdara",
+            rating: 4.5,
+            description:
+                "Belgrade's second-largest forest, laced with running trails and quiet enough to hear the birds",
+            lat: 44.792,
+            lng: 20.506,
+            image: ""
+            },
+        {
+            name: "Pionirski Park",
+            cuisine: "nature",
+            cuisineLabel: "City Park",
+            area: "Stari Grad",
+            address: "Dragoslava Jovanovića, Stari Grad",
+            rating: 4.5,
+            description:
+                "Small formal park between the Old and New Palace, with chestnut avenues and benches in the shade",
+            lat: 44.8125,
+            lng: 20.4638,
+            image: ""
+            },
+        {
+            name: "Great War Island",
+            cuisine: "nature",
+            cuisineLabel: "Nature Reserve",
+            area: "Zemun",
+            address: "Veliko ratno ostrvo, Zemun",
+            rating: 4.6,
+            badge: "trending",
+            description:
+                "Protected river island at the confluence, reachable by pontoon bridge in summer — herons, willows and the Lido beach",
+            lat: 44.832,
+            lng: 20.44,
+            image: ""
+            },
+        {
+            name: "Banjica Forest",
+            cuisine: "nature",
+            cuisineLabel: "Forest Park",
+            area: "Voždovac",
+            address: "Banjička šuma, Voždovac",
+            rating: 4.4,
+            description:
+                "Neighbourhood pine forest with an outdoor gym, a marked running loop and dogs off the lead",
+            lat: 44.757,
+            lng: 20.474,
+            image: ""
+            }
     ],
 };
 
