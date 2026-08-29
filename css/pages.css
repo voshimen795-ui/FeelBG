@@ -442,11 +442,9 @@
     margin-bottom: var(--space-4);
 }
 
-/* Editorial tags — three per attraction, on the card and in the modal.
-   They sit on both the light card surface and the modal body, so the colour
-   comes from the bronze accent rather than from either background. */
-.place-card__pills,
-.detail-modal__pills {
+/* Editorial tags — three per attraction, on the grid card. The venue card
+   styles its own set (css/venue-card.css) against the night-blue panel. */
+.place-card__pills {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
@@ -462,19 +460,6 @@
     font-size: var(--text-xs);
     font-weight: 600;
     line-height: 1.5;
-}
-
-/* Long-form sections in the detail modal: what you see, why it's worth it,
-   and the one thing that isn't on the map. */
-.detail-modal__story {
-    font-size: var(--text-sm);
-    line-height: 1.7;
-    margin: 0 0 var(--space-3);
-}
-
-.detail-modal__story--insider {
-    padding-left: var(--space-3);
-    border-left: 2px solid var(--secondary-color);
 }
 
 .place-card__meta {
@@ -680,152 +665,3 @@
 .place-card:nth-child(6) { animation-delay: 0.3s; }
 
 
-/* ============================================
-   DETAIL POPUP MODAL
-   ============================================ */
-.detail-modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-4);
-    opacity: 0;
-    transition: opacity 0.3s;
-    overflow-y: auto;
-}
-.detail-modal-overlay.active { opacity: 1; }
-
-.detail-modal {
-    background: #fff;
-    border-radius: var(--radius-lg);
-    max-width: 420px;
-    width: 100%;
-    overflow: hidden;
-    transform: translateY(30px) scale(0.97);
-    transition: transform 0.3s;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-}
-.detail-modal-overlay.active .detail-modal {
-    transform: translateY(0) scale(1);
-}
-
-.detail-modal__image {
-    height: 220px;
-    position: relative;
-    background: linear-gradient(135deg, #1e3a8a 0%, #b8860b 50%, #ffd700 100%);
-}
-.detail-modal__close-x {
-    position: absolute;
-    top: 12px; right: 12px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    border: none;
-    font-size: var(--text-xl);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: background 0.2s;
-}
-.detail-modal__close-x:hover { background: rgba(0,0,0,0.7); }
-
-.detail-modal__body { padding: var(--space-5); }
-
-.detail-modal__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: var(--space-2);
-}
-.detail-modal__title {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xl);
-    margin: 0;
-    line-height: 1.2;
-}
-.detail-modal__rating {
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-sm);
-    font-weight: 700;
-    font-size: var(--text-base);
-    white-space: nowrap;
-}
-.detail-modal__location {
-    font-size: var(--text-sm);
-    margin: 0 0 var(--space-2);
-}
-.detail-modal__desc {
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    margin: 0 0 var(--space-4);
-}
-
-.detail-modal__info {
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-4);
-    border: 1px solid transparent;
-}
-.detail-modal__info-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) 0;
-    font-size: var(--text-sm);
-}
-.detail-modal__info-row i {
-    width: 18px;
-    text-align: center;
-    font-size: var(--icon-sm);
-}
-
-.detail-modal__actions {
-    display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-}
-.detail-modal__reserve {
-    flex: 1;
-    padding: var(--space-3) var(--space-4);
-    background: linear-gradient(135deg, #25d366, #128c7e);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: var(--text-base);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    font-family: var(--font-body);
-    transition: background 0.2s, transform 0.15s;
-}
-.detail-modal__reserve:hover {
-    background: linear-gradient(135deg, #128c7e, #075e54);
-    transform: translateY(-1px);
-}
-.detail-modal__close-btn {
-    padding: var(--space-3) var(--space-4);
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: var(--text-base);
-    cursor: pointer;
-    font-family: var(--font-body);
-    transition: background 0.2s;
-}
-
-@media (max-width: 480px) {
-    .detail-modal { max-width: 100%; border-radius: var(--radius-lg); }
-    .detail-modal__image { height: 180px; }
-    .detail-modal__body { padding: var(--space-4); }
-    .detail-modal__title { font-size: var(--text-xl); }
-}

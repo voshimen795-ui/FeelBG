@@ -17,6 +17,10 @@ var FEELBG_VENUES = {
             lat: 44.8135,
             lng: 20.4528,
             image: "slike/temperament.jpg",
+            // Only fields the venue itself publishes go here. Anything absent
+            // is left absent — the card omits the row rather than filling it.
+            website: "restorantemperament.com",
+            menu: "temperament",
         },
         {
             name: "Zlatni Bokal",
@@ -33,6 +37,9 @@ var FEELBG_VENUES = {
             lat: 44.8185,
             lng: 20.4632,
             image: "slike/Zlatni Bokal.jpg",
+            phone: "+381 60 1111992",
+            hours: "14:00 – 02:00",
+            menu: "zlatni_bokal",
         },
         {
             name: "Dva Jelena",
@@ -49,6 +56,7 @@ var FEELBG_VENUES = {
             lat: 44.818,
             lng: 20.464,
             image: "slike/logo/dva jelena.jpg",
+            menu: "dva_jelena",
         },
     ],
 

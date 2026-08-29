@@ -208,35 +208,23 @@ class LoadMoreFeature {
     }
 }
 
+/* ============================================================
+   VENUE CARD
+
+   One panel per place. It leads with the photograph, the name and
+   the three numbers a visitor actually decides on — rating, price,
+   neighbourhood — then two sentences, then the buttons. The map,
+   the practical facts and what is nearby are folded, because a
+   visitor who has not decided to go does not need the address.
+
+   Nothing on this card is invented. Earlier versions filled the
+   information box with a phone number hashed out of the venue's
+   name, a website guessed as `<name>.rs`, and opening hours read
+   off the price band — four facts that looked authoritative and
+   were fiction. A row now appears only when the data exists.
+   ============================================================ */
 class PlaceDetails {
     constructor() {
-        this.budgetRanges = {
-            'budget': { min: 5, max: 15, icon: '$' },
-            'moderate': { min: 15, max: 30, icon: '$$' },
-            'upscale': { min: 30, max: 60, icon: '$$$' },
-            'fine-dining': { min: 60, max: 120, icon: '$$$$' }
-        };
-        this.hoursMap = {
-            'budget': '08:00 – 22:00',
-            'moderate': '10:00 – 23:00',
-            'upscale': '12:00 – 00:00',
-            'fine-dining': '18:00 – 01:00'
-        };
-        // Extra "vibe" gallery slides pulled from images already hosted on
-        // this site (not external stock) — generic ambience shots with no
-        // identifying signage, so they never misrepresent a specific
-        // competitor's business as belonging to a different venue.
-        this.galleryPools = {
-            restaurants: [],
-            cafes: [
-                'assets/images/restorani/bay.jpg',
-                'assets/images/restorani/dekstop.jpg'
-            ],
-            nightlife: [
-                'assets/images/belgrade-by-night-4576220_1280.jpg'
-            ],
-            attractions: []
-        };
         this.init();
     }
 
@@ -273,192 +261,457 @@ class PlaceDetails {
     }
 
     showDetailsForVenue(venue) {
-        const pageType = this.typeToPageType(venue.type);
-        // Same rule as the grid card: an attraction leads with its hook.
-        const lead = (window.CardRenderer && window.CardRenderer.getTranslated(venue, 'hook'))
-            || venue.desc || venue.description || '';
-        const card = document.createElement('div');
-        card.dataset.price = venue.priceLabel ? (venue.price || 'moderate') : 'none';
-        card.dataset.lat = venue.lat;
-        card.dataset.lng = venue.lng;
-        card.innerHTML = `
-            <div class="place-card__image" style="background-image:url('${venue.image || ''}')"></div>
-            <div class="place-card__rating"><i class="fas fa-star"></i> ${venue.rating || ''}</div>
-            <div class="place-card__location"><i class="fas fa-map-marker-alt"></i> ${venue.area || ''}</div>
-            <div class="place-card__description">${lead}</div>
-            <div class="place-card__cuisine">${venue.cuisineLabel || ''}</div>
-        `;
-        this.showDetails(venue.name, card, pageType);
+        this.showDetails(venue.name, null, this.typeToPageType(venue.type), venue);
+    }
+
+    allVenues() {
+        const v = window.FEELBG_VENUES;
+        if (!v) return [];
+        const tag = (list, type) => (list || []).map(x => Object.assign({ type }, x));
+        return [].concat(
+            tag(v.restaurants, 'restaurants'),
+            tag(v.cafes, 'cafes'),
+            tag(v.nightlife, 'nightlife'),
+            tag(v.attractions, 'attractions')
+        );
     }
 
     findVenue(title) {
-        const venues = window.FEELBG_VENUES;
-        if (!venues) return null;
-        const all = [].concat(venues.restaurants || [], venues.cafes || [], venues.nightlife || [], venues.attractions || []);
-        return all.find(v => v.name === title) || null;
+        return this.allVenues().find(v => v.name === title) || null;
     }
 
-    fakePhone(title) {
-        let hash = 0;
-        for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) >>> 0;
-        const num = String(hash).padStart(7, '0').slice(0, 7);
-        return `+381 11 ${num.slice(0, 3)} ${num.slice(3)}`;
-    }
-
-    buildGallery(pageType, primaryImage) {
-        const pool = this.galleryPools[pageType] || this.galleryPools.restaurants;
+    /* A venue shows its own photographs or none. Earlier versions padded the
+       strip with generic Belgrade ambience shots so that every card had
+       something to swipe; the result was three photographs of somewhere else
+       captioned with this venue's name. A tinted plate carrying the initial
+       is the honest fallback, and it is what the grid cards already do. */
+    buildGallery(venue, primaryImage) {
+        const own = (venue && Array.isArray(venue.images)) ? venue.images.slice() : [];
         const images = [];
         if (primaryImage) images.push(primaryImage);
-        pool.forEach(src => { if (images.indexOf(src) === -1) images.push(src); });
-        return images.slice(0, 5);
+        own.forEach(src => { if (src && images.indexOf(src) === -1) images.push(src); });
+        return images.slice(0, 6);
     }
 
-    showDetails(title, card, forcedPageType) {
-        const rating = card.querySelector('.place-card__rating')?.textContent.trim() || '';
-        const location = card.querySelector('.place-card__location')?.textContent.trim() || '';
-        const description = card.querySelector('.place-card__description')?.textContent.trim() || '';
-        const priceLevel = card.dataset.price || 'moderate';
-        const budgetInfo = this.budgetRanges[priceLevel] || this.budgetRanges['moderate'];
-        const hours = this.hoursMap[priceLevel] || '10:00 – 23:00';
-        const cuisine = card.querySelector('.place-card__cuisine')?.textContent.trim() || '';
+    /* Straight-line metres between two coordinates. Belgrade is small enough
+       that the equirectangular approximation is accurate to well under the
+       precision anyone reads off a "420 m" label. */
+    static metresBetween(aLat, aLng, bLat, bLng) {
+        const R = 6371000;
+        const rad = Math.PI / 180;
+        const x = (bLng - aLng) * rad * Math.cos((aLat + bLat) * 0.5 * rad);
+        const y = (bLat - aLat) * rad;
+        return Math.sqrt(x * x + y * y) * R;
+    }
 
-        const pageType = forcedPageType || this.getPageType();
-        const venue = this.findVenue(title);
+    static formatDistance(m) {
+        return m < 950 ? `${Math.round(m / 5) * 5} m` : `${(m / 1000).toFixed(1)} km`;
+    }
 
-        // Extract the venue's own image from the card's background image
-        let primaryImage = '';
-        const imgDiv = card.querySelector('.place-card__image');
-        if (imgDiv) {
-            const inlineStyle = imgDiv.style.backgroundImage;
-            const match = /url\((['"]?)(.*?)\1\)/.exec(inlineStyle || '');
-            if (match) primaryImage = match[2];
-        }
-        if (!primaryImage && venue) primaryImage = venue.image;
+    /* Everything of ours within walking distance, closest first. Real data,
+       computed from the coordinates already in venues.js — no new source and
+       nothing to keep in step. */
+    nearbyOf(venue, radius = 900, limit = 5) {
+        if (!venue || !venue.lat || !venue.lng) return [];
+        return this.allVenues()
+            .filter(v => v.name !== venue.name && v.lat && v.lng)
+            .map(v => ({ venue: v, m: PlaceDetails.metresBetween(venue.lat, venue.lng, v.lat, v.lng) }))
+            .filter(x => x.m <= radius)
+            .sort((a, b) => a.m - b.m)
+            .slice(0, limit);
+    }
 
-        const galleryImages = this.buildGallery(pageType, primaryImage);
+    /* A relative locator, not a map: the venue at the centre, everything
+       nearby plotted at its true bearing and distance, with a scale bar. It
+       needs no tile provider or key, and unlike a hand-drawn schematic it is
+       correct for every venue because it is drawn from the coordinates. */
+    drawLocator(canvas, venue, near) {
+        if (!canvas || !canvas.getContext || !venue.lat) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = canvas.clientWidth || 600;
+        const h = canvas.clientHeight || 225;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
 
-        const isAttraction = pageType === 'attractions' || priceLevel === 'none';
-        const budgetLabel = isAttraction ? '' : `€${budgetInfo.min} – €${budgetInfo.max} ${t('popup.perPerson')}`;
-        const websiteName = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '.rs';
-        const phone = this.fakePhone(title);
-        const categoryTag = (venue && venue.cuisineLabel) || cuisine.replace(/^\s*\S+\s+/, '') || pageType;
+        const gold = '#b08d2e';
+        const faint = '#8890a8';
+        const rule = '#2b3452';
+        const rad = Math.PI / 180;
+        const cx = w / 2;
+        const cy = h / 2;
 
-        const lat = card.dataset.lat;
-        const lng = card.dataset.lng;
-        const hasCoords = lat && lng;
+        // Metres per pixel is set so the farthest place lands inside the
+        // plate with room for its label, rather than on the edge of it.
+        const far = near.length ? near[near.length - 1].m : 200;
+        const usable = Math.min(w / 2 - 78, h / 2 - 20);
+        const scale = usable / Math.max(far, 80);
 
-        // Editorial copy for attractions: the card already carries the hook as
-        // its description, so the modal picks up from there with the longer
-        // sections. Venues without this copy render exactly as before.
+        const project = (v) => ({
+            x: cx + (v.lng - venue.lng) * rad * Math.cos(venue.lat * rad) * 6371000 * scale,
+            y: cy - (v.lat - venue.lat) * rad * 6371000 * scale
+        });
+
+        // One ring, at a round distance that actually fits the plate.
+        const rings = [100, 200, 300, 500, 750, 1000].filter(r => r * scale < usable);
+        ctx.strokeStyle = rule;
+        ctx.lineWidth = 1;
+        rings.forEach(r => {
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * scale, 0, Math.PI * 2);
+            ctx.stroke();
+        });
+
+        // Labels are nudged apart vertically so two places at the same
+        // bearing do not print on top of each other.
+        ctx.font = '400 11px Poppins, -apple-system, sans-serif';
+        const placed = [];
+        near.forEach(({ venue: v }) => {
+            const p = project(v);
+            ctx.fillStyle = faint;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            let label = v.name;
+            while (label.length > 4 && ctx.measureText(label).width > 96) label = label.slice(0, -1);
+            if (label !== v.name) label = label.trimEnd() + '…';
+
+            const width = ctx.measureText(label).width;
+            const right = p.x + 9 + width < w - 6;
+            let ly = p.y + 4;
+            while (placed.some(q => Math.abs(q.y - ly) < 13 && Math.abs(q.x - p.x) < 110)) ly += 13;
+            placed.push({ x: p.x, y: ly });
+
+            ctx.textAlign = right ? 'left' : 'right';
+            ctx.fillText(label, p.x + (right ? 9 : -9), ly);
+        });
+
+        // the venue itself, last so nothing prints over it
+        ctx.fillStyle = gold;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = gold;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 10.5, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // north mark, top right
+        ctx.fillStyle = faint;
+        ctx.strokeStyle = faint;
+        ctx.lineWidth = 1;
+        ctx.textAlign = 'center';
+        ctx.font = '600 10px Poppins, sans-serif';
+        ctx.fillText('N', w - 15, 16);
+        ctx.beginPath();
+        ctx.moveTo(w - 15, 20);
+        ctx.lineTo(w - 15, 30);
+        ctx.stroke();
+
+        // scale bar, bottom left
+        const barM = rings.length ? rings[rings.length - 1] : Math.round(far / 50) * 50;
+        ctx.beginPath();
+        ctx.moveTo(14, h - 13);
+        ctx.lineTo(14 + barM * scale, h - 13);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(14, h - 17); ctx.lineTo(14, h - 9);
+        ctx.moveTo(14 + barM * scale, h - 17); ctx.lineTo(14 + barM * scale, h - 9);
+        ctx.stroke();
+        ctx.textAlign = 'left';
+        ctx.font = '400 10px Poppins, sans-serif';
+        ctx.fillText(`${barM} m`, 14, h - 21);
+    }
+
+    static formatRsd(n) {
+        return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' RSD';
+    }
+
+    menuFor(venue) {
+        const menus = window.FEELBG_MENUS;
+        if (!menus || !venue) return null;
+        const key = venue.menu || (window.CardRenderer ? window.CardRenderer.venueSlug(venue.name) : '');
+        return menus[key] || null;
+    }
+
+    buildMenuSheet(venue, menu, esc) {
+        const dlg = document.createElement('dialog');
+        dlg.className = 'vsheet';
+        dlg.setAttribute('aria-label', `${t('menu.title')} — ${venue.name}`);
+
+        const courses = menu.sections.map(section => `
+            <section class="vsheet__course">
+                <h3>${esc(t('course.' + section.key))}</h3>
+                <ul>
+                    ${section.items.map(item => `
+                        <li>
+                            <span class="vsheet__dish">${esc(item.name)}${
+                                item.pork || item.half ? `<span class="vsheet__meta">${
+                                    item.pork ? `<i class="vsheet__mark vsheet__mark--pork" title="${esc(t('menu.pork'))}"></i>` : ''
+                                }${
+                                    item.half ? `<i class="vsheet__mark vsheet__mark--half" title="${esc(t('menu.half'))}"></i>` : ''
+                                }</span>` : ''
+                            }${item.en ? `<span>${esc(item.en)}</span>` : ''}</span>
+                            <span class="vsheet__price">${PlaceDetails.formatRsd(item.price)}${
+                                item.unit ? `<span class="vsheet__unit">${esc(item.unit)}</span>` : ''
+                            }</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </section>
+        `).join('');
+
+        const notes = [t('menu.currencyNote')];
+        if (menu.cover) notes.push(`${t('menu.cover')} ${PlaceDetails.formatRsd(menu.cover)}`);
+        (menu.notes || []).forEach(n => { if (n !== 'allergens') notes.push(t('menu.' + n)); });
+        if (menu.incomplete) notes.push(t('menu.partial'));
+        if ((menu.notes || []).indexOf('allergens') !== -1) notes.push(t('menu.allergens'));
+
+        dlg.innerHTML = `
+            <div class="vsheet__inner">
+                <div class="vsheet__head">
+                    <div>
+                        <h2>${esc(t('menu.title'))}</h2>
+                        <p>${esc(venue.name)}${venue.cuisineLabel ? ` · ${esc(venue.cuisineLabel)}` : ''}</p>
+                    </div>
+                    <button class="vsheet__close" type="button" aria-label="${esc(t('popup.close'))}" data-close>&times;</button>
+                </div>
+                <div class="vsheet__scroll">${courses}</div>
+                <div class="vsheet__foot">${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>
+            </div>
+        `;
+
+        dlg.querySelector('[data-close]').addEventListener('click', () => dlg.close());
+        // A click on the backdrop closes; one on the sheet does not.
+        dlg.addEventListener('click', (e) => {
+            if (e.target !== dlg) return;
+            const r = dlg.getBoundingClientRect();
+            const outside = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+            if (outside) dlg.close();
+        });
+        return dlg;
+    }
+
+    showDetails(title, card, forcedPageType, venueOverride) {
         const CR = window.CardRenderer;
+        const esc = (s) => (CR ? CR.escapeHtml(String(s == null ? '' : s)) : String(s == null ? '' : s));
+        const venue = venueOverride || this.findVenue(title);
+        const pageType = forcedPageType || (venue && venue.type ? this.typeToPageType(venue.type) : this.getPageType());
+        const isAttraction = pageType === 'attractions';
+
+        // The venue record is the source. The card DOM is only consulted for
+        // places rendered outside venues.js, and never overrides real data.
+        const fromCard = (sel) => (card && card.querySelector(sel)) ? card.querySelector(sel).textContent.trim() : '';
+        const rating = (venue && venue.rating) || fromCard('.place-card__rating').replace(/[^\d.]/g, '') || '';
+        const area = (venue && venue.area) || fromCard('.place-card__location').replace(/^\s*\S*\s*/, '') || '';
+        const kind = (venue && (CR ? CR.getTranslated(venue, 'cuisine') : venue.cuisineLabel)) || fromCard('.place-card__cuisine') || '';
+        const priceLabel = venue ? this.priceLabelFor(venue) : '';
+
+        let image = (venue && venue.image) || '';
+        if (!image && card) {
+            const imgDiv = card.querySelector('.place-card__image');
+            const match = /url\((['"]?)(.*?)\1\)/.exec((imgDiv && imgDiv.style.backgroundImage) || '');
+            if (match && match[2]) image = match[2];
+        }
+        const gallery = this.buildGallery(venue, image);
+
+        // An attraction leads with its hook, then carries the longer copy.
         const story = (venue && CR) ? {
+            lead: CR.getTranslated(venue, 'hook') || CR.getTranslated(venue, 'desc') || venue.description || '',
             about: CR.getTranslated(venue, 'about'),
             why: CR.getTranslated(venue, 'why'),
             insider: CR.getTranslated(venue, 'insider'),
             pills: CR.pillsFor(venue)
-        } : { about: '', why: '', insider: '', pills: [] };
-        const esc = (s) => CR ? CR.escapeHtml(s) : String(s);
-        const sectionTitle = 'detail-modal__section-title font-display text-base text-royal mt-5 mb-2 flex items-center gap-2';
-        const storyHtml = `
-            ${story.pills.length ? `<div class="detail-modal__pills">${story.pills.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>` : ''}
-            ${story.about ? `<p class="detail-modal__story">${story.about}</p>` : ''}
-            ${story.why ? `<h4 class="${sectionTitle}"><i class="fas fa-star"></i> ${t('attraction.why')}</h4>
-                           <p class="detail-modal__story">${story.why}</p>` : ''}
-            ${story.insider ? `<h4 class="${sectionTitle}"><i class="fas fa-lightbulb"></i> ${t('attraction.insider')}</h4>
-                               <p class="detail-modal__story detail-modal__story--insider">${story.insider}</p>` : ''}
+        } : { lead: fromCard('.place-card__description'), about: '', why: '', insider: '', pills: [] };
+
+        const near = this.nearbyOf(venue);
+        const menu = this.menuFor(venue);
+        const hasCoords = venue && venue.lat && venue.lng;
+
+        const stats = [];
+        if (rating) stats.push(`<li><span class="star">★</span> ${esc(rating)}</li>`);
+        if (priceLabel) stats.push(`<li>${priceLabel}</li>`);
+        if (area) stats.push(`<li>${esc(area)}</li>`);
+
+        const facts = [];
+        if (venue && venue.hours) facts.push([t('card.hours'), esc(venue.hours)]);
+        if (venue && venue.phone) facts.push([t('card.phone'), `<a href="tel:${esc(venue.phone.replace(/\s/g, ''))}">${esc(venue.phone)}</a>`]);
+        if (venue && venue.website) facts.push([t('card.website'), `<a href="https://${esc(venue.website)}" target="_blank" rel="noopener">${esc(venue.website)}</a>`]);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'vcard-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', title);
+
+        const initial = (title || '?').trim().charAt(0).toUpperCase();
+        const shotsHtml = gallery.length
+            ? gallery.map(src => `<div class="vcard__shot" style="background-image:url('${esc(src)}')" role="img" aria-label="${esc(title)}"></div>`).join('')
+            : `<div class="vcard__shot vcard__shot--none" data-initial="${esc(initial)}" role="img" aria-label="${esc(title)}"></div>`;
+
+        overlay.innerHTML = `
+            <article class="vcard">
+                <div class="vcard__shot-wrap">
+                    <div class="vcard__shots">${shotsHtml}</div>
+                    <button class="vcard__close" type="button" aria-label="${esc(t('popup.close'))}">&times;</button>
+                    ${gallery.length > 1 ? `
+                        <button class="vcard__photos" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h3l1.6-2h8.8L18 7h3v12H3z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg>
+                            ${esc(t('card.photoCount').replace('{n}', gallery.length))}
+                        </button>` : ''}
+                </div>
+
+                <div class="vcard__head">
+                    ${kind ? `<p class="vcard__kind">${esc(kind)}</p>` : ''}
+                    <h2 class="vcard__name">${esc(title)}</h2>
+                    ${stats.length ? `<ul class="vcard__stats">${stats.join('')}</ul>` : ''}
+                    ${story.lead ? `<p class="vcard__lead">${esc(story.lead)}</p>` : ''}
+                    ${story.pills.length ? `<ul class="vcard__pills">${story.pills.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
+                    ${story.about ? `<p class="vcard__lead">${esc(story.about)}</p>` : ''}
+                    ${story.why ? `<p class="vcard__note"><b>${esc(t('attraction.why'))}</b>${esc(story.why)}</p>` : ''}
+                    ${story.insider ? `<p class="vcard__note"><b>${esc(t('attraction.insider'))}</b>${esc(story.insider)}</p>` : ''}
+                </div>
+
+                <div class="vcard__actions">
+                    ${isAttraction ? '' : `
+                        <button class="vcard__btn vcard__btn--primary" type="button" data-booking="${esc(title)}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16v15H4z" stroke-linejoin="round"/><path d="M8 3v4M16 3v4M4 10h16" stroke-linecap="round"/></svg>
+                            ${esc(t(pageType === 'nightlife' ? 'card.reserveSpot' : 'popup.reserve'))}
+                        </button>`}
+                    ${menu ? `
+                        <button class="vcard__btn" type="button" data-open-menu>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 4h16v16H4z" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke-linecap="round"/></svg>
+                            ${esc(t('card.viewMenu'))}
+                        </button>` : ''}
+                    ${hasCoords ? `
+                        <button class="vcard__btn detail-modal__route-btn" type="button"
+                                data-route-lat="${esc(venue.lat)}" data-route-lng="${esc(venue.lng)}" data-route-name="${esc(title)}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4"/></svg>
+                            ${esc(t('card.directions'))}
+                        </button>` : ''}
+                </div>
+
+                ${(hasCoords || facts.length || near.length) ? `
+                <div class="vcard__folds">
+                    ${hasCoords ? `
+                    <details class="vcard__fold" data-fold="map">
+                        <summary>${esc(t('card.gettingThere'))}
+                            ${venue.address ? `<span class="sub">${esc(venue.address)}</span>` : ''}
+                            <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </summary>
+                        <div class="vcard__fold-body">
+                            ${near.length ? `<div class="vcard__map"><canvas aria-label="${esc(title)} and what surrounds it"></canvas></div>` : ''}
+                            <p class="vcard__addr">${venue.address ? `<b>${esc(venue.address)}</b> · ` : ''}${esc(venue.lat.toFixed(4))}, ${esc(venue.lng.toFixed(4))}</p>
+                            ${facts.length ? `<ul class="vcard__facts">${facts.map(([k, v]) => `<li><span class="k">${esc(k)}</span><span class="v">${v}</span></li>`).join('')}</ul>` : ''}
+                        </div>
+                    </details>` : ''}
+                    ${near.length ? `
+                    <details class="vcard__fold">
+                        <summary>${esc(t('card.nearby'))}
+                            <span class="sub">${esc(t('card.nearbyCount').replace('{n}', near.length).replace('{d}', PlaceDetails.formatDistance(near[near.length - 1].m)))}</span>
+                            <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </summary>
+                        <div class="vcard__fold-body">
+                            <ul class="vcard__near">
+                                ${near.map(({ venue: v, m }) => `
+                                    <li>
+                                        <span class="m">${esc(PlaceDetails.formatDistance(m))}</span>
+                                        <span class="n">${esc(v.name)}</span>
+                                        <span class="t">${esc((CR ? CR.getTranslated(v, 'cuisine') : '') || v.cuisineLabel || '')}</span>
+                                    </li>`).join('')}
+                            </ul>
+                        </div>
+                    </details>` : ''}
+                </div>` : ''}
+            </article>
         `;
 
-        const slidesHtml = galleryImages.map(src =>
-            `<div class="modal-gallery__slide" style="background-image:url('${src}')"></div>`
-        ).join('');
-        const dotsHtml = galleryImages.length > 1 ? galleryImages.map((_, i) =>
-            `<button class="modal-gallery__dot${i === 0 ? ' active' : ''}" data-slide="${i}" aria-label="Photo ${i + 1}"></button>`
-        ).join('') : '';
-        const arrowsHtml = galleryImages.length > 1 ? `
-                    <button class="modal-gallery__arrow modal-gallery__arrow--prev" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
-                    <button class="modal-gallery__arrow modal-gallery__arrow--next" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>` : '';
-
-        const modal = document.createElement('div');
-        modal.className = 'detail-modal-overlay';
-        modal.innerHTML = `
-            <div class="detail-modal detail-modal--premium">
-                <div class="modal-gallery" id="modal-gallery">
-                    <div class="modal-gallery__track" id="modal-gallery-track">${slidesHtml}</div>
-                    <button class="modal-gallery__close" aria-label="Close">&times;</button>
-                    ${arrowsHtml}
-                    ${dotsHtml ? `<div class="modal-gallery__dots">${dotsHtml}</div>` : ''}
-                </div>
-                <div class="detail-modal__body">
-                    <span class="detail-modal__category-tag inline-block px-3.5 py-1 rounded-full bg-gradient-to-br from-royal to-royal-light text-white text-[11px] font-bold uppercase tracking-wider mb-2">${categoryTag}</span>
-                    <div class="detail-modal__header">
-                        <h3 class="detail-modal__title">${title}</h3>
-                        <span class="detail-modal__rating">${rating}</span>
-                    </div>
-                    <p class="detail-modal__location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
-                    ${description ? `<p class="detail-modal__desc">${description}</p>` : ''}
-                    ${storyHtml}
-
-                    <h4 class="${sectionTitle}"><i class="fas fa-circle-info"></i> ${t('popup.information')}</h4>
-                    <div class="detail-modal__info">
-                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-clock"></i><span>${t('popup.open')} ${hours}</span></div>
-                        ${isAttraction ? '' : `<div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-wallet"></i><span>${t('popup.avgBudget')} ${budgetLabel}</span></div>`}
-                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-phone"></i><span>${phone}</span></div>
-                        <div class="detail-modal__info-row flex items-center gap-2.5 py-1.5 text-sm text-gray-700"><i class="fas fa-globe"></i><span>www.${websiteName}</span></div>
-                    </div>
-
-                    <div class="detail-modal__actions">
-                        ${isAttraction ? '' : `<button class="detail-modal__reserve" data-booking="${title}"><i class="fas fa-calendar-check"></i> ${t('popup.reserve')}</button>`}
-                        ${hasCoords ? `<button class="detail-modal__route-btn" data-route-lat="${lat}" data-route-lng="${lng}" data-route-name="${title}"><i class="fas fa-route"></i> ${t('popup.seeRoute')}</button>` : ''}
-                        <button class="detail-modal__close-btn">${t('popup.close')}</button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(modal);
+        document.body.appendChild(overlay);
+        const scrollY = window.scrollY;
         document.body.style.overflow = 'hidden';
-        requestAnimationFrame(() => modal.classList.add('active'));
+        requestAnimationFrame(() => overlay.classList.add('is-open'));
 
-        const escHandler = (e) => { if (e.key === 'Escape') closeModal(); };
+        let sheet = null;
+        let onResize = null;
         const closeModal = () => {
-            modal.classList.remove('active');
+            if (sheet && sheet.open) sheet.close();
+            overlay.classList.remove('is-open');
             document.removeEventListener('keydown', escHandler);
+            if (onResize) window.removeEventListener('resize', onResize);
             document.body.style.overflow = '';
-            setTimeout(() => modal.remove(), 400);
+            window.scrollTo(0, scrollY);
+            setTimeout(() => { overlay.remove(); if (sheet) sheet.remove(); }, 320);
+        };
+        const escHandler = (e) => {
+            // The menu sheet is a <dialog> and handles its own Escape; only
+            // close the card when the sheet is not the thing on top.
+            if (e.key === 'Escape' && !(sheet && sheet.open)) closeModal();
         };
 
-        modal.querySelector('.modal-gallery__close').addEventListener('click', closeModal);
-        modal.querySelector('.detail-modal__close-btn').addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        overlay.querySelector('.vcard__close').addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
         document.addEventListener('keydown', escHandler);
+        overlay.querySelector('.vcard__close').focus({ preventScroll: true });
 
-        // Gallery carousel
-        if (galleryImages.length > 1) {
-            let current = 0;
-            const track = modal.querySelector('#modal-gallery-track');
-            const dots = modal.querySelectorAll('.modal-gallery__dot');
-            const goTo = (index) => {
-                current = (index + galleryImages.length) % galleryImages.length;
-                track.style.transform = `translateX(-${current * 100}%)`;
-                dots.forEach((d, i) => d.classList.toggle('active', i === current));
-            };
-            modal.querySelector('.modal-gallery__arrow--prev').addEventListener('click', () => goTo(current - 1));
-            modal.querySelector('.modal-gallery__arrow--next').addEventListener('click', () => goTo(current + 1));
-            dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.slide, 10))));
+        // photograph strip
+        if (gallery.length > 1) {
+            const shots = overlay.querySelector('.vcard__shots');
+            let index = 0;
+            overlay.querySelector('.vcard__photos').addEventListener('click', () => {
+                index = (index + 1) % gallery.length;
+                shots.style.transform = `translateX(-${index * 100}%)`;
+            });
         }
 
-        const routeBtn = modal.querySelector('.detail-modal__route-btn');
+        // menu sheet
+        const menuBtn = overlay.querySelector('[data-open-menu]');
+        if (menuBtn && menu) {
+            sheet = this.buildMenuSheet(venue, menu, esc);
+            document.body.appendChild(sheet);
+            menuBtn.addEventListener('click', () => {
+                if (typeof sheet.showModal === 'function') sheet.showModal();
+                else sheet.setAttribute('open', '');
+            });
+        }
+
+        // locator, drawn when the fold is first opened and on resize
+        const mapFold = overlay.querySelector('[data-fold="map"]');
+        const canvas = overlay.querySelector('.vcard__map canvas');
+        if (mapFold && canvas && near.length) {
+            onResize = () => { if (mapFold.open) this.drawLocator(canvas, venue, near); };
+            mapFold.addEventListener('toggle', onResize);
+            window.addEventListener('resize', onResize);
+        }
+
+        const routeBtn = overlay.querySelector('.detail-modal__route-btn');
         if (routeBtn) {
             routeBtn.addEventListener('click', () => {
-                const destLat = parseFloat(routeBtn.dataset.routeLat);
-                const destLng = parseFloat(routeBtn.dataset.routeLng);
                 window.open(
-                    `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}`,
+                    `https://www.google.com/maps/dir/?api=1&destination=${routeBtn.dataset.routeLat},${routeBtn.dataset.routeLng}`,
                     '_blank',
                     'noopener'
                 );
             });
         }
+    }
+
+    /* The price band is the venue's own label, with the trailing phrase
+       translated the same way the grid card translates it. Attractions carry
+       no price and get no price line rather than an invented one. */
+    priceLabelFor(venue) {
+        if (!venue.priceLabel) return '';
+        const CR = window.CardRenderer;
+        const label = venue.priceLabel
+            .replace(/per person/i, CR ? CR.t('venue.price.perPerson') : 'per person')
+            .replace(/\bentry\b/i, CR ? CR.t('venue.price.entry') : 'entry');
+        const esc = (s) => (CR ? CR.escapeHtml(s) : s);
+        // "€15–25 per person" → figure, then the phrase in a quieter tone.
+        const m = /^(\S+)\s+(.+)$/.exec(label);
+        return m ? `${esc(m[1])} <span class="quiet">${esc(m[2])}</span>` : esc(label);
     }
 }
 
