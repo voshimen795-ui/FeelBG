@@ -271,22 +271,35 @@
 .card-stack__dots {
     display: flex;
     justify-content: center;
-    gap: var(--space-2);
-    margin-top: var(--space-5);
+    /* The buttons carry their own spacing now that each is a 28px target. */
+    gap: 0;
+    margin-top: var(--space-4);
 }
 
+/* The dot a thumb hits is 28px square; the dot an eye sees is the 8px mark
+   drawn inside it. Sizing the button itself to the mark made a target a
+   third of the 24px minimum, which on a phone means missing it. */
 .card-stack__dot {
-    width: var(--space-2);
-    height: var(--space-2);
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
     padding: 0;
     border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.card-stack__dot::before {
+    content: '';
+    width: var(--space-2);
+    height: var(--space-2);
     border-radius: var(--radius-full);
     background: rgba(244, 239, 226, 0.3);
-    cursor: pointer;
     transition: background var(--transition-normal), transform var(--transition-normal);
 }
 
-.card-stack__dot[aria-current="true"] {
+.card-stack__dot[aria-current="true"]::before {
     background: #ffd700;
     transform: scale(1.4);
 }
@@ -404,21 +417,29 @@
     margin: 0;
 }
 
+/* Underlined with `text-decoration` rather than a bottom border, so the
+   link can carry vertical padding — and so reach a thumb-sized target —
+   without the rule drifting away from the words. */
 .stack-block__all {
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 4px 0;
     color: rgba(244, 239, 226, 0.85);
     font-size: var(--text-sm);
     font-weight: 600;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.45);
-    padding-bottom: 2px;
-    transition: color var(--transition-normal), border-color var(--transition-normal);
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 215, 0, 0.45);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color var(--transition-normal), text-decoration-color var(--transition-normal);
 }
 
 .stack-block__all:hover,
 .stack-block__all:focus-visible {
     color: #ffd700;
-    border-bottom-color: #ffd700;
+    text-decoration-color: #ffd700;
 }
 
 /* One line to introduce the seven stacks. */

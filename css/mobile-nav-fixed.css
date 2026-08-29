@@ -10,11 +10,19 @@
        height, rendered at ~51px, while the reserved clearance was 64px
        (--space-8) — 13px of dead space at the bottom of every mobile page. */
     height: var(--control-lg);
+    /* On a phone with a home indicator the bar's bottom ~34px sits under it,
+       so the row is padded by the inset and the bar grows to match. Without
+       this the labels are half-hidden and the taps land on the indicator. */
+    height: calc(var(--control-lg) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     display: flex;
     justify-content: space-around;
     align-items: stretch;
-    padding: var(--space-2) var(--space-1);
+    /* No vertical padding on the bar: the items stretch to its full height,
+       which is what makes each one a 52px target rather than a 36px one. */
+    padding-left: var(--space-1);
+    padding-right: var(--space-1);
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
     z-index: 9999;
     border-top: 2px solid rgba(255, 215, 0, 0.3);
@@ -29,7 +37,7 @@
     flex: 1 1 0;
     min-width: 0;
     max-width: 20%;
-    padding: var(--space-2) var(--space-1);
+    padding: var(--space-1);
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     transition: all 0.3s ease;
@@ -77,15 +85,15 @@
    page for a bar that shouldn't render there at all. */
 @media (max-width: 767px) {
     body {
-        padding-bottom: var(--control-lg);
+        padding-bottom: calc(var(--control-lg) + env(safe-area-inset-bottom));
     }
 
     main {
-        padding-bottom: var(--control-lg);
+        padding-bottom: calc(var(--control-lg) + env(safe-area-inset-bottom));
     }
 
     .footer {
-        margin-bottom: var(--control-lg);
+        margin-bottom: calc(var(--control-lg) + env(safe-area-inset-bottom));
     }
 
     .mobile-bottom-nav {

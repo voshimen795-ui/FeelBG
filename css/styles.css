@@ -1785,10 +1785,16 @@ input, textarea, select {
 }
 
 .footer__links li {
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-1);
 }
 
+/* An inline <a> is only as tall as its text — 17px here, well under the
+   24px minimum target, and the rows sat close enough together that a thumb
+   could land between two of them. The padding makes each link its own
+   tappable row; the reduced margin above keeps the column the same height. */
 .footer__links a {
+    display: inline-block;
+    padding: 5px 0;
     color: rgba(255, 255, 255, 0.7);
     transition: all var(--transition-normal);
 }
@@ -1867,6 +1873,8 @@ input, textarea, select {
 }
 
 .footer__bottom-links a {
+    display: inline-block;
+    padding: 6px 0;
     color: rgba(255, 255, 255, 0.5);
     transition: color var(--transition-normal);
 }
