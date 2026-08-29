@@ -443,6 +443,11 @@ class PlaceDetails {
         dlg.className = 'vsheet';
         dlg.setAttribute('aria-label', `${t('menu.title')} — ${venue.name}`);
 
+        // The gloss is for a reader who cannot read the Serbian dish name.
+        // In Serbian it would just restate the dish, so it is left out.
+        const stored = (() => { try { return JSON.parse(localStorage.getItem('feelbg_language') || '{}').code; } catch (e) { return 'en'; } })();
+        const inSerbian = stored === 'sr';
+
         const courses = menu.sections.map(section => `
             <section class="vsheet__course">
                 <h3>${esc(t('course.' + section.key))}</h3>
@@ -455,7 +460,7 @@ class PlaceDetails {
                                 }${
                                     item.half ? `<i class="vsheet__mark vsheet__mark--half" title="${esc(t('menu.half'))}"></i>` : ''
                                 }</span>` : ''
-                            }${item.en ? `<span>${esc(item.en)}</span>` : ''}</span>
+                            }${(item.en && !inSerbian) ? `<span>${esc(item.en)}</span>` : ''}</span>
                             <span class="vsheet__price">${PlaceDetails.formatRsd(item.price)}${
                                 item.unit ? `<span class="vsheet__unit">${esc(item.unit)}</span>` : ''
                             }</span>
@@ -507,7 +512,9 @@ class PlaceDetails {
         // places rendered outside venues.js, and never overrides real data.
         const fromCard = (sel) => (card && card.querySelector(sel)) ? card.querySelector(sel).textContent.trim() : '';
         const rating = (venue && venue.rating) || fromCard('.place-card__rating').replace(/[^\d.]/g, '') || '';
-        const area = (venue && venue.area) || fromCard('.place-card__location').replace(/^\s*\S*\s*/, '') || '';
+        const area = (venue && venue.area)
+            ? (CR ? CR.translateArea(venue.area) : venue.area)
+            : (fromCard('.place-card__location').replace(/^\s*\S*\s*/, '') || '');
         const kind = (venue && (CR ? CR.getTranslated(venue, 'cuisine') : venue.cuisineLabel)) || fromCard('.place-card__cuisine') || '';
         const priceLabel = venue ? this.priceLabelFor(venue) : '';
 
