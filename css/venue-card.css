@@ -553,7 +553,10 @@
    the price is pushed off the right edge on a narrow phone. */
 .vsheet__dish { min-width: 0; font-size: 15px; font-weight: 500; }
 
-.vsheet__dish span {
+/* Class, not `.vsheet__dish span`: the marks wrapper is also a span, and
+   the descendant selector was winning over its own `display: inline-flex`
+   and dropping the dot onto a line of its own. */
+.vsheet__gloss {
     display: block;
     font-size: 13px;
     font-weight: 300;

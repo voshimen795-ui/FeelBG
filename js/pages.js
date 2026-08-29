@@ -460,7 +460,7 @@ class PlaceDetails {
                                 }${
                                     item.half ? `<i class="vsheet__mark vsheet__mark--half" title="${esc(t('menu.half'))}"></i>` : ''
                                 }</span>` : ''
-                            }${(item.en && !inSerbian) ? `<span>${esc(item.en)}</span>` : ''}</span>
+                            }${(item.en && !inSerbian) ? `<span class="vsheet__gloss">${esc(item.en)}</span>` : ''}</span>
                             <span class="vsheet__price">${PlaceDetails.formatRsd(item.price)}${
                                 item.unit ? `<span class="vsheet__unit">${esc(item.unit)}</span>` : ''
                             }</span>
