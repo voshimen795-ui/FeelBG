@@ -982,6 +982,17 @@ input, textarea, select {
     background: var(--bg-primary);
 }
 
+/* Tighter lead-in than the site-wide .section rhythm: this is a
+   card-stack section, so the first card should be reachable without
+   scrolling once the section is in view. */
+.categories.section {
+    padding-top: var(--space-6);
+}
+
+.categories .section__header {
+    margin-bottom: var(--space-4);
+}
+
 /* 280px min left the fourth tile orphaned on its own row at desktop width
    (4 x 280 + gaps overflowed the 1136px content box). 240px lets all four
    sit in one row, and still drops to two, then one, as the page narrows. */
