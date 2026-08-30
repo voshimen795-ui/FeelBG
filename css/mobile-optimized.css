@@ -103,7 +103,6 @@ body {
    TOUCH-FRIENDLY BUTTONS & INTERACTIONS
    ============================================ */
 .btn,
-.filter-pill,
 .place-card,
 .category__card {
     min-height: 48px; /* iOS recommended touch target */
@@ -111,8 +110,7 @@ body {
 }
 
 /* Better touch feedback */
-.btn:active,
-.filter-pill:active {
+.btn:active {
     transform: scale(0.95);
 }
 

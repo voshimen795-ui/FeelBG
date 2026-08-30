@@ -78,11 +78,6 @@ class PlaceFiltering {
     applyFilterFromUrl() {
         const wanted = new URLSearchParams(window.location.search).get('filter');
         if (!wanted) return;
-        const pill = Array.from(this.filterPills)
-            .find(p => p.dataset.filter === wanted);
-        if (!pill) return;
-        this.filterPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
         this.currentFilters.cuisine = wanted;
         this.applyFilters();
     }
