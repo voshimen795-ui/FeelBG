@@ -442,17 +442,6 @@
     text-decoration-color: #ffd700;
 }
 
-/* One line to introduce the seven stacks. */
-.explore-intro {
-    max-width: 46rem;
-    margin: 0 auto var(--space-8);
-    color: rgba(244, 239, 226, 0.85);
-    font-size: var(--text-lg);
-    line-height: 1.6;
-    text-align: center;
-    text-wrap: balance;
-}
-
 @media (max-width: 767px) {
     .stack-block {
         margin-bottom: var(--space-8);

@@ -6,10 +6,13 @@
 /* ============================================
    PAGE HERO
    ============================================ */
+/* Top padding clears the fixed 80px header (see .header in styles.css)
+   plus a little breathing room — kept tight so the results grid below
+   still lands on screen without scrolling. */
 .page-hero {
     position: relative;
-    padding: 150px 0 var(--space-8);
-    min-height: 400px;
+    padding: calc(80px + var(--space-4)) 0 var(--space-5);
+    min-height: 260px;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -263,14 +266,14 @@
    RESULTS SECTION
    ============================================ */
 .results-section {
-    padding: var(--section-y) 0;
+    padding: var(--space-6) 0;
 }
 
 .results-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-4);
     flex-wrap: wrap;
     gap: var(--space-4);
 }
@@ -605,7 +608,8 @@
 
 @media (max-width: 480px) {
     .page-hero {
-        padding: 120px 0 var(--space-8);
+        padding: calc(80px + var(--space-3)) 0 var(--space-5);
+        min-height: 220px;
     }
     
     .page-hero__title {
