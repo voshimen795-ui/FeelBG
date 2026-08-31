@@ -1,12 +1,41 @@
 'use strict';
 
 class CardRenderer {
-    static isAttractionsPage() {
-        return window.location.pathname.includes('attractions');
-    }
-
+    /* The translation key slug: ASCII-only, underscores, diacritics collapsed
+       (Ušće Park -> u_e_park). The keys in venue-translations.js and
+       attraction-translations.js were written against this exact behaviour, so
+       it must not change. The URL slug is a different thing entirely and lives
+       on the venue object as `slug` — see tools/seo-slug.mjs. */
     static venueSlug(name) {
         return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    }
+
+    /* Permalink to the venue's own page.
+
+       Only English and Serbian have generated pages; every other locale falls
+       back to the English URL, which is also the hreflang x-default. Route
+       shapes are mirrored from tools/seo.config.mjs — if they change there,
+       change them here too. */
+    static venueUrl(venue) {
+        if (this.currentLang() === 'sr') {
+            return '/sr/mesto/' + (venue.slugSr || venue.slug) + '/';
+        }
+        return '/en/venue/' + venue.slug + '/';
+    }
+
+    /* The active language.
+
+       `CardRenderer.lang` lets a non-browser caller (the SEO build) render the
+       same markup for a chosen language; in a browser it is unset and the
+       stored preference wins. */
+    static currentLang() {
+        if (this.lang) return this.lang;
+        try {
+            var stored = localStorage.getItem('feelbg_language');
+            return stored ? JSON.parse(stored).code : 'en';
+        } catch (e) {
+            return 'en';
+        }
     }
 
     static areaKey(area) {
@@ -20,10 +49,8 @@ class CardRenderer {
     }
 
     static t(key) {
-        var translations = window.FEELBG_TRANSLATIONS || {};
-        var stored = localStorage.getItem('feelbg_language');
-        var langCode = stored ? JSON.parse(stored).code : 'en';
-        var lang = translations[langCode] || {};
+        var translations = (typeof window !== 'undefined' && window.FEELBG_TRANSLATIONS) || {};
+        var lang = translations[this.currentLang()] || {};
         var fallback = translations['en'] || {};
         if (key in lang) return lang[key];
         if (key in fallback) return fallback[key];
@@ -86,7 +113,11 @@ class CardRenderer {
 
     static renderCard(venue) {
         var badgeHtml = venue.badge ? '<div class="place-card__badge ' + (venue.badge === 'popular' ? 'popular' : '') + ' ' + (venue.badge === 'trending' ? 'trending' : '') + '" data-i18n="badge.' + venue.badge + '">' + this.t('badge.' + venue.badge) + '</div>' : '';
-        var isAttraction = this.isAttractionsPage() || !venue.priceLabel;
+        /* priceLabel is present on every restaurant, cafe and club and on no
+           attraction, so it alone tells the two apart — the old extra check on
+           the page URL was redundant, and wrong on any page whose path did not
+           happen to contain "attractions". */
+        var isAttraction = !venue.priceLabel;
         var translatedPrice = '';
         if (!isAttraction && venue.priceLabel) {
             translatedPrice = venue.priceLabel
@@ -105,19 +136,19 @@ class CardRenderer {
         var pillsHtml = this.pillsHtml(venue);
 
         return '\
-            <div class="place-card" data-cuisine="' + venue.cuisine + '" data-price="' + (venue.price || 'free') + '" data-area="' + venue.area.toLowerCase().replace(/[^a-z]/g, '-') + '" data-rating="' + venue.rating + '" data-lat="' + venue.lat + '" data-lng="' + venue.lng + '" data-name="' + venue.name.replace(/"/g, '&quot;') + '">\
+            <div class="place-card" data-cuisine="' + venue.cuisine + '" data-price="' + (venue.price || 'free') + '" data-area="' + venue.area.toLowerCase().replace(/[^a-z]/g, '-') + '" data-rating="' + venue.rating + '" data-lat="' + venue.lat + '" data-lng="' + venue.lng + '" data-name="' + venue.name.replace(/"/g, '&quot;') + '" data-venue-slug="' + (venue.slug || '') + '">\
                 <div class="place-card__image" style="background-image:url(\'' + venue.image + '\');background-size:cover;background-position:center;">\
                     ' + badgeHtml + '\
                     <div class="place-card__heart"><i class="far fa-heart"></i></div>\
                 </div>\
                 <div class="place-card__content">\
                     <div class="place-card__header">\
-                        <h3 class="place-card__title">' + venue.name + '</h3>\
+                        <h3 class="place-card__title"><a class="place-card__permalink" href="' + this.venueUrl(venue) + '">' + this.escapeHtml(venue.name) + '</a></h3>\
                         <div class="place-card__rating"><i class="fas fa-star"></i> ' + venue.rating + '</div>\
                     </div>\
-                    <p class="place-card__cuisine"><i class="fas fa-tag"></i> ' + cuisineLabel + '</p>\
-                    <p class="place-card__location"><i class="fas fa-map-marker-alt"></i> ' + this.translateArea(venue.area) + '</p>\
-                    <p class="place-card__description">' + desc + '</p>\
+                    <p class="place-card__cuisine"><i class="fas fa-tag"></i> ' + this.escapeHtml(cuisineLabel) + '</p>\
+                    <p class="place-card__location"><i class="fas fa-map-marker-alt"></i> ' + this.escapeHtml(this.translateArea(venue.area)) + '</p>\
+                    <p class="place-card__description">' + this.escapeHtml(desc) + '</p>\
                     ' + pillsHtml + '\
                     ' + priceHtml + '\
                     <div class="place-card__footer">\
@@ -156,4 +187,8 @@ class CardRenderer {
     }
 }
 
-window.CardRenderer = CardRenderer;
+if (typeof window !== 'undefined') { window.CardRenderer = CardRenderer; }
+/* The SEO build (tools/build-seo.mjs) renders the same cards server-side. It
+   loads this exact file rather than reimplementing renderCard, so the
+   pre-rendered markup and the markup the browser produces cannot drift apart. */
+if (typeof module !== 'undefined' && module.exports) { module.exports = CardRenderer; }

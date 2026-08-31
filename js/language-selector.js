@@ -170,6 +170,10 @@ class LanguageSelector {
         else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
         else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
         else CardRenderer.renderAll(grid.id);
+        // Record what language the grid now holds, so the DOMContentLoaded
+        // handler in pages.js knows the server-rendered cards have been
+        // replaced and does not skip a render it actually needs to do.
+        grid.dataset.prerendered = CardRenderer.currentLang();
         var pf = window._placeFilteringInstance;
         if (pf) {
             pf.grid = grid;

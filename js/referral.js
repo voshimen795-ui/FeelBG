@@ -36,19 +36,103 @@
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(log.slice(-500))); } catch (e) { /* storage full/blocked — non-fatal */ }
     }
 
+    /* ---------------------------------------------------------------- *
+     * Event context
+     *
+     * Every row carries the language it happened in, where the visitor came
+     * from, and whether they were on a phone. That is the whole of it — there
+     * is no visitor id, no cookie, no fingerprint and no third-party script,
+     * which is what keeps this outside the scope of a consent banner. Rows are
+     * counted, never joined back to a person.
+     * ---------------------------------------------------------------- */
+
+    var SOURCE_KEY = 'feelbg_traffic_source';
+
+    /** The current UI language, from the same store the rest of the site uses. */
+    function currentLang() {
+        try {
+            var stored = localStorage.getItem('feelbg_language');
+            return stored ? (JSON.parse(stored).code || 'en') : 'en';
+        } catch (e) { return 'en'; }
+    }
+
+    function deviceClass() {
+        try {
+            return window.matchMedia('(pointer: coarse)').matches ? 'mobile' : 'desktop';
+        } catch (e) { return 'desktop'; }
+    }
+
+    /**
+     * Where this visit came from, as a coarse label.
+     *
+     * Resolved once per session and kept in sessionStorage: document.referrer
+     * becomes our own domain the moment the visitor clicks anything internal,
+     * so reading it fresh on a later click would report "internal" for
+     * everyone. Only the label is stored, never the full referring URL.
+     */
+    function trafficSource() {
+        try {
+            var cached = sessionStorage.getItem(SOURCE_KEY);
+            if (cached) return cached;
+        } catch (e) { /* private mode — fall through and classify each time */ }
+
+        var label = 'direct';
+        try {
+            var ref = document.referrer || '';
+            if (ref) {
+                var host = new URL(ref).hostname.replace(/^www\./, '');
+                if (host === location.hostname) label = 'internal';
+                else if (/google\./.test(host)) label = 'google';
+                else if (/bing\.|duckduckgo\.|yahoo\./.test(host)) label = 'search';
+                else if (/instagram\./.test(host)) label = 'instagram';
+                else if (/facebook\.|fb\./.test(host)) label = 'facebook';
+                else if (/tiktok\./.test(host)) label = 'tiktok';
+                else if (/t\.co$|twitter\.|x\.com$/.test(host)) label = 'twitter';
+                else label = host;
+            }
+            // A first click that lands mid-session shouldn't overwrite the real
+            // entry point with "internal".
+            if (label !== 'internal') sessionStorage.setItem(SOURCE_KEY, label);
+        } catch (e) { /* ignore */ }
+        return label;
+    }
+
+    /**
+     * Fire-and-forget, and it has to survive the page going away.
+     *
+     * sendBeacon is the whole reason this isn't a plain fetch: half of what we
+     * now track — a tel: link, a website link — navigates the current tab, and
+     * an in-flight fetch is cancelled when that happens, silently losing
+     * exactly the conversions we most want to count. Beacon hands the request
+     * to the browser, which delivers it after the page is gone.
+     *
+     * text/plain keeps it a simple request, so there is no CORS preflight and
+     * the Apps Script endpoint needs no extra handling.
+     */
     function sendToServer(row) {
         if (!ENDPOINT) return;
+        var payload = JSON.stringify(row);
+        try {
+            if (navigator.sendBeacon) {
+                var blob = new Blob([payload], { type: 'text/plain;charset=utf-8' });
+                if (navigator.sendBeacon(ENDPOINT, blob)) return;
+            }
+        } catch (e) { /* fall through to fetch */ }
         try {
             fetch(ENDPOINT, {
                 method: 'POST',
                 mode: 'no-cors',
+                keepalive: true,
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(row)
+                body: payload
             }).catch(function () { /* offline/blocked — the local log still has it */ });
         } catch (e) { /* ignore */ }
     }
 
     function appendRow(row) {
+        if (!row.lang) row.lang = currentLang();
+        if (!row.device) row.device = deviceClass();
+        if (!row.source) row.source = trafficSource();
         var log = readLog();
         log.push(row);
         writeLog(log);
@@ -119,8 +203,24 @@
             return code;
         },
 
-        track: function (action, venueName, code) {
-            var row = appendRow({ code: code || '', venue: venueName || '', action: action, ts: Date.now() });
+        /**
+         * Record one event.
+         *
+         * `venueId` is the venue's URL slug and is what the dashboard groups
+         * on. The display name is still written alongside it, because the log
+         * predates the slug and the older rows have nothing else — but the
+         * name alone is not a safe key: the detail popup passes the *translated*
+         * title, so the same venue would otherwise split into one row per
+         * language.
+         */
+        track: function (action, venueName, code, venueId) {
+            var row = appendRow({
+                code: code || '',
+                venue: venueName || '',
+                venueId: venueId || '',
+                action: action,
+                ts: Date.now()
+            });
             if (action === 'code_generated') refreshWidget();
             return row;
         },
@@ -184,29 +284,100 @@
     window.FeelBGReferral = FeelBGReferral;
     captureScannedCode();
 
-    // Wire the "Directions" outbound action on every place card + the venue
-    // detail modal's route button to carry a referral code, same as the
-    // WhatsApp booking flow already does.
+    /* ---------------------------------------------------------------- *
+     * Outbound clicks
+     *
+     * One delegated listener owns every way a visitor leaves us for a venue:
+     * directions, phone, the venue's own website. It is delegated on document
+     * rather than bound per element because cards are re-rendered on every
+     * language switch and are also pre-rendered into the category pages by
+     * tools/build-seo.mjs — per-element listeners would miss both.
+     *
+     * Nothing here calls preventDefault. The link or button does what it
+     * always did; the beacon in sendToServer is what makes the event survive
+     * the navigation, so tracking never sits between the visitor and the venue.
+     * ---------------------------------------------------------------- */
+
+    /**
+     * Work out which venue a click belongs to, wherever it happened.
+     *
+     * Three shapes exist: a card on a category page, the detail popup, and a
+     * generated venue page (which has no card and no FEELBG_VENUES — only body
+     * data attributes).
+     */
+    function venueContext(el) {
+        var card = el.closest ? el.closest('.place-card') : null;
+        if (card) {
+            return {
+                name: (card.dataset.name || (card.querySelector('.place-card__title') || {}).textContent || '').trim(),
+                id: card.dataset.venueSlug || ''
+            };
+        }
+        var modal = el.closest ? el.closest('.vcard-overlay') : null;
+        if (modal) {
+            // Prefer the untranslated name stashed on the overlay; the visible
+            // <h2> is localised and would split one venue across languages.
+            return {
+                name: modal.dataset.venueName || (modal.querySelector('h2') || {}).textContent || '',
+                id: modal.dataset.venueSlug || ''
+            };
+        }
+        var body = document.body;
+        if (body && body.dataset.page === 'venue') {
+            return { name: body.dataset.venueName || '', id: body.dataset.venueSlug || '' };
+        }
+        return { name: '', id: '' };
+    }
+
     document.addEventListener('click', function (e) {
-        var directionsBtn = e.target.closest('.btn-directions');
+        var target = e.target;
+
+        var directionsBtn = target.closest('.btn-directions');
         if (directionsBtn) {
             var card = directionsBtn.closest('.place-card');
             var lat = card && card.dataset.lat;
             var lng = card && card.dataset.lng;
-            var name = card ? (card.dataset.name || (card.querySelector('.place-card__title') || {}).textContent || '') : '';
-            name = name.trim();
+            var ctx = venueContext(directionsBtn);
             if (lat && lng) {
-                var code = FeelBGReferral.getOrCreateCode(name);
-                FeelBGReferral.track('directions_clicked', name, code);
+                var code = FeelBGReferral.getOrCreateCode(ctx.name);
+                FeelBGReferral.track('directions_clicked', ctx.name, code, ctx.id);
                 window.open('https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng, '_blank', 'noopener');
             }
             return;
         }
-        var routeBtn = e.target.closest('.detail-modal__route-btn');
+
+        var routeBtn = target.closest('.detail-modal__route-btn');
         if (routeBtn) {
             var routeName = routeBtn.dataset.routeName || '';
             var routeCode = FeelBGReferral.getOrCreateCode(routeName);
-            FeelBGReferral.track('directions_clicked', routeName, routeCode);
+            FeelBGReferral.track('directions_clicked', routeName, routeCode, routeBtn.dataset.routeSlug || '');
+            return;
+        }
+
+        // The directions link on a generated venue page. It is a plain anchor
+        // with target=_blank, so it needs no interception — only recording.
+        var mapLink = target.closest('.venue-map-link');
+        if (mapLink) {
+            var mapCtx = venueContext(mapLink);
+            FeelBGReferral.track('directions_clicked', mapCtx.name, '', mapCtx.id);
+            return;
+        }
+
+        var link = target.closest('a[href]');
+        if (!link) return;
+        var href = link.getAttribute('href') || '';
+
+        if (href.indexOf('tel:') === 0) {
+            var phoneCtx = venueContext(link);
+            FeelBGReferral.track('phone_clicked', phoneCtx.name, '', phoneCtx.id);
+            return;
+        }
+
+        // A link out to the venue's own site. Anything pointing back at us, or
+        // at the map/WhatsApp flows already handled above, is not that.
+        if (/^https?:/i.test(href) && link.dataset.venueWebsite !== undefined) {
+            var siteCtx = venueContext(link);
+            FeelBGReferral.track('website_clicked', siteCtx.name, '', siteCtx.id);
         }
     });
 

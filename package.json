@@ -5,7 +5,9 @@
   "main": "index.html",
   "scripts": {
     "start": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
-    "dev": "npx live-server --port=5000 --host=0.0.0.0 --no-browser"
+    "dev": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
+    "seo:build": "node tools/build-seo.mjs",
+    "seo:check": "node tools/build-seo.mjs --check"
   },
   "keywords": [
     "modern",

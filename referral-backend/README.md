@@ -7,7 +7,7 @@ action) — no accounts, no personal data.
 
 The referral codes, WhatsApp prefill, and voucher screen on the site all
 work **without** this backend deployed — they just won't be logged anywhere
-but the visitor's own browser (`localStorage`), so `/partner-report.html`
+but the visitor's own browser (`localStorage`), so `/admin/`
 would only be able to show that one device's activity. Deploying this gets
 you a real cross-device log for commission invoicing.
 
@@ -34,7 +34,29 @@ you a real cross-device log for commission invoicing.
    window.FEELBG_REFERRAL_DASHBOARD_KEY = 'the-same-string-you-put-in-DASHBOARD_KEY';
    ```
 9. Commit, push, redeploy the site. Referral events will now append rows to
-   your spreadsheet, and `/partner-report.html` will read from it.
+   your spreadsheet, and `/admin/` will read from it.
+
+## The /admin dashboard
+
+`/admin/` reads this same log and shows venue traffic: page views, outbound
+clicks (reserve, phone, website, directions) and the conversion between them.
+
+It is gated by a real password, checked server-side in `api/admin.js`, so set
+three environment variables in the Vercel dashboard (Settings → Environment
+Variables) and redeploy:
+
+| Variable | Value |
+|---|---|
+| `ADMIN_PASSWORD` | whatever you want to type at `/admin/` |
+| `FEELBG_SHEETS_ENDPOINT` | the same `/exec` URL from step 7 above |
+| `FEELBG_SHEETS_KEY` | the same string you put in `DASHBOARD_KEY` |
+
+Keep these out of `js/referral-config.js`. That file ships to every visitor —
+which is exactly why the old `/partner-report.html` could not really protect
+anything, and why it now just redirects to `/admin/`.
+
+Until `FEELBG_SHEETS_ENDPOINT` is set the dashboard loads and says so rather
+than showing an empty page that looks like "no traffic yet".
 
 ## Updating the script later
 
@@ -44,11 +66,34 @@ the changes to take effect — saving alone doesn't update the live web app.
 
 ## What gets logged
 
-Each row: `Timestamp, Code, Venue, Action, Received At`. `Action` is one of
-`code_generated`, `whatsapp_booking_initiated`, `directions_clicked`,
-`voucher_viewed`, `qr_scan`, `code_redeemed`. No names, phone numbers, or
-other personal data are ever sent — only the anonymous code, the venue name,
-and the action.
+Each row: `Timestamp, Code, Venue, Action, Received At, Venue ID, Lang, Source, Device`.
+
+`Action` is one of:
+
+- **Referral flow** — `qr_scan`, `code_generated`, `whatsapp_booking_initiated`,
+  `voucher_viewed`, `code_redeemed`
+- **Traffic** — `venue_view` (someone opened a venue page), `reserve_clicked`,
+  `phone_clicked`, `website_clicked`, `directions_clicked` (someone left for the venue)
+
+`Venue ID` is the venue's URL slug and is what `/admin/` groups on. The `Venue`
+column keeps the display name, both for readability and because rows written
+before the slug existed have nothing else — but the name alone is not a safe
+key, since the detail popup passes the *translated* title and would otherwise
+split one venue into a row per language.
+
+`Source` is a coarse label for where the visit came from (`google`, `instagram`,
+`direct`, …), resolved once per session from the referring page; `Lang` is the
+chosen UI language; `Device` is `mobile` or `desktop`.
+
+**No personal data is ever sent** — no name, phone number, IP address, cookie or
+visitor id, and no third-party analytics script. Events are counted, never
+joined back to a person, which is what keeps this outside the scope of a consent
+banner: a row contains nothing that identifies who produced it.
+
+Actions not on the list above are rejected by `doPost`. The write endpoint is
+necessarily open — a tracker running in a visitor's browser cannot hold a secret
+— so that whitelist, plus a 120-character cap per field, is what stops the sheet
+filling up with arbitrary strings.
 
 ## Redemption emails
 

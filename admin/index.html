@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FeelBG · Venue traffic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Loaded without blocking rendering or scripts.
+
+     A stylesheet in the head holds up every script after it, so if Google Fonts
+     is slow or unreachable — a corporate proxy, an ad blocker, a bad network —
+     the dashboard's JavaScript never runs and the page sits there as a dead
+     login form. Switching the media query after load makes the browser fetch it
+     at low priority and apply it whenever it arrives. The fallback stack in the
+     CSS below means the page is fully usable, just less pretty, if it never does. -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+/* Self-contained on purpose: this page shares no components with the public
+   site, and one file means one thing to reason about when it misbehaves.
+   Colours are the site's own navy/gold, so it still reads as FeelBG. */
+:root{
+  --bg:#0a1128; --surface:#0d1a3d; --surface-2:#122350;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+  --ink:#f4efe2; --ink-2:#b9c2de; --ink-3:#7f8bb0;
+  --gold:#ffd700; --gold-deep:#b8860b;
+
+  /* Categorical hues for the four click types, in fixed order. Validated on
+     this surface with the dataviz palette checker: lightness band, chroma
+     floor, CVD separation, normal-vision floor and contrast all pass for
+     adjacent pairs — which is the case that matters here, because they only
+     ever appear as ordered segments of one stacked bar with a 2px gap and a
+     legend, never as free-floating marks to be compared two at a time. */
+  --c-reserve:#b8860b; --c-phone:#2f9fbe; --c-website:#d45f5a; --c-maps:#8f72d6;
+  /* Views are the denominator, not a fifth category, so they wear ink. */
+  --c-views:#7f8bb0;
+
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Poppins',system-ui,sans-serif;font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;margin:0}
+a{color:var(--gold)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 72px}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+.gate__card{width:100%;max-width:380px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);padding:32px}
+.gate__mark{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);margin-bottom:6px}
+.gate__hint{color:var(--ink-3);font-size:13px;margin:0 0 22px}
+.field{display:block;margin-bottom:14px}
+.field span{display:block;font-size:12px;color:var(--ink-2);margin-bottom:6px;
+  letter-spacing:.08em;text-transform:uppercase}
+input[type=password],select{width:100%;padding:11px 13px;border-radius:10px;
+  background:var(--bg);border:1px solid var(--line-2);color:var(--ink);
+  font:inherit;font-size:15px}
+input:focus,select:focus{outline:2px solid var(--gold-deep);outline-offset:1px}
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  min-height:44px;padding:0 18px;border:0;border-radius:999px;cursor:pointer;
+  font:inherit;font-weight:600;
+  background:linear-gradient(135deg,var(--gold-deep),var(--gold));color:#14204a}
+.btn:hover{filter:brightness(1.06)}
+.btn--ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line-2)}
+.btn--ghost:hover{color:var(--ink);border-color:var(--gold-deep);filter:none}
+.btn[disabled]{opacity:.55;cursor:default;filter:none}
+.err{margin-top:14px;color:#f0a3a0;font-size:13px;min-height:18px}
+
+/* ---------- chrome ---------- */
+.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;
+  justify-content:space-between;margin-bottom:24px}
+.top h1{font-size:27px;color:var(--gold)}
+.top p{margin:4px 0 0;color:var(--ink-3);font-size:13px}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.controls select{width:auto;min-width:150px}
+
+.note{background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--gold-deep);border-radius:10px;
+  padding:14px 16px;margin-bottom:22px;color:var(--ink-2);font-size:13px}
+.note code{color:var(--gold);font-size:12px}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  margin-bottom:22px}
+.tile{background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:18px 20px}
+.tile__k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.tile__v{font-family:'Playfair Display',serif;font-size:34px;line-height:1.1;margin-top:6px}
+.tile__sub{font-size:12px;color:var(--ink-3);margin-top:4px}
+
+/* ---------- panels ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:20px;margin-bottom:22px}
+.panel__head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;
+  justify-content:space-between;margin-bottom:4px}
+.panel h2{font-size:17px}
+.panel__sub{color:var(--ink-3);font-size:12.5px;margin:0 0 16px}
+
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 14px;padding:0;list-style:none}
+.legend li{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2)}
+.swatch{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+
+.grid2{display:grid;gap:22px;grid-template-columns:1fr}
+@media(min-width:900px){.grid2{grid-template-columns:1.35fr 1fr}}
+
+/* ---------- charts ---------- */
+.chart{width:100%;overflow:visible}
+.chart text{font-family:'Poppins',sans-serif;fill:var(--ink-3);font-size:11px}
+.axis line,.axis path{stroke:var(--line);stroke-width:1}
+.gridline{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
+
+.bars{display:grid;gap:9px}
+.bar-row{display:grid;grid-template-columns:minmax(96px,1.1fr) 1fr auto;
+  gap:12px;align-items:center;font-size:13px}
+.bar-row__name{color:var(--ink);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.bar-row__track{height:15px;border-radius:5px;background:rgba(255,255,255,.05);
+  display:flex;overflow:hidden}
+/* 2px surface-coloured gap between adjacent segments, so two similar hues
+   never touch and read as one block. */
+.seg{height:100%;box-shadow:2px 0 0 0 var(--surface)}
+.seg:last-child{box-shadow:none}
+.seg:first-child{border-radius:5px 0 0 5px}
+.seg:last-child{border-radius:0 5px 5px 0}
+.bar-row__n{color:var(--ink-2);font-variant-numeric:tabular-nums;min-width:34px;
+  text-align:right}
+
+.mini{display:grid;gap:12px}
+.mini__row{display:grid;grid-template-columns:minmax(78px,auto) 1fr auto;
+  gap:10px;align-items:center;font-size:12.5px}
+.mini__track{height:8px;border-radius:4px;background:rgba(255,255,255,.05);overflow:hidden}
+.mini__fill{height:100%;border-radius:4px;background:var(--c-views)}
+.mini__n{color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ---------- table ---------- */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:660px}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+th{color:var(--ink-3);font-weight:600;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;user-select:none;position:sticky;top:0;
+  background:var(--surface)}
+th:hover{color:var(--ink)}
+th[aria-sort]{color:var(--gold)}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+td.venue{color:var(--ink)}
+td.venue small{display:block;color:var(--ink-3);font-size:11px}
+.zero{color:var(--ink-3)}
+/* A rate computed from a handful of views. Shown, but visibly not to be
+   trusted, rather than dropped — "we barely have data on this one" is itself
+   worth seeing. */
+td.thin{color:var(--ink-3)}
+.tip{position:fixed;pointer-events:none;z-index:50;background:#0a1128;
+  border:1px solid var(--line-2);border-radius:9px;padding:9px 11px;font-size:12.5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;transition:opacity .12s;max-width:250px}
+.tip b{color:var(--gold);font-weight:600}
+.tip div{color:var(--ink-2);display:flex;justify-content:space-between;gap:14px}
+.empty{color:var(--ink-3);text-align:center;padding:34px 0;font-size:13.5px}
+</style>
+</head>
+<body>
+
+<!-- Password gate. The check happens in /api/admin.js against an environment
+     variable — nothing here can be bypassed by reading the source, because
+     there is no secret in it. -->
+<div class="gate" id="gate">
+  <form class="gate__card" id="gate-form">
+    <div class="gate__mark">Feel<span style="color:#3b82f6">BG</span></div>
+    <p class="gate__hint">Venue traffic &amp; outbound clicks</p>
+    <label class="field">
+      <span>Password</span>
+      <input type="password" id="pw" autocomplete="current-password" required>
+    </label>
+    <button class="btn" style="width:100%" id="gate-btn" type="submit">Open dashboard</button>
+    <div class="err" id="gate-err"></div>
+  </form>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <div class="top">
+    <div>
+      <h1>Venue traffic</h1>
+      <p id="range-note"></p>
+    </div>
+    <div class="controls">
+      <select id="range" aria-label="Time range">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="365">Last 12 months</option>
+      </select>
+      <button class="btn btn--ghost" id="csv" type="button">Export CSV</button>
+      <button class="btn btn--ghost" id="out" type="button">Lock</button>
+    </div>
+  </div>
+
+  <div id="notice"></div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="panel">
+    <div class="panel__head"><h2>Views and clicks over time</h2></div>
+    <p class="panel__sub">A view is someone opening a venue's page. A click is someone leaving for that venue — reserving, calling, opening its site, or asking for directions.</p>
+    <ul class="legend">
+      <li><span class="swatch" style="background:var(--c-views)"></span>Views</li>
+      <li><span class="swatch" style="background:var(--gold)"></span>Clicks</li>
+    </ul>
+    <div id="trend"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <div class="panel__head"><h2>Where the clicks go</h2></div>
+      <p class="panel__sub">Top venues by outbound clicks, split by what the visitor did.</p>
+      <ul class="legend">
+        <li><span class="swatch" style="background:var(--c-reserve)"></span>Reserve</li>
+        <li><span class="swatch" style="background:var(--c-phone)"></span>Phone</li>
+        <li><span class="swatch" style="background:var(--c-website)"></span>Website</li>
+        <li><span class="swatch" style="background:var(--c-maps)"></span>Directions</li>
+      </ul>
+      <div id="topvenues"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__head"><h2>Who is arriving</h2></div>
+      <p class="panel__sub">Counted from the referring page, the pointer type and the chosen language. No cookies, no identifiers.</p>
+      <div id="breakdowns"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel__head">
+      <h2>Every venue</h2>
+      <span class="panel__sub" style="margin:0">Click a column to sort</span>
+    </div>
+    <div class="tablewrap">
+      <table id="table">
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="panel__sub" style="margin:14px 0 0">* Conversion from fewer than 10 views — too small a sample to read as a rate.</p>
+  </div>
+</div>
+
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var COLS = [
+    { k: 'name',       label: 'Venue',      t: 'text' },
+    { k: 'views',      label: 'Views',      t: 'n' },
+    { k: 'clicks',     label: 'Clicks',     t: 'n' },
+    { k: 'conversion', label: 'Conversion', t: 'pct' },
+    { k: 'reserve',    label: 'Reserve',    t: 'n' },
+    { k: 'phone',      label: 'Phone',      t: 'n' },
+    { k: 'website',    label: 'Website',    t: 'n' },
+    { k: 'maps',       label: 'Directions', t: 'n' }
+  ];
+  var CLICK_KEYS = [
+    { k: 'reserve', label: 'Reserve',    v: '--c-reserve' },
+    { k: 'phone',   label: 'Phone',      v: '--c-phone' },
+    { k: 'website', label: 'Website',    v: '--c-website' },
+    { k: 'maps',    label: 'Directions', v: '--c-maps' }
+  ];
+
+  /* Below this many views a conversion rate is noise, not a signal. */
+  var MIN_VIEWS_FOR_RATE = 10;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  var pct = function (x) { return x == null ? '—' : (x * 100).toFixed(x >= 0.1 ? 0 : 1) + '%'; };
+  var css = function (name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); };
+
+  // Kept in memory only. Reloading the page asks again, which is the right
+  // trade for a dashboard that shows commercial numbers.
+  var password = '';
+  var data = null;
+  var sort = { k: 'clicks', dir: -1 };
+
+  /* ---------------- data ---------------- */
+
+  function load(days) {
+    return fetch('/api/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: password, days: days })
+    }).then(function (r) {
+      return r.json().then(function (j) { return { status: r.status, body: j }; });
+    });
+  }
+
+  /* ---------------- tooltip ---------------- */
+
+  var tip = $('tip');
+  function showTip(html, e) {
+    tip.innerHTML = html;
+    tip.style.opacity = '1';
+    var pad = 14;
+    var x = Math.min(e.clientX + pad, window.innerWidth - tip.offsetWidth - 8);
+    var y = Math.max(e.clientY - tip.offsetHeight - pad, 8);
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.style.opacity = '0'; }
+
+  /* ---------------- trend (line) ---------------- */
+
+  function renderTrend(daily) {
+    var host = $('trend');
+    if (!daily.length) { host.innerHTML = '<p class="empty">No activity in this period yet.</p>'; return; }
+
+    var W = 900, H = 230, L = 38, R = 12, T = 12, B = 26;
+    var iw = W - L - R, ih = H - T - B;
+    var max = Math.max(1, daily.reduce(function (m, d) { return Math.max(m, d.views, d.clicks); }, 0));
+    var step = daily.length > 1 ? iw / (daily.length - 1) : 0;
+    var xAt = function (i) { return L + (daily.length > 1 ? i * step : iw / 2); };
+    var yAt = function (v) { return T + ih - (v / max) * ih; };
+    var path = function (key) {
+      return daily.map(function (d, i) { return (i ? 'L' : 'M') + xAt(i).toFixed(1) + ' ' + yAt(d[key]).toFixed(1); }).join(' ');
+    };
+
+    // Four gridlines is enough to read a value off; more would compete with
+    // the data for attention.
+    var ticks = [0, 0.25, 0.5, 0.75, 1].map(function (f) { return Math.round(max * f); })
+      .filter(function (v, i, a) { return a.indexOf(v) === i; });
+
+    var svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Views and clicks per day">';
+    ticks.forEach(function (v) {
+      svg += '<line class="gridline" x1="' + L + '" x2="' + (W - R) + '" y1="' + yAt(v).toFixed(1) + '" y2="' + yAt(v).toFixed(1) + '"/>' +
+             '<text x="' + (L - 8) + '" y="' + (yAt(v) + 4).toFixed(1) + '" text-anchor="end">' + v + '</text>';
+    });
+    svg += '<path d="' + path('views') + '" fill="none" stroke="' + css('--c-views') + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    svg += '<path d="' + path('clicks') + '" fill="none" stroke="' + css('--gold') + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+
+    // First and last date only — a label per day is unreadable at 90 days and
+    // adds nothing at 7.
+    svg += '<text x="' + L + '" y="' + (H - 6) + '">' + daily[0].date.slice(5) + '</text>';
+    if (daily.length > 1) svg += '<text x="' + (W - R) + '" y="' + (H - 6) + '" text-anchor="end">' + daily[daily.length - 1].date.slice(5) + '</text>';
+
+    // One invisible hit column per day, so the hover target is the whole
+    // column rather than a 2px line.
+    daily.forEach(function (d, i) {
+      var w = daily.length > 1 ? step : iw;
+      svg += '<rect x="' + (xAt(i) - w / 2).toFixed(1) + '" y="' + T + '" width="' + w.toFixed(1) + '" height="' + ih + '" fill="transparent" data-i="' + i + '"/>';
+    });
+    svg += '</svg>';
+    host.innerHTML = svg;
+
+    host.querySelector('svg').addEventListener('mousemove', function (e) {
+      var r = e.target.closest('rect[data-i]');
+      if (!r) return hideTip();
+      var d = daily[+r.dataset.i];
+      showTip('<b>' + d.date + '</b>' +
+        '<div><span>Views</span><span>' + d.views + '</span></div>' +
+        '<div><span>Clicks</span><span>' + d.clicks + '</span></div>', e);
+    });
+    host.addEventListener('mouseleave', hideTip);
+  }
+
+  /* ---------------- top venues (stacked bars) ---------------- */
+
+  function renderTop(venues) {
+    var host = $('topvenues');
+    var top = venues.filter(function (v) { return v.clicks > 0; })
+      .sort(function (a, b) { return b.clicks - a.clicks; }).slice(0, 10);
+    if (!top.length) { host.innerHTML = '<p class="empty">No outbound clicks yet.</p>'; return; }
+
+    var max = top[0].clicks;
+    host.innerHTML = '<div class="bars">' + top.map(function (v) {
+      var segs = CLICK_KEYS.filter(function (c) { return v[c.k] > 0; }).map(function (c) {
+        return '<span class="seg" style="width:' + (v[c.k] / v.clicks * 100) + '%;background:var(' + c.v + ')" ' +
+               'data-l="' + esc(c.label) + '" data-n="' + v[c.k] + '" data-v="' + esc(v.name) + '"></span>';
+      }).join('');
+      return '<div class="bar-row">' +
+        '<span class="bar-row__name" title="' + esc(v.name) + '">' + esc(v.name) + '</span>' +
+        '<span class="bar-row__track" style="width:' + Math.max(6, v.clicks / max * 100) + '%">' + segs + '</span>' +
+        '<span class="bar-row__n">' + v.clicks + '</span>' +
+        '</div>';
+    }).join('') + '</div>';
+
+    host.addEventListener('mousemove', function (e) {
+      var s = e.target.closest('.seg');
+      if (!s) return hideTip();
+      showTip('<b>' + esc(s.dataset.v) + '</b><div><span>' + esc(s.dataset.l) + '</span><span>' + s.dataset.n + '</span></div>', e);
+    });
+    host.addEventListener('mouseleave', hideTip);
+  }
+
+  /* ---------------- arrival breakdowns ---------------- */
+
+  function renderBreakdowns(d) {
+    var blocks = [
+      { title: 'Traffic source', rows: d.sources },
+      { title: 'Device', rows: d.devices },
+      { title: 'Language', rows: d.langs }
+    ];
+    $('breakdowns').innerHTML = blocks.map(function (b) {
+      if (!b.rows.length) return '';
+      var max = b.rows[0].n;
+      return '<h3 style="font-size:12px;letter-spacing:.09em;text-transform:uppercase;' +
+             'color:var(--ink-3);font-family:Poppins,sans-serif;margin:16px 0 10px">' + b.title + '</h3>' +
+        '<div class="mini">' + b.rows.slice(0, 6).map(function (r) {
+          return '<div class="mini__row"><span>' + esc(r.key) + '</span>' +
+            '<span class="mini__track"><span class="mini__fill" style="width:' + (r.n / max * 100) + '%"></span></span>' +
+            '<span class="mini__n">' + r.n + '</span></div>';
+        }).join('') + '</div>';
+    }).join('') || '<p class="empty">Nothing recorded yet.</p>';
+  }
+
+  /* ---------------- table ---------------- */
+
+  function renderTable(venues) {
+    $('thead').innerHTML = COLS.map(function (c) {
+      var active = sort.k === c.k;
+      return '<th data-k="' + c.k + '"' + (active ? ' aria-sort="' + (sort.dir < 0 ? 'descending' : 'ascending') + '"' : '') + '>' +
+        esc(c.label) + (active ? (sort.dir < 0 ? ' ↓' : ' ↑') : '') + '</th>';
+    }).join('');
+
+    var rows = venues.slice().sort(function (a, b) {
+      var x = a[sort.k], y = b[sort.k];
+      if (sort.k === 'name') return sort.dir * String(x).localeCompare(String(y));
+      // Venues with no views have no conversion; keep them last either way
+      // rather than letting null sort as zero and look like a real 0%.
+      if (x == null) return 1;
+      if (y == null) return -1;
+      return sort.dir * (x - y);
+    });
+
+    $('tbody').innerHTML = rows.map(function (v) {
+      return '<tr>' + COLS.map(function (c) {
+        if (c.k === 'name') {
+          return '<td class="venue">' + esc(v.name) + '<small>' + esc(v.area || v.type || '') + '</small></td>';
+        }
+        var val = v[c.k];
+        if (c.t === 'pct') {
+          // One view and one click is 100%, and sorting would put it above a
+          // venue with 45 views and 16. Marking the thin ones keeps the column
+          // honest without hiding them — the view count is right there to judge by.
+          if (val == null) return '<td class="zero">—</td>';
+          var thin = v.views < MIN_VIEWS_FOR_RATE;
+          return '<td' + (thin ? ' class="thin" title="Only ' + v.views + ' view' + (v.views === 1 ? '' : 's') + ' — too few to read as a rate"' : '') + '>' +
+            pct(val) + (thin ? ' *' : '') + '</td>';
+        }
+        return '<td' + (val ? '' : ' class="zero"') + '>' + (val || 0) + '</td>';
+      }).join('') + '</tr>';
+    }).join('');
+  }
+
+  $('thead').addEventListener('click', function (e) {
+    var th = e.target.closest('th');
+    if (!th || !data) return;
+    var k = th.dataset.k;
+    sort = { k: k, dir: sort.k === k ? -sort.dir : (k === 'name' ? 1 : -1) };
+    renderTable(data.venues);
+  });
+
+  /* ---------------- render ---------------- */
+
+  function render(d) {
+    data = d;
+    var t = d.totals;
+    var conv = t.views ? t.clicks / t.views : null;
+
+    $('notice').innerHTML = d.configured === false
+      ? '<div class="note">No log endpoint configured yet, so these are all zeroes. Deploy <code>referral-backend/Code.gs</code> and set <code>FEELBG_SHEETS_ENDPOINT</code> and <code>FEELBG_SHEETS_KEY</code> in Vercel.</div>'
+      : '';
+
+    $('tiles').innerHTML = [
+      ['Venue page views', t.views, 'people who opened a venue page'],
+      ['Outbound clicks', t.clicks, 'people who left for a venue'],
+      ['Conversion', pct(conv), 'clicks per view'],
+      ['Venues with activity', t.venuesWithActivity + ' / ' + t.venuesTotal, 'the rest had none']
+    ].map(function (r) {
+      return '<div class="tile"><div class="tile__k">' + r[0] + '</div>' +
+        '<div class="tile__v">' + r[1] + '</div>' +
+        '<div class="tile__sub">' + r[2] + '</div></div>';
+    }).join('');
+
+    $('range-note').textContent = 'Last ' + d.days + ' days · ' + t.views + ' views · ' + t.clicks + ' clicks';
+
+    renderTrend(d.daily);
+    renderTop(d.venues);
+    renderBreakdowns(d);
+    renderTable(d.venues);
+  }
+
+  function refresh() {
+    var days = +$('range').value;
+    return load(days).then(function (r) {
+      if (r.status === 200 && r.body.ok) { render(r.body); return true; }
+      return r.body;
+    });
+  }
+
+  /* ---------------- gate ---------------- */
+
+  $('gate-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('gate-btn');
+    var err = $('gate-err');
+    password = $('pw').value;
+    btn.disabled = true;
+    err.textContent = '';
+    refresh().then(function (res) {
+      if (res === true) {
+        $('gate').hidden = true;
+        $('app').hidden = false;
+        return;
+      }
+      password = '';
+      err.textContent = res && res.error === 'unauthorized' ? 'Wrong password.'
+        : res && res.error === 'not_configured' ? 'ADMIN_PASSWORD is not set on the server.'
+        : res && res.detail ? res.detail
+        : 'Could not load the data.';
+    }).catch(function () {
+      password = '';
+      err.textContent = 'Could not reach the server.';
+    }).then(function () { btn.disabled = false; });
+  });
+
+  // Reports failure in the page rather than through alert(): a modal dialog
+  // blocks the whole renderer until it is dismissed, which is a poor way to
+  // say "the network hiccuped" and freezes anything driving the page.
+  $('range').addEventListener('change', function () {
+    var note = $('range-note');
+    var was = note.textContent;
+    note.textContent = 'Loading…';
+    refresh().then(function (res) {
+      if (res !== true) note.textContent = was + '  ·  could not refresh';
+    }).catch(function () { note.textContent = was + '  ·  could not refresh'; });
+  });
+
+  $('out').addEventListener('click', function () { location.reload(); });
+
+  $('csv').addEventListener('click', function () {
+    if (!data) return;
+    var head = COLS.map(function (c) { return c.label; });
+    var lines = [head.join(',')].concat(data.venues.map(function (v) {
+      return COLS.map(function (c) {
+        var val = c.k === 'conversion' ? (v.conversion == null ? '' : (v.conversion * 100).toFixed(1)) : v[c.k];
+        return /[",\n]/.test(String(val)) ? '"' + String(val).replace(/"/g, '""') + '"' : val;
+      }).join(',');
+    }));
+    var url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'feelbg-venues-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+})();
+</script>
+</body>
+</html>

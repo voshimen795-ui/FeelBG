@@ -254,6 +254,26 @@
     line-height: 1.2;
 }
 
+/* The title is a real link to the venue's own page — that anchor is how a
+   crawler reaches the 96 generated venue pages at all, and without it they are
+   orphans nothing points to. It inherits the heading's colour so the card looks
+   exactly as it did, and only announces itself on hover and focus. */
+.place-card__permalink {
+    color: inherit;
+    text-decoration: none;
+}
+
+.place-card__permalink:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.place-card__permalink:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+}
+
 .place-card__rating {
     display: flex;
     align-items: center;

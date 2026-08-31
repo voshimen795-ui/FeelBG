@@ -4,6 +4,7 @@ var FEELBG_VENUES = {
     restaurants: [
         {
             name: "Temperament",
+            slug: "temperament",
             cuisine: "serbian",
             cuisineLabel: "Modern Serbian",
             price: "moderate",
@@ -24,6 +25,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Zlatni Bokal",
+            slug: "zlatni-bokal",
             cuisine: "serbian",
             cuisineLabel: "Traditional Serbian",
             price: "moderate",
@@ -43,6 +45,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Dva Jelena",
+            slug: "dva-jelena",
             cuisine: "serbian",
             cuisineLabel: "Traditional Serbian",
             price: "moderate",
@@ -63,6 +66,7 @@ var FEELBG_VENUES = {
     cafes: [
         {
             name: "Smokvica",
+            slug: "smokvica",
             cuisine: "coffee",
             cuisineLabel: "Specialty Coffee",
             price: "moderate",
@@ -79,6 +83,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Supermarket Concept Store",
+            slug: "supermarket-concept-store",
             cuisine: "coffee",
             cuisineLabel: "Specialty Coffee",
             price: "moderate",
@@ -94,6 +99,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Manufaktura",
+            slug: "manufaktura",
             cuisine: "coffee",
             cuisineLabel: "Cafe · Garden",
             price: "moderate",
@@ -110,6 +116,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Comunale Caffe",
+            slug: "comunale-caffe",
             cuisine: "coffee",
             cuisineLabel: "Cafe · Bar",
             price: "budget",
@@ -125,6 +132,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Kafeterija",
+            slug: "kafeterija",
             cuisine: "coffee",
             cuisineLabel: "Specialty Coffee",
             price: "budget",
@@ -141,6 +149,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Pržionica D59B",
+            slug: "przionica-d59b",
             cuisine: "coffee",
             cuisineLabel: "Coffee Roastery",
             price: "budget",
@@ -156,6 +165,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Hotel Moskva",
+            slug: "hotel-moskva",
             cuisine: "cocktail",
             cuisineLabel: "Cafe · Patisserie",
             price: "upscale",
@@ -172,6 +182,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Frans",
+            slug: "frans",
             cuisine: "wine",
             cuisineLabel: "Cafe · Wine Bar",
             price: "moderate",
@@ -190,6 +201,7 @@ var FEELBG_VENUES = {
     nightlife: [
         {
             name: "Money",
+            slug: "money",
             cuisine: "electronic",
             cuisineLabel: "Club · Electronic",
             price: "upscale",
@@ -206,6 +218,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Lasta",
+            slug: "lasta",
             cuisine: "mainstream",
             cuisineLabel: "Splav · Party",
             price: "moderate",
@@ -222,6 +235,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Leto",
+            slug: "leto",
             cuisine: "mainstream",
             cuisineLabel: "Splav · Lounge",
             price: "moderate",
@@ -237,6 +251,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Sindikat",
+            slug: "sindikat",
             cuisine: "electronic",
             cuisineLabel: "Club · Techno",
             price: "moderate",
@@ -256,6 +271,9 @@ var FEELBG_VENUES = {
     attractions: [
         {
             name: "Kalemegdan Fortress",
+            slug: "kalemegdan-fortress",
+            nameSr: "Kalemegdanska tvrđava",
+            slugSr: "kalemegdanska-tvrdjava",
             cuisine: "historic",
             cuisineLabel: "Historic Fortress",
             area: "Stari Grad",
@@ -266,7 +284,7 @@ var FEELBG_VENUES = {
                 "Ancient fortress at the confluence of the Sava and Danube rivers",
             lat: 44.8227,
             lng: 20.4513,
-            image: "assets/atractions/kalis.jfif",
+            image: "assets/atractions/kalis.jpg",
             hook:
                 "From the Victor terrace you look straight down at the seam where the green Sava pushes into the brown Danube — two colours of water that take a while to mix.",
             about:
@@ -279,6 +297,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Skadarlija Bohemian Quarter",
+            slug: "skadarlija-bohemian-quarter",
+            nameSr: "Skadarlija",
+            slugSr: "skadarlija",
             cuisine: "cultural",
             cuisineLabel: "Bohemian Street",
             area: "Stari Grad",
@@ -302,6 +323,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Ada Ciganlija",
+            slug: "ada-ciganlija",
             cuisine: "nature",
             cuisineLabel: "Beach · Recreation",
             area: "Čukarica",
@@ -325,6 +347,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Saint Sava Temple",
+            slug: "saint-sava-temple",
+            nameSr: "Hram Svetog Save",
+            slugSr: "hram-svetog-save",
             cuisine: "religious",
             cuisineLabel: "Orthodox Church",
             area: "Vračar",
@@ -348,6 +373,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Nikola Tesla Museum",
+            slug: "nikola-tesla-museum",
+            nameSr: "Muzej Nikole Tesle",
+            slugSr: "muzej-nikole-tesle",
             cuisine: "museum",
             cuisineLabel: "Science Museum",
             area: "Vračar",
@@ -371,6 +399,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Topčider Park",
+            slug: "topcider-park",
+            nameSr: "Park Topčider",
+            slugSr: "park-topcider",
             cuisine: "nature",
             cuisineLabel: "Royal Park",
             area: "Topčider",
@@ -393,6 +424,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Gardoš Tower",
+            slug: "gardos-tower",
+            nameSr: "Gardoš kula",
+            slugSr: "gardos-kula",
             cuisine: "historic",
             cuisineLabel: "Historic Tower",
             area: "Zemun",
@@ -416,6 +450,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "National Museum",
+            slug: "national-museum",
+            nameSr: "Narodni muzej",
+            slugSr: "narodni-muzej",
             cuisine: "museum",
             cuisineLabel: "Art & History Museum",
             area: "Stari Grad",
@@ -438,6 +475,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Zemun Quay",
+            slug: "zemun-quay",
+            nameSr: "Zemunski kej",
+            slugSr: "zemunski-kej",
             cuisine: "nature",
             cuisineLabel: "Riverside Walk",
             area: "Zemun",
@@ -461,6 +501,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Belgrade Fortress Military Museum",
+            slug: "belgrade-fortress-military-museum",
+            nameSr: "Vojni muzej",
+            slugSr: "vojni-muzej",
             cuisine: "museum",
             cuisineLabel: "Military Museum",
             area: "Stari Grad",
@@ -470,7 +513,7 @@ var FEELBG_VENUES = {
                 "Outdoor tanks and artillery plus indoor exhibits tracing Serbia's military history",
             lat: 44.823,
             lng: 20.4518,
-            image: "assets/atractions/miltary.jfif",
+            image: "assets/atractions/miltary.jpg",
             hook:
                 "The tanks sit outside on the ramparts where you can walk up and put a hand on them — including wreckage from the American stealth fighter shot down in 1999.",
             about:
@@ -483,6 +526,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Museum of Yugoslavia",
+            slug: "museum-of-yugoslavia",
+            nameSr: "Muzej Jugoslavije",
+            slugSr: "muzej-jugoslavije",
             cuisine: "museum",
             cuisineLabel: "History Museum",
             area: "Savski Venac",
@@ -497,6 +543,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Museum of Contemporary Art",
+            slug: "museum-of-contemporary-art",
+            nameSr: "Muzej savremene umetnosti",
+            slugSr: "muzej-savremene-umetnosti",
             cuisine: "museum",
             cuisineLabel: "Modern Art Museum",
             area: "Novi Beograd",
@@ -510,6 +559,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Ethnographic Museum",
+            slug: "ethnographic-museum",
+            nameSr: "Etnografski muzej",
+            slugSr: "etnografski-muzej",
             cuisine: "museum",
             cuisineLabel: "Ethnographic Museum",
             area: "Stari Grad",
@@ -523,6 +575,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Ružica Church",
+            slug: "ruzica-church",
+            nameSr: "Crkva Ružica",
+            slugSr: "crkva-ruzica",
             cuisine: "religious",
             cuisineLabel: "Orthodox Church",
             area: "Stari Grad",
@@ -537,6 +592,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "St. Petka Chapel",
+            slug: "st-petka-chapel",
+            nameSr: "Kapela Svete Petke",
+            slugSr: "kapela-svete-petke",
             cuisine: "religious",
             cuisineLabel: "Chapel · Holy Spring",
             area: "Stari Grad",
@@ -550,6 +608,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Saborna Crkva",
+            slug: "saborna-crkva",
             cuisine: "religious",
             cuisineLabel: "Cathedral Church",
             area: "Stari Grad",
@@ -563,6 +622,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "St. Mark's Church",
+            slug: "st-marks-church",
+            nameSr: "Crkva Svetog Marka",
+            slugSr: "crkva-svetog-marka",
             cuisine: "religious",
             cuisineLabel: "Orthodox Church",
             area: "Palilula",
@@ -577,6 +639,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Alexander Nevsky Church",
+            slug: "alexander-nevsky-church",
+            nameSr: "Crkva Aleksandra Nevskog",
+            slugSr: "crkva-aleksandra-nevskog",
             cuisine: "religious",
             cuisineLabel: "Orthodox Church",
             area: "Dorćol",
@@ -590,6 +655,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Tašmajdan Park",
+            slug: "tasmajdan-park",
+            nameSr: "Tašmajdan",
+            slugSr: "tasmajdan",
             cuisine: "nature",
             cuisineLabel: "City Park",
             area: "Palilula",
@@ -603,6 +671,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Košutnjak Forest",
+            slug: "kosutnjak-forest",
+            nameSr: "Šuma Košutnjak",
+            slugSr: "suma-kosutnjak",
             cuisine: "nature",
             cuisineLabel: "Forest Park",
             area: "Čukarica",
@@ -617,6 +688,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Jevremovac Botanical Garden",
+            slug: "jevremovac-botanical-garden",
+            nameSr: "Botanička bašta Jevremovac",
+            slugSr: "botanicka-basta-jevremovac",
             cuisine: "nature",
             cuisineLabel: "Botanical Garden",
             area: "Stari Grad",
@@ -630,6 +704,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Ušće Shopping Center",
+            slug: "usce-shopping-center",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Novi Beograd",
@@ -644,6 +719,9 @@ var FEELBG_VENUES = {
         },
         {
             name: "Galerija Belgrade",
+            slug: "galerija-belgrade",
+            nameSr: "Galerija Beograd",
+            slugSr: "galerija-beograd",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Savski Venac",
@@ -658,6 +736,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Rajićeva Shopping Center",
+            slug: "rajiceva-shopping-center",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Stari Grad",
@@ -671,6 +750,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Delta City",
+            slug: "delta-city",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Novi Beograd",
@@ -684,6 +764,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "BEO Shopping Center",
+            slug: "beo-shopping-center",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Voždovac",
@@ -697,6 +778,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Stadion Shopping Center",
+            slug: "stadion-shopping-center",
             cuisine: "shopping",
             cuisineLabel: "Shopping Centre",
             area: "Voždovac",
@@ -710,6 +792,7 @@ var FEELBG_VENUES = {
         },
         {
             name: "Avala",
+            slug: "avala",
             cuisine: "nature",
             cuisineLabel: "Forest Park",
             area: "Voždovac",
@@ -724,6 +807,9 @@ var FEELBG_VENUES = {
             },
         {
             name: "Ušće Park",
+            slug: "usce-park",
+            nameSr: "Park Ušće",
+            slugSr: "park-usce",
             cuisine: "nature",
             cuisineLabel: "Riverside Park",
             area: "Novi Beograd",
@@ -737,6 +823,9 @@ var FEELBG_VENUES = {
             },
         {
             name: "Zvezdara Forest",
+            slug: "zvezdara-forest",
+            nameSr: "Zvezdarska šuma",
+            slugSr: "zvezdarska-suma",
             cuisine: "nature",
             cuisineLabel: "Forest Park",
             area: "Zvezdara",
@@ -750,6 +839,7 @@ var FEELBG_VENUES = {
             },
         {
             name: "Pionirski Park",
+            slug: "pionirski-park",
             cuisine: "nature",
             cuisineLabel: "City Park",
             area: "Stari Grad",
@@ -763,6 +853,9 @@ var FEELBG_VENUES = {
             },
         {
             name: "Great War Island",
+            slug: "great-war-island",
+            nameSr: "Veliko ratno ostrvo",
+            slugSr: "veliko-ratno-ostrvo",
             cuisine: "nature",
             cuisineLabel: "Nature Reserve",
             area: "Zemun",
@@ -777,6 +870,9 @@ var FEELBG_VENUES = {
             },
         {
             name: "Banjica Forest",
+            slug: "banjica-forest",
+            nameSr: "Banjička šuma",
+            slugSr: "banjicka-suma",
             cuisine: "nature",
             cuisineLabel: "Forest Park",
             area: "Voždovac",
