@@ -27,21 +27,39 @@ class BookingChatbot {
                 e.preventDefault();
                 e.stopPropagation();
                 let venue = trigger.getAttribute('data-booking');
-                if (!venue) {
-                    const card = trigger.closest('.place-card');
-                    if (card) {
+                let venueId = '';
+                const card = trigger.closest('.place-card');
+                const overlay = trigger.closest('.vcard-overlay');
+                if (card) {
+                    venueId = card.dataset.venueSlug || '';
+                    if (!venue) {
                         const title = card.querySelector('.place-card__title');
                         venue = title ? title.textContent.trim() : '';
                     }
+                } else if (overlay) {
+                    venueId = overlay.dataset.venueSlug || '';
+                    venue = overlay.dataset.venueName || venue;
                 }
-                this.open(venue || 'FeelBG Reservation');
+                this.open(venue || 'FeelBG Reservation', venueId);
             }
         });
     }
 
-    open(venue) {
+    open(venue, venueId) {
         this.step = 0;
         this.answers = { venue: venue || 'FeelBG Reservation', guests: '', time: '', requests: '' };
+        this.venueId = venueId || '';
+
+        // Record the intent, not just the completion. Until now the first row
+        // written was code_generated in showSummary(), which only fires after
+        // all three questions are answered — so everyone who opened the chat
+        // and thought better of it was invisible, and the drop-off between
+        // "wanted to book" and "booked" could not be seen at all.
+        // Hooked here rather than on the [data-booking] listener because
+        // js/reserve-picker.js opens the chatbot directly and would be missed.
+        if (window.FeelBGReferral) {
+            window.FeelBGReferral.track('reserve_clicked', this.answers.venue, '', this.venueId);
+        }
         if (document.getElementById('booking-chatbot-modal')) {
             document.getElementById('booking-chatbot-modal').remove();
         }
@@ -213,14 +231,14 @@ class BookingChatbot {
                 'bot'
             );
             document.getElementById('bcb-wa-link')?.addEventListener('click', () => {
-                if (window.FeelBGReferral) window.FeelBGReferral.track('whatsapp_booking_initiated', this.answers.venue, this.referralCode);
+                if (window.FeelBGReferral) window.FeelBGReferral.track('whatsapp_booking_initiated', this.answers.venue, this.referralCode, this.venueId);
             });
             document.getElementById('bcb-voucher-btn')?.addEventListener('click', () => this.showVoucher());
         }, 500);
     }
 
     showVoucher() {
-        if (window.FeelBGReferral) window.FeelBGReferral.track('voucher_viewed', this.answers.venue, this.referralCode);
+        if (window.FeelBGReferral) window.FeelBGReferral.track('voucher_viewed', this.answers.venue, this.referralCode, this.venueId);
         const existing = document.getElementById('bcb-voucher-overlay');
         if (existing) existing.remove();
         const dateStr = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });

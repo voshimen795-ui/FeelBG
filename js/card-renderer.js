@@ -136,7 +136,7 @@ class CardRenderer {
         var pillsHtml = this.pillsHtml(venue);
 
         return '\
-            <div class="place-card" data-cuisine="' + venue.cuisine + '" data-price="' + (venue.price || 'free') + '" data-area="' + venue.area.toLowerCase().replace(/[^a-z]/g, '-') + '" data-rating="' + venue.rating + '" data-lat="' + venue.lat + '" data-lng="' + venue.lng + '" data-name="' + venue.name.replace(/"/g, '&quot;') + '">\
+            <div class="place-card" data-cuisine="' + venue.cuisine + '" data-price="' + (venue.price || 'free') + '" data-area="' + venue.area.toLowerCase().replace(/[^a-z]/g, '-') + '" data-rating="' + venue.rating + '" data-lat="' + venue.lat + '" data-lng="' + venue.lng + '" data-name="' + venue.name.replace(/"/g, '&quot;') + '" data-venue-slug="' + (venue.slug || '') + '">\
                 <div class="place-card__image" style="background-image:url(\'' + venue.image + '\');background-size:cover;background-position:center;">\
                     ' + badgeHtml + '\
                     <div class="place-card__heart"><i class="far fa-heart"></i></div>\

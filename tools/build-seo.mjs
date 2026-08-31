@@ -560,6 +560,25 @@ function siteFooter(lang) {
     </footer>`;
 }
 
+/**
+ * Records that this venue page was looked at.
+ *
+ * This is the denominator the dashboard divides by: without a view count,
+ * "three people clicked Reserve" says nothing about whether that is good.
+ *
+ * It waits for load rather than firing immediately so it never competes with
+ * rendering, and it is a no-op when referral.js is blocked or absent.
+ */
+function viewBeacon() {
+    return `    <script>
+        window.addEventListener('load', function () {
+            if (!window.FeelBGReferral) return;
+            var b = document.body;
+            window.FeelBGReferral.track('venue_view', b.dataset.venueName || '', '', b.dataset.venueSlug || '');
+        });
+    <\/script>`;
+}
+
 function scriptTags() {
     return SCRIPTS.map((s) => `    <script src="/${s}"></script>`).join('\n') + `
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -614,14 +633,14 @@ function venuePage(v, lang) {
         [s.area, esc(v.area)],
         v.hours ? [s.hours, esc(v.hours)] : null,
         v.phone ? [s.phone, `<a href="tel:${esc(v.phone.replace(/\s/g, ''))}">${esc(v.phone)}</a>`] : null,
-        v.website ? [s.website, `<a href="https://${esc(v.website)}" rel="noopener nofollow" target="_blank">${esc(v.website)}</a>`] : null,
+        v.website ? [s.website, `<a href="https://${esc(v.website)}" rel="noopener nofollow" target="_blank" data-venue-website>${esc(v.website)}</a>`] : null,
         v.priceLabel ? [s.price, esc(priceText(v, lang))] : null,
         [s.category, esc(label)],
     ].filter(Boolean);
 
     const related = relatedFor(v, lang);
 
-    const body = `<body data-page="venue" data-venue-type="${v.type}" data-venue-slug="${esc(v.slug)}">
+    const body = `<body data-page="venue" data-venue-type="${v.type}" data-venue-slug="${esc(v.slug)}" data-venue-name="${esc(v.name)}">
 ${CURSOR}
 ${siteHeader(lang)}
 
@@ -683,6 +702,7 @@ ${g.items.map(({ v: x, note }) => `                    <li><a href="${pathFor(x,
 ${siteFooter(lang)}
 
 ${scriptTags()}
+${viewBeacon()}
 </body>
 </html>
 `;

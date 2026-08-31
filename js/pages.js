@@ -542,10 +542,15 @@ class PlaceDetails {
         const facts = [];
         if (venue && venue.hours) facts.push([t('card.hours'), esc(venue.hours)]);
         if (venue && venue.phone) facts.push([t('card.phone'), `<a href="tel:${esc(venue.phone.replace(/\s/g, ''))}">${esc(venue.phone)}</a>`]);
-        if (venue && venue.website) facts.push([t('card.website'), `<a href="https://${esc(venue.website)}" target="_blank" rel="noopener">${esc(venue.website)}</a>`]);
+        if (venue && venue.website) facts.push([t('card.website'), `<a href="https://${esc(venue.website)}" target="_blank" rel="noopener" data-venue-website>${esc(venue.website)}</a>`]);
 
         const overlay = document.createElement('div');
         overlay.className = 'vcard-overlay';
+        // The tracker reads the venue's stable id from here. The popup's
+        // heading is the *translated* title, so it cannot be the key — the same
+        // venue would file one row per language.
+        overlay.dataset.venueSlug = (venue && venue.slug) || '';
+        overlay.dataset.venueName = (venue && venue.name) || '';
         overlay.setAttribute('role', 'dialog');
         overlay.setAttribute('aria-modal', 'true');
         overlay.setAttribute('aria-label', title);
@@ -591,7 +596,7 @@ class PlaceDetails {
                         </button>` : ''}
                     ${hasCoords ? `
                         <button class="vcard__btn detail-modal__route-btn" type="button"
-                                data-route-lat="${esc(venue.lat)}" data-route-lng="${esc(venue.lng)}" data-route-name="${esc(title)}">
+                                data-route-lat="${esc(venue.lat)}" data-route-lng="${esc(venue.lng)}" data-route-name="${esc(title)}" data-route-slug="${esc((venue && venue.slug) || '')}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4"/></svg>
                             ${esc(t('card.directions'))}
                         </button>` : ''}

@@ -91,7 +91,7 @@
 }
     </script>
 </head>
-<body data-page="venue" data-venue-type="attractions" data-venue-slug="topcider-park">
+<body data-page="venue" data-venue-type="attractions" data-venue-slug="topcider-park" data-venue-name="Topčider Park">
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
     <header class="header scroll-header" id="header">
@@ -226,5 +226,12 @@
     <script src="/js/script.js"></script>
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script defer src="/_vercel/insights/script.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            if (!window.FeelBGReferral) return;
+            var b = document.body;
+            window.FeelBGReferral.track('venue_view', b.dataset.venueName || '', '', b.dataset.venueSlug || '');
+        });
+    </script>
 </body>
 </html>
