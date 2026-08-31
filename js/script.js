@@ -564,16 +564,18 @@ const initAOS = () => {
 
 class PageVisibility {
     constructor() {
+        // Restore the title this page was actually served with. The old code
+        // put back a hard-coded "Feelbg - Modern Elegance", so every page —
+        // including the 96 venue pages, each with its own title written for
+        // search results — lost it permanently the first time the reader
+        // switched tabs, taking the bookmark and history entry with it.
+        this.originalTitle = document.title;
         this.init();
     }
 
     init() {
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                document.title = '👋 Come back!';
-            } else {
-                document.title = 'Feelbg - Modern Elegance';
-            }
+            document.title = document.hidden ? '👋 Come back!' : this.originalTitle;
         });
     }
 }

@@ -720,12 +720,24 @@ class PlaceDetails {
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('restaurants-grid') || document.getElementById('places-grid');
     if (grid && window.CardRenderer && window.FEELBG_VENUES) {
-        const path = window.location.pathname;
-        if (path.includes('restaurants')) CardRenderer.renderByType('restaurants', grid.id);
-        else if (path.includes('cafes')) CardRenderer.renderByType('cafes', grid.id);
-        else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
-        else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
-        else CardRenderer.renderAll(grid.id);
+        // The category pages now ship their cards in the HTML (tools/build-seo.mjs),
+        // so a crawler sees them without running any of this. When the markup on
+        // the page is already in the reader's language there is nothing to do —
+        // re-rendering identical nodes only throws away the elements gsap-fx.js
+        // is about to attach its scroll animation to.
+        //
+        // Note this only skips the render; PlaceFiltering below must still be
+        // constructed either way, or the details popup never binds.
+        const lang = CardRenderer.currentLang();
+        if (grid.dataset.prerendered !== lang) {
+            const path = window.location.pathname;
+            if (path.includes('restaurants')) CardRenderer.renderByType('restaurants', grid.id);
+            else if (path.includes('cafes')) CardRenderer.renderByType('cafes', grid.id);
+            else if (path.includes('nightlife')) CardRenderer.renderByType('nightlife', grid.id);
+            else if (path.includes('attractions')) CardRenderer.renderByType('attractions', grid.id);
+            else CardRenderer.renderAll(grid.id);
+            grid.dataset.prerendered = lang;
+        }
     }
     window._placeFilteringInstance = new PlaceFiltering();
     new LoadMoreFeature();
