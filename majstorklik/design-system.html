@@ -1,0 +1,338 @@
+<!--
+  MajstorKlik — Dizajn sistem / styleguide
+  Referentna stranica: svi tokeni i komponente na jednom mestu.
+  Kad praviš novu stranicu (blog, stranica po opštini, landing za kampanju),
+  kopiraš :root blok odavde i koristiš iste klase — sve ostaje konzistentno.
+-->
+<title>MajstorKlik — Dizajn sistem</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎛️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy-900:#0a1826; --navy-800:#0e2033; --navy-700:#12283f; --navy-600:#1a3b5c;
+  --navy-500:#24507a; --navy-400:#3d6c99; --navy-200:#a8c0d6; --navy-50:#eef4f9;
+
+  --accent-700:#c94f1c; --accent-600:#e4622a; --accent-500:#ff7a3d; --accent-400:#ff9663;
+  --accent-200:#ffd0b8; --accent-50:#fff3ec;
+
+  --slate-900:#101820; --slate-800:#1a2530; --slate-600:#44576b; --slate-500:#5b6b7a;
+  --slate-400:#8496a6; --slate-300:#c3ced8; --slate-200:#e4e8ec; --slate-100:#f0f3f6;
+  --slate-50:#f7f8fa; --white:#ffffff;
+
+  --success:#17936a; --success-bg:#e8f6f1;
+  --danger:#c1382a;  --danger-bg:#fdeceb;
+  --whatsapp:#25D366;
+
+  --bg:var(--slate-50); --surface:var(--white); --ink:var(--slate-800);
+  --ink-muted:var(--slate-500); --border:var(--slate-200);
+
+  --font:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px; --s-20:80px; --s-24:96px;
+
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:26px; --r-full:999px;
+
+  --e-1:0 1px 2px rgba(16,24,32,.06),0 1px 3px rgba(16,24,32,.04);
+  --e-2:0 4px 10px rgba(16,24,32,.06),0 2px 4px rgba(16,24,32,.04);
+  --e-3:0 12px 28px rgba(16,24,32,.10),0 4px 10px rgba(16,24,32,.05);
+  --e-4:0 24px 56px rgba(16,24,32,.16),0 8px 20px rgba(16,24,32,.08);
+  --glow:0 10px 30px rgba(255,122,61,.38);
+
+  --dur-fast:140ms; --dur:240ms; --dur-slow:520ms;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin-inline:auto;padding:0 var(--s-5)}
+code{font-family:var(--mono);font-size:.8rem;background:var(--slate-100);border:1px solid var(--border);
+  padding:2px 7px;border-radius:6px;color:var(--navy-600)}
+
+/* header */
+.ds-head{background:linear-gradient(150deg,var(--navy-800),var(--navy-900));color:#fff;padding:var(--s-20) 0 var(--s-16)}
+.ds-head h1{font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.03em;font-weight:800}
+.ds-head p{color:#b9cadb;margin-top:var(--s-4);max-width:600px}
+.ds-badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(255,122,61,.18);color:var(--accent-400);padding:6px 13px;border-radius:var(--r-full);margin-bottom:var(--s-4)}
+
+/* sections */
+.ds-sec{padding-block:var(--s-16);border-bottom:1px solid var(--border)}
+.ds-sec h2{font-size:1.7rem;letter-spacing:-.02em;font-weight:800}
+.ds-sec > .wrap > p.sub{color:var(--ink-muted);margin-top:var(--s-2);margin-bottom:var(--s-8);max-width:620px}
+h3.ds-sub{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-400);
+  font-weight:700;margin:var(--s-8) 0 var(--s-4)}
+
+/* swatches */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s-3)}
+.sw{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:var(--surface);box-shadow:var(--e-1)}
+.sw-chip{height:78px}
+.sw-meta{padding:10px 12px;font-size:.75rem}
+.sw-meta b{display:block;font-size:.8rem;font-weight:700}
+.sw-meta span{color:var(--ink-muted);font-family:var(--mono);font-size:.7rem}
+
+/* type scale */
+.type-row{display:flex;align-items:baseline;gap:var(--s-5);padding:var(--s-4) 0;border-bottom:1px dashed var(--border);flex-wrap:wrap}
+.type-row .label{font-family:var(--mono);font-size:.72rem;color:var(--slate-400);min-width:130px}
+
+/* spacing */
+.space-row{display:flex;align-items:center;gap:var(--s-4);padding:7px 0}
+.space-bar{height:16px;background:linear-gradient(90deg,var(--accent-500),var(--accent-400));border-radius:4px}
+.space-row .label{font-family:var(--mono);font-size:.74rem;color:var(--slate-500);min-width:118px}
+
+/* boxes */
+.demo{display:flex;flex-wrap:wrap;gap:var(--s-4);align-items:center}
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:var(--s-4)}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:var(--s-6);text-align:center;font-size:.78rem;color:var(--ink-muted);font-family:var(--mono)}
+
+/* buttons (iste klase kao na sajtu) */
+.btn{--btn-bg:var(--accent-500);--btn-fg:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--btn-bg);color:var(--btn-fg);padding:15px 24px;border-radius:var(--r-md);border:0;cursor:pointer;
+  font-weight:700;font-size:1rem;box-shadow:var(--glow);text-decoration:none;
+  transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur) var(--ease),background var(--dur) var(--ease)}
+.btn:hover{background:var(--accent-600);transform:translateY(-2px)}
+.btn-lg{padding:18px 32px;font-size:1.06rem}
+.btn-navy{--btn-bg:var(--navy-700);box-shadow:none}
+.btn-navy:hover{background:var(--navy-600)}
+.btn-wa{--btn-bg:var(--whatsapp);box-shadow:0 10px 26px rgba(37,211,102,.34)}
+.btn-wa:hover{background:#1fb857}
+.btn-outline{--btn-bg:transparent;--btn-fg:var(--navy-700);border:1.5px solid var(--border);box-shadow:none}
+.btn-outline:hover{background:var(--slate-100);border-color:var(--slate-300)}
+
+/* form bits */
+.input{width:100%;padding:15px var(--s-4);border-radius:var(--r-md);border:1.5px solid var(--border);
+  background:var(--slate-50);font-family:inherit;font-size:1rem}
+.input:focus{outline:none;border-color:var(--accent-500);background:#fff;box-shadow:0 0 0 4px var(--accent-50)}
+.chip{display:inline-flex;align-items:center;gap:9px;border:1.5px solid var(--border);background:var(--slate-50);
+  border-radius:var(--r-md);padding:13px 18px;font-size:.9rem;font-weight:600;cursor:pointer}
+.chip.is-active{border-color:var(--accent-500);background:var(--accent-50);box-shadow:0 0 0 3px rgba(255,122,61,.14)}
+.tag{font-size:.72rem;font-weight:600;color:var(--navy-500);background:var(--navy-50);
+  border-radius:var(--r-full);padding:5px 11px;display:inline-block}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--s-6);
+  transition:transform var(--dur) var(--ease-out-expo),box-shadow var(--dur) var(--ease)}
+.card:hover{transform:translateY(-5px);box-shadow:var(--e-3)}
+.card-icon{width:52px;height:52px;border-radius:var(--r-md);display:grid;place-items:center;font-size:25px;
+  background:linear-gradient(135deg,var(--accent-50),#ffe3d2);border:1px solid var(--accent-200);margin-bottom:var(--s-4)}
+.card h4{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.card p{font-size:.86rem;color:var(--ink-muted);margin-top:6px}
+
+/* elevation demo */
+.elev{height:96px;border-radius:var(--r-md);background:var(--surface);display:grid;place-items:center;
+  font-family:var(--mono);font-size:.74rem;color:var(--ink-muted)}
+
+/* rules table */
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+th,td{text-align:left;padding:13px var(--s-4);border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--slate-100);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;color:var(--slate-500)}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+
+footer.ds-foot{padding:var(--s-12) 0;text-align:center;color:var(--slate-400);font-size:.8rem}
+</style>
+
+<div class="ds-head">
+  <div class="wrap">
+    <span class="ds-badge">Dizajn sistem v1.0</span>
+    <h1>MajstorKlik — vizuelni jezik</h1>
+    <p>Svi tokeni, komponente i pravila na jednom mestu. Kad praviš novu stranicu (landing po opštini, blog, stranica za kampanju), kopiraš <code style="color:#ffd0b8;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)">:root</code> blok i koristiš iste klase — sve ostaje konzistentno.</p>
+  </div>
+</div>
+
+<!-- BOJE -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>1. Boje</h2>
+    <p class="sub">Navy nosi poverenje i ozbiljnost (pozadine, tekst, header), narandžasta je rezervisana isključivo za akciju — dugmad i ključne akcente. Nikad ne koristi narandžastu za veće površine: ona gubi snagu ako je ima previše.</p>
+
+    <h3 class="ds-sub">Brand · Navy</h3>
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-900)"></div><div class="sw-meta"><b>navy-900</b><span>#0a1826</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-800)"></div><div class="sw-meta"><b>navy-800</b><span>#0e2033</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-700)"></div><div class="sw-meta"><b>navy-700</b><span>#12283f</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-600)"></div><div class="sw-meta"><b>navy-600</b><span>#1a3b5c</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-500)"></div><div class="sw-meta"><b>navy-500</b><span>#24507a</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-200)"></div><div class="sw-meta"><b>navy-200</b><span>#a8c0d6</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--navy-50)"></div><div class="sw-meta"><b>navy-50</b><span>#eef4f9</span></div></div>
+    </div>
+
+    <h3 class="ds-sub">Akcent · Narandžasta (samo akcije)</h3>
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-700)"></div><div class="sw-meta"><b>accent-700</b><span>#c94f1c</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-600)"></div><div class="sw-meta"><b>accent-600</b><span>#e4622a</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-500)"></div><div class="sw-meta"><b>accent-500</b><span>#ff7a3d</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-400)"></div><div class="sw-meta"><b>accent-400</b><span>#ff9663</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-200)"></div><div class="sw-meta"><b>accent-200</b><span>#ffd0b8</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-50)"></div><div class="sw-meta"><b>accent-50</b><span>#fff3ec</span></div></div>
+    </div>
+
+    <h3 class="ds-sub">Neutralne + statusne</h3>
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:var(--slate-800)"></div><div class="sw-meta"><b>slate-800</b><span>tekst</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--slate-500)"></div><div class="sw-meta"><b>slate-500</b><span>prigušen tekst</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--slate-200)"></div><div class="sw-meta"><b>slate-200</b><span>ivice</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--slate-50)"></div><div class="sw-meta"><b>slate-50</b><span>pozadina</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--success)"></div><div class="sw-meta"><b>success</b><span>#17936a</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--danger)"></div><div class="sw-meta"><b>danger</b><span>#c1382a</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--whatsapp)"></div><div class="sw-meta"><b>whatsapp</b><span>#25D366</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOGRAFIJA -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>2. Tipografija</h2>
+    <p class="sub">Jedan font — <b>Manrope</b>. Naslovi idu 800 sa negativnim tracking-om (zbijeno = premium), telo teksta 400/500 sa opuštenim proredom 1.62 radi čitljivosti na mobilnom.</p>
+    <div class="type-row"><span class="label">--fs-display / 800</span><span style="font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;letter-spacing:-.028em;line-height:1.08">Proveren majstor</span></div>
+    <div class="type-row"><span class="label">--fs-h1 / 800</span><span style="font-size:clamp(2rem,4.4vw,3.1rem);font-weight:800;letter-spacing:-.028em">Naslov stranice</span></div>
+    <div class="type-row"><span class="label">--fs-h2 / 800</span><span style="font-size:clamp(1.6rem,3.2vw,2.35rem);font-weight:800;letter-spacing:-.028em">Naslov sekcije</span></div>
+    <div class="type-row"><span class="label">--fs-h3 / 700</span><span style="font-size:1.15rem;font-weight:700">Naslov kartice</span></div>
+    <div class="type-row"><span class="label">--fs-lead / 400</span><span style="font-size:1.15rem;color:var(--ink-muted)">Uvodni pasus ispod naslova, malo veći od tela teksta.</span></div>
+    <div class="type-row"><span class="label">--fs-body / 400</span><span>Osnovni tekst — 1rem, prored 1.62.</span></div>
+    <div class="type-row"><span class="label">--fs-sm / 400</span><span style="font-size:.875rem;color:var(--ink-muted)">Sitniji tekst: opisi kartica, pomoćni tekst u formi.</span></div>
+    <div class="type-row"><span class="label">--fs-xs / 700</span><span style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-500)">Eyebrow / oznaka</span></div>
+  </div>
+</section>
+
+<!-- SPACING -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>3. Razmak</h2>
+    <p class="sub">Baza je 4px. Sve margine i paddingi biraju se iz ove skale — nikad „na oko“. Sekcije dišu na <code>--s-24</code> (96px) na desktopu, <code>--s-16</code> (64px) na mobilnom.</p>
+    <div class="space-row"><span class="label">--s-1 · 4px</span><div class="space-bar" style="width:4px"></div></div>
+    <div class="space-row"><span class="label">--s-2 · 8px</span><div class="space-bar" style="width:8px"></div></div>
+    <div class="space-row"><span class="label">--s-3 · 12px</span><div class="space-bar" style="width:12px"></div></div>
+    <div class="space-row"><span class="label">--s-4 · 16px</span><div class="space-bar" style="width:16px"></div></div>
+    <div class="space-row"><span class="label">--s-6 · 24px</span><div class="space-bar" style="width:24px"></div></div>
+    <div class="space-row"><span class="label">--s-8 · 32px</span><div class="space-bar" style="width:32px"></div></div>
+    <div class="space-row"><span class="label">--s-12 · 48px</span><div class="space-bar" style="width:48px"></div></div>
+    <div class="space-row"><span class="label">--s-16 · 64px</span><div class="space-bar" style="width:64px"></div></div>
+    <div class="space-row"><span class="label">--s-24 · 96px</span><div class="space-bar" style="width:96px"></div></div>
+  </div>
+</section>
+
+<!-- RADIUS + SENKE -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>4. Zaobljenja i senke</h2>
+    <p class="sub">Što je element veći, to je zaobljenje veće. Senke rastu sa „visinom“ elementa: kartica u mirovanju je <code>--e-1</code>, na hover <code>--e-3</code>, modal/forma <code>--e-4</code>.</p>
+    <h3 class="ds-sub">Radius</h3>
+    <div class="demo">
+      <div class="box" style="border-radius:var(--r-sm);width:130px">--r-sm · 8</div>
+      <div class="box" style="border-radius:var(--r-md);width:130px">--r-md · 12</div>
+      <div class="box" style="border-radius:var(--r-lg);width:130px">--r-lg · 18</div>
+      <div class="box" style="border-radius:var(--r-xl);width:130px">--r-xl · 26</div>
+      <div class="box" style="border-radius:var(--r-full);width:150px">--r-full</div>
+    </div>
+    <h3 class="ds-sub">Elevacija</h3>
+    <div class="demo-grid">
+      <div class="elev" style="box-shadow:var(--e-1)">--e-1</div>
+      <div class="elev" style="box-shadow:var(--e-2)">--e-2</div>
+      <div class="elev" style="box-shadow:var(--e-3)">--e-3</div>
+      <div class="elev" style="box-shadow:var(--e-4)">--e-4</div>
+      <div class="elev" style="box-shadow:var(--glow);background:var(--accent-500);color:#fff">--glow</div>
+    </div>
+  </div>
+</section>
+
+<!-- DUGMAD -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>5. Dugmad</h2>
+    <p class="sub">Pravilo: <b>jedno narandžasto dugme po ekranu</b>. Ono je glavna akcija (pošalji upit). Sve ostalo je navy, outline ili WhatsApp zeleno.</p>
+    <div class="demo">
+      <button class="btn btn-lg">Zatraži procenu</button>
+      <button class="btn">Primarno</button>
+      <button class="btn btn-wa">💬 WhatsApp</button>
+      <button class="btn btn-navy">📞 Pozovi</button>
+      <button class="btn btn-outline">Sekundarno</button>
+    </div>
+    <table style="margin-top:var(--s-8)">
+      <tr><th>Klasa</th><th>Kada se koristi</th></tr>
+      <tr><td><code>.btn</code></td><td>Glavna konverzija — slanje upita, procena. Maksimalno jedno po ekranu.</td></tr>
+      <tr><td><code>.btn-wa</code></td><td>Sve što vodi u WhatsApp. Zelena boja je prepoznatljiva i podiže klik.</td></tr>
+      <tr><td><code>.btn-navy</code></td><td>Poziv telefonom i druge ravnopravne, ali ne primarne akcije.</td></tr>
+      <tr><td><code>.btn-ghost</code></td><td>Samo preko tamne pozadine ili videa (hero sekcija).</td></tr>
+      <tr><td><code>.btn-outline</code></td><td>Tercijarne akcije, tamo gde ne želiš da odvučeš pažnju.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- FORME -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>6. Elementi forme</h2>
+    <p class="sub">Ključno pravilo za konverziju: <b>što manje kucanja</b>. Sve što može da bude dodir umesto unosa — jeste. Jedino obavezno polje je telefon.</p>
+    <div style="max-width:520px;display:grid;gap:var(--s-4)">
+      <input class="input" placeholder="Standardno polje">
+      <input class="input" value="Neispravan unos" style="border-color:var(--danger);background:var(--danger-bg)">
+      <div class="demo">
+        <span class="chip is-active">🧱 Gips ✓</span>
+        <span class="chip">🀄 Keramika</span>
+        <span class="chip">🎨 Moleraj</span>
+      </div>
+      <div class="demo"><span class="tag">Kupatilo</span><span class="tag">Podovi</span><span class="tag">Terase</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- KARTICE -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>7. Kartice</h2>
+    <p class="sub">Ikona u gradijent-pločici, naslov, kratak opis, opciono tagovi. Na hover se podiže 5-6px — pokret mora biti brz (240ms) i suptilan.</p>
+    <div class="demo-grid">
+      <div class="card"><div class="card-icon">🧱</div><h4>Gipsani radovi</h4><p>Spušteni plafoni, pregradni zidovi, niše i skrivena rasveta.</p></div>
+      <div class="card"><div class="card-icon">🀄</div><h4>Keramika</h4><p>Pločice u kupatilu i kuhinji, podovi, hidroizolacija.</p></div>
+      <div class="card"><div class="card-icon">🎨</div><h4>Moleraj</h4><p>Gletovanje, krečenje, dekorativni malteri, sanacija vlage.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>8. Animacija</h2>
+    <p class="sub">Pokret je tu da vodi oko, ne da se pokazuje. Ulazne animacije 520ms, mikro-interakcije 140–240ms. Sve poštuje <code>prefers-reduced-motion</code>.</p>
+    <table>
+      <tr><th>Token</th><th>Vrednost</th><th>Za šta</th></tr>
+      <tr><td><code>--dur-fast</code></td><td>140ms</td><td>Pritisak dugmeta, promena boje na hover</td></tr>
+      <tr><td><code>--dur</code></td><td>240ms</td><td>Podizanje kartice, fokus polja, header na skrol</td></tr>
+      <tr><td><code>--dur-slow</code></td><td>520ms</td><td>Ulazak sekcije u vidno polje (scroll reveal)</td></tr>
+      <tr><td><code>--ease</code></td><td>cubic-bezier(.22,.61,.36,1)</td><td>Standardno usporavanje</td></tr>
+      <tr><td><code>--ease-out-expo</code></td><td>cubic-bezier(.16,1,.3,1)</td><td>Ulazak elemenata — deluje „skupo“</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- PRAVILA -->
+<section class="ds-sec">
+  <div class="wrap">
+    <h2>9. Pravila koja drže sistem</h2>
+    <p class="sub">Ovih šest stvari čuvaju da sajt ostane konzistentan kad ga budeš širio.</p>
+    <table>
+      <tr><th>#</th><th>Pravilo</th></tr>
+      <tr><td>1</td><td><b>Jedno narandžasto dugme po ekranu.</b> Narandžasta = akcija koju najviše želiš. Ako ih je pet, nijedna nije važna.</td></tr>
+      <tr><td>2</td><td><b>Nema vrednosti van skale.</b> Nikad <code>padding:19px</code> — uvek token iz spacing skale.</td></tr>
+      <tr><td>3</td><td><b>Tekst preko slike/videa uvek ima scrim.</b> Tamni gradijent preko medija, inače pada čitljivost i deluje amaterski.</td></tr>
+      <tr><td>4</td><td><b>Kontrast minimum 4.5:1</b> za tekst. Prigušen tekst je <code>slate-500</code>, ne svetliji.</td></tr>
+      <tr><td>5</td><td><b>Tap meta minimum 44px.</b> Sva dugmad i chipovi na mobilnom moraju da se pogode palcem iz prve.</td></tr>
+      <tr><td>6</td><td><b>Nema izmišljenog društvenog dokaza.</b> Recenzije, brojevi i fotografije radova idu na sajt tek kad su pravi — lažni se prepoznaju i ubiju poverenje.</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer class="ds-foot">
+  <div class="wrap">MajstorKlik dizajn sistem · v1.0 · Manrope · navy #12283f + accent #ff7a3d</div>
+</footer>
