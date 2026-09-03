@@ -214,7 +214,8 @@ var FEELBG_VENUES = {
                 "Premier nightclub at Belgrade Waterfront with top electronic DJs",
             lat: 44.8148,
             lng: 20.4480,
-            image: "assets/images/money-club.jpg",
+            image: "assets/venues/money-1.jpg",
+            images: ["assets/venues/money-2.jpg", "assets/venues/money-3.jpg"],
         },
         {
             name: "Lasta",
@@ -231,7 +232,8 @@ var FEELBG_VENUES = {
                 "Legendary floating nightclub on the Sava with top DJs and open-air dancing",
             lat: 44.8150,
             lng: 20.4200,
-            image: "slike/lasta.jpg",
+            image: "assets/venues/lasta-1.jpg",
+            images: ["assets/venues/lasta-2.jpg", "assets/venues/lasta-3.jpg"],
         },
         {
             name: "Leto",
@@ -247,7 +249,8 @@ var FEELBG_VENUES = {
                 "Riverside beach club on the Sava — daybeds by day, DJs after dark",
             lat: 44.8145,
             lng: 20.421,
-            image: ""
+            image: "assets/venues/leto-1.jpg",
+            images: ["assets/venues/leto-2.jpg", "assets/venues/leto-3.jpg"]
         },
         {
             name: "Sindikat",
@@ -264,7 +267,8 @@ var FEELBG_VENUES = {
                 "Underground techno club in a converted Savamala warehouse, serious sound system and a devoted late-night crowd",
             lat: 44.8168,
             lng: 20.4571,
-            image: ""
+            image: "assets/venues/sindikat-1.jpg",
+            images: ["assets/venues/sindikat-2.jpg", "assets/venues/sindikat-3.jpg"]
         }
     ],
 
