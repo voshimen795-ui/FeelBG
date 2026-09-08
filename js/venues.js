@@ -145,7 +145,7 @@ var FEELBG_VENUES = {
                 "Small-batch roasters and the reference point for third-wave coffee in Belgrade",
             lat: 44.8188,
             lng: 20.4553,
-            image: "assets/venue-art/kafeterija.svg"
+            image: "assets/venues/kafeterija.jpg"
         },
         {
             name: "Pržionica D59B",
@@ -161,7 +161,7 @@ var FEELBG_VENUES = {
                 "Working roastery with a counter — the coffee is roasted in the room you drink it in",
             lat: 44.8234,
             lng: 20.4626,
-            image: "assets/venue-art/przionica_d59b.svg"
+            image: "assets/venues/przionica_d59b.jpg"
         },
         {
             name: "Hotel Moskva",
@@ -823,7 +823,7 @@ var FEELBG_VENUES = {
                 "Flat riverside park where the Sava meets the Danube, with cycle paths, fountains and summer concerts",
             lat: 44.818,
             lng: 20.444,
-            image: "assets/venue-art/usce_park.svg"
+            image: "assets/venues/usce_park.jpg"
             },
         {
             name: "Zvezdara Forest",
@@ -870,7 +870,7 @@ var FEELBG_VENUES = {
                 "Protected river island at the confluence, reachable by pontoon bridge in summer — herons, willows and the Lido beach",
             lat: 44.832,
             lng: 20.44,
-            image: "assets/venue-art/great_war_island.svg"
+            image: "assets/venues/great_war_island.jpg"
             },
         {
             name: "Banjica Forest",
