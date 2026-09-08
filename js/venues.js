@@ -543,7 +543,7 @@ var FEELBG_VENUES = {
                 "Tito's mausoleum and the relay batons, gifts and objects of a country that no longer exists",
             lat: 44.788,
             lng: 20.451,
-            image: "assets/venue-art/museum_of_yugoslavia.svg"
+            image: "assets/venues/museum_of_yugoslavia.jpg"
         },
         {
             name: "Museum of Contemporary Art",
@@ -559,7 +559,7 @@ var FEELBG_VENUES = {
                 "Yugoslav modernist landmark at the confluence, holding 20th-century art of the region",
             lat: 44.8155,
             lng: 20.4415,
-            image: "assets/venue-art/museum_of_contemporary_art.svg"
+            image: "assets/venues/museum_of_contemporary_art.jpg"
         },
         {
             name: "Ethnographic Museum",
@@ -575,7 +575,7 @@ var FEELBG_VENUES = {
                 "Folk costume, craft and village life across the Balkans, floor by floor",
             lat: 44.818,
             lng: 20.457,
-            image: "assets/venue-art/ethnographic_museum.svg"
+            image: "assets/venues/ethnographic_museum.jpg"
         },
         {
             name: "Ružica Church",
@@ -688,7 +688,7 @@ var FEELBG_VENUES = {
                 "330 hectares of oak and beech forest with running trails and the old royal hunting ground",
             lat: 44.769,
             lng: 20.43,
-            image: "assets/venue-art/kosutnjak_forest.svg"
+            image: "assets/venues/kosutnjak_forest.jpg"
         },
         {
             name: "Jevremovac Botanical Garden",
