@@ -543,7 +543,7 @@ var FEELBG_VENUES = {
                 "Tito's mausoleum and the relay batons, gifts and objects of a country that no longer exists",
             lat: 44.788,
             lng: 20.451,
-            image: "assets/venue-art/museum_of_yugoslavia.svg"
+            image: "assets/venues/museum_of_yugoslavia.jpg"
         },
         {
             name: "Museum of Contemporary Art",
@@ -559,7 +559,7 @@ var FEELBG_VENUES = {
                 "Yugoslav modernist landmark at the confluence, holding 20th-century art of the region",
             lat: 44.8155,
             lng: 20.4415,
-            image: "assets/venue-art/museum_of_contemporary_art.svg"
+            image: "assets/venues/museum_of_contemporary_art.jpg"
         },
         {
             name: "Ethnographic Museum",
@@ -575,7 +575,7 @@ var FEELBG_VENUES = {
                 "Folk costume, craft and village life across the Balkans, floor by floor",
             lat: 44.818,
             lng: 20.457,
-            image: "assets/venue-art/ethnographic_museum.svg"
+            image: "assets/venues/ethnographic_museum.jpg"
         },
         {
             name: "Ružica Church",
@@ -592,7 +592,7 @@ var FEELBG_VENUES = {
                 "Ivy-covered church inside the fortress walls, with chandeliers made from spent shell casings",
             lat: 44.8241,
             lng: 20.4535,
-            image: "assets/venue-art/ruzica_church.svg"
+            image: "assets/venues/ruzica_church.jpg"
         },
         {
             name: "St. Petka Chapel",
@@ -608,7 +608,7 @@ var FEELBG_VENUES = {
                 "Mosaic-lined chapel built over a spring people still queue to drink from",
             lat: 44.8243,
             lng: 20.4538,
-            image: "assets/venue-art/st_petka_chapel.svg"
+            image: "assets/venues/st_petka_chapel.jpg"
         },
         {
             name: "Saborna Crkva",
@@ -622,7 +622,7 @@ var FEELBG_VENUES = {
                 "Belgrade's 1840 cathedral, burial place of Serbian princes and Vuk Karadžić",
             lat: 44.8199,
             lng: 20.4525,
-            image: "assets/venue-art/saborna_crkva.svg"
+            image: "assets/venues/saborna_crkva.jpg"
         },
         {
             name: "St. Mark's Church",
@@ -639,7 +639,7 @@ var FEELBG_VENUES = {
                 "Serbo-Byzantine church modelled on Gračanica, holding Emperor Dušan's tomb",
             lat: 44.8107,
             lng: 20.4707,
-            image: "assets/venue-art/st_mark_s_church.svg"
+            image: "assets/venues/st_marks_church.jpg"
         },
         {
             name: "Alexander Nevsky Church",
@@ -655,7 +655,7 @@ var FEELBG_VENUES = {
                 "Quiet Dorcol parish church with a Russian dedication and a shaded churchyard",
             lat: 44.8258,
             lng: 20.4614,
-            image: "assets/venue-art/alexander_nevsky_church.svg"
+            image: "assets/venues/alexander_nevsky_church.jpg"
         },
         {
             name: "Tašmajdan Park",
@@ -671,7 +671,7 @@ var FEELBG_VENUES = {
                 "Park built over a Roman quarry and a wartime shelter, now benches, chess and fountains",
             lat: 44.8103,
             lng: 20.4713,
-            image: "assets/venue-art/tasmajdan_park.svg"
+            image: "assets/venues/tasmajdan_park.jpg"
         },
         {
             name: "Košutnjak Forest",
@@ -688,7 +688,7 @@ var FEELBG_VENUES = {
                 "330 hectares of oak and beech forest with running trails and the old royal hunting ground",
             lat: 44.769,
             lng: 20.43,
-            image: "assets/venue-art/kosutnjak_forest.svg"
+            image: "assets/venues/kosutnjak_forest.jpg"
         },
         {
             name: "Jevremovac Botanical Garden",
@@ -704,7 +704,7 @@ var FEELBG_VENUES = {
                 "University garden from 1889 with a cast-iron glasshouse and a Japanese section",
             lat: 44.8177,
             lng: 20.4747,
-            image: "assets/venue-art/jevremovac_botanical_garden.svg"
+            image: "assets/venues/jevremovac_botanical_garden.jpg"
         },
         {
             name: "Ušće Shopping Center",
@@ -719,7 +719,7 @@ var FEELBG_VENUES = {
                 "The largest mall in the region, at the confluence next to Ušće Tower",
             lat: 44.8162,
             lng: 20.4373,
-            image: "assets/venue-art/usce_shopping_center.svg"
+            image: "assets/venues/usce_shopping_center.jpg"
         },
         {
             name: "Galerija Belgrade",
@@ -736,7 +736,7 @@ var FEELBG_VENUES = {
                 "Waterfront mall with a rooftop terrace over the Sava and 300-plus shops",
             lat: 44.8098,
             lng: 20.4463,
-            image: "assets/venue-art/galerija_belgrade.svg"
+            image: "assets/venues/galerija_belgrade.jpg"
         },
         {
             name: "Rajićeva Shopping Center",
@@ -750,7 +750,7 @@ var FEELBG_VENUES = {
                 "Glass mall dropped into the old town, its entrance right on the pedestrian street",
             lat: 44.8168,
             lng: 20.4573,
-            image: "assets/venue-art/rajiceva_shopping_center.svg"
+            image: "assets/venues/rajiceva_shopping_center.jpg"
         },
         {
             name: "Delta City",
@@ -764,7 +764,7 @@ var FEELBG_VENUES = {
                 "New Belgrade's long-standing mall, cinema and food court included",
             lat: 44.8074,
             lng: 20.4014,
-            image: "assets/venue-art/delta_city.svg"
+            image: "assets/venues/delta_city.jpg"
         },
         {
             name: "BEO Shopping Center",
@@ -778,7 +778,7 @@ var FEELBG_VENUES = {
                 "Voždovac mall with a supermarket, cinema and the neighbourhood's weekend crowd",
             lat: 44.7794,
             lng: 20.49,
-            image: "assets/venue-art/beo_shopping_center.svg"
+            image: "assets/venues/beo_shopping_center.jpg"
         },
         {
             name: "Stadion Shopping Center",
@@ -792,7 +792,7 @@ var FEELBG_VENUES = {
                 "Mall built into the stand of a football stadium — the pitch sits on its roof",
             lat: 44.7717,
             lng: 20.477,
-            image: "assets/venue-art/stadion_shopping_center.svg"
+            image: "assets/venues/stadion_shopping_center.jpg"
         },
         {
             name: "Avala",
@@ -839,7 +839,7 @@ var FEELBG_VENUES = {
                 "Belgrade's second-largest forest, laced with running trails and quiet enough to hear the birds",
             lat: 44.792,
             lng: 20.506,
-            image: "assets/venue-art/zvezdara_forest.svg"
+            image: "assets/venues/zvezdara_forest.jpg"
             },
         {
             name: "Pionirski Park",
@@ -853,7 +853,7 @@ var FEELBG_VENUES = {
                 "Small formal park between the Old and New Palace, with chestnut avenues and benches in the shade",
             lat: 44.8125,
             lng: 20.4638,
-            image: "assets/venue-art/pionirski_park.svg"
+            image: "assets/venues/pionirski_park.jpg"
             },
         {
             name: "Great War Island",
@@ -886,7 +886,7 @@ var FEELBG_VENUES = {
                 "Neighbourhood pine forest with an outdoor gym, a marked running loop and dogs off the lead",
             lat: 44.757,
             lng: 20.474,
-            image: "assets/venue-art/banjica_forest.svg"
+            image: "assets/venues/banjica_forest.jpg"
             }
     ],
 };
