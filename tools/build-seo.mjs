@@ -38,6 +38,10 @@ const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const VENUES = require(path.join(ROOT, 'js', 'venues.js'));
 
+/* Collections whose venues take a reservation. Mirrors
+   CardRenderer.RESERVABLE_TYPES in js/card-renderer.js — change both. */
+const RESERVABLE_TYPES = new Set(['restaurants', 'nightlife']);
+
 const argv = process.argv.slice(2);
 const CHECK = argv.includes('--check');
 const ONLY = (argv.find((a) => a.startsWith('--only=')) || '').slice(7)
@@ -454,6 +458,9 @@ const STYLESHEETS = [
     'css/dropdown-menu.css', 'css/hero-fullscreen.css', 'css/mobile-nav-fixed.css',
     'css/mobile-optimized.css', 'css/insider-tips.css', 'css/premium-fx.css',
     'css/venue-card.css', 'css/venue-page.css',
+    // Last: it turns off the decorative motion on desktop, so it has to be
+    // able to override anything a component stylesheet set.
+    'css/desktop-static.css',
 ];
 
 // pages.js and card-renderer.js are deliberately absent: pages.js falls through
@@ -499,13 +506,6 @@ ${STYLESHEETS.map((s) => `    <link rel="stylesheet" href="/${s}">`).join('\n')}
 ${jsonLd.map((o) => `    <script type="application/ld+json">\n${JSON.stringify(o, null, 2)}\n    </script>`).join('\n')}
 </head>`;
 }
-
-/* js/script.js constructs CustomCursor unconditionally and dereferences these
-   two elements, so a page without them throws before the rest of that file's
-   DOMContentLoaded work runs. Every hand-written page has them; generated pages
-   need them for the same reason. */
-const CURSOR = `    <div class="cursor-dot" data-cursor-dot></div>
-    <div class="cursor-outline" data-cursor-outline></div>`;
 
 function siteHeader(lang) {
     const nav = [
@@ -654,8 +654,10 @@ function venuePage(v, lang) {
        data-venue-type tells it which venue this is, which is how a club gets
        the seating question and a cafe does not.
 
-       Attractions are excluded: you cannot book a fortress. */
-    const reserve = v.type === 'attractions' ? '' : `
+       Attractions are excluded: you cannot book a fortress. Cafes are too —
+       they are walk-in places, so a Reserve button there would promise a
+       booking the venue does not take. Same rule as js/card-renderer.js. */
+    const reserve = !RESERVABLE_TYPES.has(v.type) ? '' : `
             <p class="venue-cta">
                 <button class="venue-reserve-btn" type="button" data-booking="${esc(name)}">
                     <i class="fas fa-calendar-check" aria-hidden="true"></i>
@@ -665,7 +667,6 @@ function venuePage(v, lang) {
             </p>`;
 
     const body = `<body data-page="venue" data-venue-type="${v.type}" data-venue-slug="${esc(v.slug)}" data-venue-name="${esc(v.name)}">
-${CURSOR}
 ${siteHeader(lang)}
 
     <main class="main venue-page">
@@ -760,7 +761,6 @@ function categoryPage(type, lang) {
         LIMITS.descriptionMax);
 
     const body = `<body data-page="category" data-venue-type="${type}">
-${CURSOR}
 ${siteHeader(lang)}
 
     <main class="main venue-page">
@@ -830,7 +830,10 @@ const CARDS_END = '<!-- seo:cards:end -->';
 
 function renderCardsFor(type, lang) {
     CardRenderer.lang = lang;
-    const html = VENUES[type].map((v) => CardRenderer.renderCard(v)).join('');
+    // The collection is passed through so the renderer knows which cards may
+    // carry a Reserve button — it cannot infer it from the venue alone here,
+    // where there is no window.FEELBG_VENUES to look the venue up in.
+    const html = VENUES[type].map((v) => CardRenderer.renderCard(v, type)).join('');
     CardRenderer.lang = null;
     return html;
 }

@@ -6,7 +6,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 ## Tech Stack
 - **Frontend**: Pure HTML5, CSS3, Vanilla JavaScript (ES6+)
 - **Dev Server**: live-server (npm package)
-- **Libraries**: AOS (Animate On Scroll), Font Awesome 6, Google Fonts, Leaflet.js (maps)
+- **Libraries**: Font Awesome 6, Google Fonts, Leaflet.js (maps), Three.js (home-page constellation, mobile only)
 - **No build step required** — files are served directly
 
 ## Project Structure
@@ -25,7 +25,8 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 │   ├── hero-fullscreen.css — Hero section styles
 │   ├── dropdown-menu.css   — Dropdown menu styles
 │   ├── remove-blank-space.css — Layout fix styles
-│   └── insider-tips.css    — Floating insider tips widget styles
+│   ├── insider-tips.css    — Floating insider tips widget styles
+│   └── desktop-static.css  — Desktop (≥1024px): turns off decorative motion, loaded last
 ├── js/
 │   ├── venues.js           — Centralized venue database (window.FEELBG_VENUES)
 │   ├── card-renderer.js    — Dynamic card rendering with i18n (venueSlug + getTranslated)
@@ -53,7 +54,7 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 ### Centralized Venue Database (js/venues.js)
 All venue data lives in `window.FEELBG_VENUES` with 4 categories:
 - `restaurants` (15 venues) — Serbian, Italian, Japanese, Mediterranean, Fine Dining, Seafood
-- `cafes` (11 venues) — Hotel Moskva Café, Coffee, Cocktails, Wine, Craft Beer
+- `cafes` (5 venues) — Hotel Moskva Café, specialty coffee, roasteries, concept store
 - `nightlife` (10 venues) — Electronic, Pop/Dance, Jazz, Alternative, Comedy
 - `attractions` (10 venues) — Historic, Museums, Nature, Cultural, Religious
 
@@ -76,13 +77,19 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), are
 - **WhatsApp Booking**: Chatbot at +381653315640 (3-step: guests → time → requests)
 - **Interactive Map**: 46 venues, color-coded pins, walking route generation
 - **Adventure Route**: Geolocation-based "Create my Adventure" finds 3 closest venues
-- **Detail Popup**: Photo, rating, hours, budget, Reserve button, "See Route on Map"
+- **Detail Popup**: Photo, rating, hours, budget, Reserve button (restaurants and nightlife only), "See Route on Map"
 - **Responsive Design**: Mobile bottom nav, touch interactions
 - **Euro Pricing**: All restaurants, cafes, and nightlife show precise € price ranges
 - **Attractions = Free Hidden Gems**: No prices, no reserve buttons on attraction cards
+- **Cafes are walk-in**: No reserve button on cafe cards, popups, venue pages or the reserve picker — the reservable collections are listed in `CardRenderer.RESERVABLE_TYPES`
 - **Insider Tips Widget**: Floating lightbulb button with 12 rotating local tips for tourists
-- **Video Hero Sections**: Each category page has a fullscreen looping background video
+- **Video Hero Sections**: Each category page has a fullscreen looping background video. The clip lives in `data-src` and js/script.js assigns it only below 1024px; desktop shows the poster still.
 - **Light Mode Only**: Dark mode removed for consistent brand experience
+- **Static on desktop (≥1024px)**: no scroll reveals, no looping backgrounds, no
+  hero video, no custom cursor, no 3D card coverflow. The home stacks become a
+  row of three full-size cards, and the header nav is a centred 1fr/auto/1fr
+  grid. See css/desktop-static.css plus the `isDesktop()` gates in
+  js/script.js, js/card-stack.js and js/constellation-fx.js.
 
 ## Running the Project
 - **Development**: `npm start` — starts live-server on port 5000 (0.0.0.0)

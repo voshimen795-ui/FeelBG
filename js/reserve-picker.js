@@ -9,7 +9,8 @@
  * window.FEELBG_VENUES. Picking a venue hands off to the existing
  * BookingChatbot (WhatsApp flow) with the venue pre-filled.
  *
- * Attractions are excluded — you can't reserve a fortress.
+ * Attractions are excluded — you can't reserve a fortress — and so are
+ * cafes, which are walk-in places rather than places you book a table at.
  */
 class ReservePicker {
     constructor() {
@@ -50,7 +51,7 @@ class ReservePicker {
     getVenues() {
         const db = window.FEELBG_VENUES || {};
         const out = [];
-        ['restaurants', 'cafes', 'nightlife'].forEach((cat) => {
+        ['restaurants', 'nightlife'].forEach((cat) => {
             (db[cat] || []).forEach((v) => {
                 out.push({
                     category: cat,
@@ -70,11 +71,11 @@ class ReservePicker {
 
     availableCategories() {
         const db = window.FEELBG_VENUES || {};
-        return ['restaurants', 'cafes', 'nightlife'].filter((c) => (db[c] || []).length);
+        return ['restaurants', 'nightlife'].filter((c) => (db[c] || []).length);
     }
 
     categoryIcon(cat) {
-        return { restaurants: 'fa-utensils', cafes: 'fa-coffee', nightlife: 'fa-glass-cheers' }[cat] || 'fa-utensils';
+        return { restaurants: 'fa-utensils', nightlife: 'fa-glass-cheers' }[cat] || 'fa-utensils';
     }
 
     open(category) {

@@ -65,23 +65,6 @@ var FEELBG_VENUES = {
 
     cafes: [
         {
-            name: "Smokvica",
-            slug: "smokvica",
-            cuisine: "coffee",
-            cuisineLabel: "Specialty Coffee",
-            price: "moderate",
-            priceLabel: "€8–16 per person",
-            area: "Dorćol",
-            address: "Kralja Petra 73, Dorćol",
-            rating: 4.6,
-            badge: "popular",
-            description:
-                "Courtyard cafe and all-day brunch spot behind a quiet Dorcol facade",
-            lat: 44.8218,
-            lng: 20.4562,
-            image: "slike/logo/smokvica.jpg"
-        },
-        {
             name: "Supermarket Concept Store",
             slug: "supermarket-concept-store",
             cuisine: "coffee",
@@ -113,22 +96,6 @@ var FEELBG_VENUES = {
             lat: 44.8205,
             lng: 20.456,
             image: "slike/logo/manufaktura.jpg"
-        },
-        {
-            name: "Comunale Caffe",
-            slug: "comunale-caffe",
-            cuisine: "coffee",
-            cuisineLabel: "Cafe · Bar",
-            price: "budget",
-            priceLabel: "€5–12 per person",
-            area: "Vračar",
-            address: "Njegoševa, Vračar",
-            rating: 4.4,
-            description:
-                "Neighbourhood cafe bar that runs from morning coffee straight into evening drinks",
-            lat: 44.802,
-            lng: 20.469,
-            image: "slike/logo/comunale.jpg"
         },
         {
             name: "Kafeterija",
@@ -179,22 +146,6 @@ var FEELBG_VENUES = {
             lat: 44.8123,
             lng: 20.4585,
             image: "slike/logo/hotel moskva.jpg"
-        },
-        {
-            name: "Frans",
-            slug: "frans",
-            cuisine: "wine",
-            cuisineLabel: "Cafe · Wine Bar",
-            price: "moderate",
-            priceLabel: "€12–24 per person",
-            area: "Vračar",
-            address: "Bulevar oslobođenja, Vračar",
-            rating: 4.4,
-            description:
-                "French-leaning cafe that turns into a wine bar after dark",
-            lat: 44.7962,
-            lng: 20.4696,
-            image: "slike/logo/frans.jpg"
         },
     ],
 

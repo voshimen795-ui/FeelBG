@@ -24,6 +24,18 @@ const debounce = (func, wait = 20) => {
     };
 };
 
+/* Desktop presentation switch.
+
+   1024px is the site's own top breakpoint (see css/tokens.css), and
+   css/desktop-static.css is scoped to exactly the same query — the CSS and
+   the JavaScript have to agree about what "desktop" means or a page ends up
+   with, say, the particle container hidden but still being filled.
+
+   Everything gated on this is decorative: pointer trails, particles,
+   parallax and the background video walls. Nothing a visitor came for is
+   behind it. */
+const isDesktop = () => !!(window.matchMedia && window.matchMedia('(min-width: 1024px)').matches);
+
 const throttle = (func, limit = 100) => {
     let inThrottle;
     return function(...args) {
@@ -35,65 +47,11 @@ const throttle = (func, limit = 100) => {
     };
 };
 
-// ============================================
-// CUSTOM CURSOR
-// ============================================
-
-class CustomCursor {
-    constructor() {
-        this.cursorDot = $('[data-cursor-dot]');
-        this.cursorOutline = $('[data-cursor-outline]');
-        this.posX = 0;
-        this.posY = 0;
-        this.mouseX = 0;
-        this.mouseY = 0;
-        
-        if (window.innerWidth >= 1024) {
-            this.init();
-        }
-    }
-
-    init() {
-        document.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
-            
-            this.cursorDot.style.left = `${e.clientX}px`;
-            this.cursorDot.style.top = `${e.clientY}px`;
-        });
-
-        // Smooth cursor outline follow
-        const animate = () => {
-            const distX = this.mouseX - this.posX;
-            const distY = this.mouseY - this.posY;
-            
-            this.posX += distX * 0.1;
-            this.posY += distY * 0.1;
-            
-            this.cursorOutline.style.left = `${this.posX}px`;
-            this.cursorOutline.style.top = `${this.posY}px`;
-            
-            requestAnimationFrame(animate);
-        };
-        
-        animate();
-
-        // Interactive elements
-        const interactiveElements = $$('a, button, .btn, .service__card, .portfolio__item');
-        
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                this.cursorDot.style.transform = 'translate(-50%, -50%) scale(2)';
-                this.cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                this.cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-                this.cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
-        });
-    }
-}
+/* The trailing custom cursor lived here: two <div> markers that a
+   requestAnimationFrame loop dragged after the pointer for the whole life of
+   the page. It only ever ran at 1024px and up, which is the presentation that
+   now renders without decorative motion, so it is gone along with its markup
+   and its stylesheet rules rather than left running with no audience. */
 
 // ============================================
 // HEADER SCROLL BEHAVIOR
@@ -234,7 +192,9 @@ class ParticlesAnimation {
         this.particlesContainer = $('#particles');
         this.particleCount = 50;
         
-        if (this.particlesContainer) {
+        // 50 drifting nodes, each with its own infinite Web Animation. Phones
+        // and tablets keep them; desktop paints the hero once and stops.
+        if (this.particlesContainer && !isDesktop()) {
             this.init();
         }
     }
@@ -445,6 +405,9 @@ class NewsletterForm {
 class ParallaxEffect {
     constructor() {
         this.elements = $$('.hero__background, .animated-shapes');
+        // A scroll handler that writes a transform on the largest element on
+        // the page, on a presentation that is otherwise static.
+        if (isDesktop()) return;
         this.init();
     }
 
@@ -543,21 +506,11 @@ class TypingAnimation {
     }
 }
 
-// ============================================
-// AOS ANIMATION INITIALIZATION
-// ============================================
-
-const initAOS = () => {
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100,
-            easing: 'ease-out-cubic',
-            disable: 'mobile'
-        });
-    }
-};
+/* The AOS scroll-animation library used to be initialised here. It was
+   configured with `disable: 'mobile'`, so the only devices it ever animated
+   were the desktops that now render statically — which left it costing two
+   render-blocking CDN requests to do nothing. The library and its stylesheet
+   are gone from every page; the data-aos attributes went with them. */
 
 // ============================================
 // PAGE VISIBILITY API
@@ -681,6 +634,27 @@ class HeroSlideshow {
         this.current = 0;
         this.CLIP_SECONDS = 9; // how many seconds each clip plays before crossfading
 
+        /* Desktop gets the still, and pays nothing for the clips.
+
+           The four hero clips are full-size remote MP4s. They used to carry a
+           real `src` in the markup, so the browser began fetching the first
+           one while the HTML was still being parsed — megabytes competing
+           with the stylesheets, the fonts and the venue photographs for the
+           first seconds of the page, which is what made the hero slow to
+           settle. The markup now holds `data-src`, so nothing is requested
+           until this decides to request it, and on desktop it never does:
+           the fallback photograph is the hero. */
+        if (isDesktop()) {
+            this.videos.forEach((v) => v.remove());
+            this.videos = [];
+            if (this.fallback) this.fallback.classList.add('active');
+            return;
+        }
+
+        this.videos.forEach((v) => {
+            if (v.dataset.src && !v.getAttribute('src')) v.setAttribute('src', v.dataset.src);
+        });
+
         if (this.videos.length) {
             this.init();
         } else {
@@ -724,7 +698,7 @@ class HeroSlideshow {
         }, { once: true });
 
         this.safePlay(first);
-        if (this.videos[1]) this.videos[1].preload = 'auto'; // preload the next clip
+        if (this.videos[1]) this.videos[1].preload = 'metadata'; // warm the next clip, don't fetch it whole
 
         if (this.videos.length > 1 && !reducedMotion) {
             setInterval(() => this.nextVideo(), this.CLIP_SECONDS * 1000);
@@ -748,6 +722,39 @@ class HeroSlideshow {
         nxt.classList.add('active');
         cur.classList.remove('active');
         setTimeout(() => cur.pause(), 1300); // pause the old clip only after the crossfade finishes
+    }
+}
+
+/* ============================================
+   CATEGORY PAGE HERO VIDEO
+
+   restaurants / cafes / nightlife / attractions each sit under one 1080p
+   background clip, behind a gradient that is 72% opaque at its lightest —
+   so the clip costs several megabytes to be barely perceptible. Its
+   <source> carries data-src instead of src, and it is assigned only off
+   desktop. With no source the <video> paints its own poster attribute,
+   which is the still the gradient was designed over.
+   ============================================ */
+class PageHeroVideo {
+    constructor() {
+        const video = document.querySelector('.page-hero__video');
+        if (!video) return;
+
+        if (isDesktop()) {
+            video.removeAttribute('autoplay');
+            return;
+        }
+
+        let assigned = false;
+        video.querySelectorAll('source[data-src]').forEach((source) => {
+            source.setAttribute('src', source.dataset.src);
+            assigned = true;
+        });
+        if (!assigned) return;
+
+        video.load();
+        const played = video.play();
+        if (played && played.catch) played.catch(() => { /* autoplay blocked — the poster stays */ });
     }
 }
 
@@ -881,7 +888,6 @@ document.addEventListener('DOMContentLoaded', () => {
     trackHeaderHeight();
 
     // Initialize all components
-    new CustomCursor();
     new Header();
     new AnimatedCounter();
     new ParticlesAnimation();
@@ -895,10 +901,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new MouseMoveEffects();
     new KeyboardNavigation();
     new HeroSlideshow();
+    new PageHeroVideo();
     new LiveEventsInit();
-    
-    // Initialize AOS
-    initAOS();
     
     // Optional: Typing animation for hero title
     // Uncomment if you want the typing effect

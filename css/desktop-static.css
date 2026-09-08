@@ -1,0 +1,153 @@
+/* ============================================
+   DESKTOP: STATIC PRESENTATION
+
+   On a computer the site renders without decorative motion. Everything the
+   page has to say is on screen the moment it paints — nothing waits for a
+   scroll position, nothing loops, nothing fades in.
+
+   Two reasons, and they are the same reason twice:
+
+   1. Speed. The infinite background loops (ken burns, floating shapes,
+      particle drift, gold shimmer) each keep a compositor layer alive for as
+      long as the tab is open, on the largest surface the site ever paints.
+   2. Legibility. Every "reveal on scroll" mechanism starts its target at
+      opacity 0. On a tall desktop viewport several screens' worth of cards
+      are in view at once, so a mistimed observer — or a blocked CDN, or a
+      ScrollTrigger that measured before the fonts landed — left cards
+      invisible or half-transparent on the page someone came to read.
+
+   This file is loaded last, after every component stylesheet, so it settles
+   those cases with plain specificity — nothing here needs !important.
+
+   Below 1024px nothing here applies: phones and tablets keep the full
+   animated presentation.
+   ============================================ */
+
+@media (min-width: 1024px) {
+    /* --------------------------------------------
+       1. REVEAL-ON-SCROLL — everything starts visible
+       -------------------------------------------- */
+    .scroll-reveal,
+    [data-aos] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* --------------------------------------------
+       2. LOOPING DECORATION — stopped
+       -------------------------------------------- */
+    .hero__slide,
+    .hero__video,
+    .shape,
+    .page-hero__background::before,
+    .section__title,
+    .hero-reserve-btn,
+    .place-card,
+    .event-slide,
+    .scroll-down i,
+    .floating-card,
+    .belgrade-card-small {
+        animation: none;
+    }
+
+    /* Purely ornamental layers with no content in them. Hidden rather than
+       paused: the particle field is 50 absolutely-positioned nodes and the
+       shapes are five blurred gradients, and neither says anything. */
+    .animated-shapes,
+    .particles,
+    .gold-shimmer::after {
+        display: none;
+    }
+
+    /* --------------------------------------------
+       3. CARDS, MORE VISIBLE
+
+       The card surface is gold on a dark navy page. It reads well already;
+       what it lacked on desktop was edge definition against that background
+       and enough elevation to look like a raised object rather than a
+       coloured rectangle.
+       -------------------------------------------- */
+    .place-card,
+    .gem-card,
+    .category__card,
+    .event-slide__inner {
+        border: 1px solid rgba(255, 233, 168, 0.55);
+        box-shadow: var(--shadow-3);
+    }
+
+    .place-card:hover,
+    .gem-card:hover,
+    .category__card:hover {
+        border-color: #ffe9a8;
+        box-shadow: var(--shadow-4);
+    }
+
+    /* The photograph is what identifies a venue, so it gets more of the card. */
+    .place-card__image {
+        height: 280px;
+    }
+
+    /* --------------------------------------------
+       4. HOME CARD STACKS — a row, not a coverflow
+
+       js/card-stack.js skips its 3D layer on desktop (same branch
+       reduced-motion takes), which leaves the plain, accessible scroller
+       underneath. That scroller was written for a phone: one card fills the
+       whole strip. On desktop it becomes an ordinary snap-scrolling row of
+       three, so three venues per category are legible at a glance instead of
+       one fanned card and four rotated slivers.
+       -------------------------------------------- */
+    .card-stack {
+        max-width: 100%;
+        aspect-ratio: auto;
+        height: auto;
+    }
+
+    .card-stack__scroller {
+        gap: var(--grid-gap);
+        /* Room for the shadow and the focus ring, which a clipped overflow
+           container would otherwise cut off. */
+        padding: var(--space-2) var(--space-1) var(--space-4);
+        scroll-snap-type: x proximity;
+    }
+
+    .card-stack__link {
+        flex: 0 0 calc((100% - 2 * var(--grid-gap)) / 3);
+        height: 22rem;
+    }
+
+    .card-stack__card {
+        border: 1px solid rgba(255, 233, 168, 0.35);
+        box-shadow: var(--shadow-3);
+        transition: none;
+    }
+
+    .card-stack__link:hover .card-stack__card {
+        border-color: rgba(255, 233, 168, 0.8);
+        box-shadow: var(--shadow-4);
+    }
+
+    /* The dots paged the coverflow. With three cards visible in a scrolling
+       row the scrollbar-free strip pages itself. */
+    .card-stack__dots {
+        display: none;
+    }
+
+    /* --------------------------------------------
+       5. HERO — a photograph, not a video wall
+
+       index.html's four background clips and each category page's 1080p
+       clip are now left unloaded on desktop (see js/script.js); the still
+       underneath is what shows. These rules make that still the intended
+       picture rather than the first frame of a missing video.
+       -------------------------------------------- */
+    .hero__slide {
+        opacity: 1;
+    }
+
+    .page-hero__video {
+        /* No source is assigned on desktop, so this paints its poster. */
+        object-fit: cover;
+    }
+}

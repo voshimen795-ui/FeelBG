@@ -111,7 +111,43 @@ class CardRenderer {
         }).join('') + '</div>';
     }
 
-    static renderCard(venue) {
+    /* Which collections take a reservation.
+
+       Attractions never did — you cannot book a fortress — and cafes no longer
+       do either: they are walk-in places, so offering a table booking on one
+       promises something the venue does not run. The check is on the
+       collection the venue was rendered from, passed down by renderGrid; when
+       a caller has no type to hand (the SEO build renders one collection at a
+       time and does pass it), the venue is looked up in the database instead,
+       so a cafe can never pick up a Reserve button by accident. */
+    static RESERVABLE_TYPES = ['restaurants', 'nightlife'];
+
+    static typeOf(venue) {
+        var db = (typeof window !== 'undefined' && window.FEELBG_VENUES) || {};
+        var types = ['restaurants', 'cafes', 'nightlife', 'attractions'];
+        for (var i = 0; i < types.length; i++) {
+            var list = db[types[i]] || [];
+            for (var j = 0; j < list.length; j++) {
+                if (list[j] === venue || (venue.slug && list[j].slug === venue.slug)) return types[i];
+            }
+        }
+        return '';
+    }
+
+    static isReservable(venue, type) {
+        // No priceLabel means an attraction, whatever the caller said.
+        if (!venue.priceLabel) return false;
+        var t = type || venue.type || this.typeOf(venue);
+        if (!t) return true; // unknown collection: keep the old behaviour
+        return this.RESERVABLE_TYPES.indexOf(this.normalizeType(t)) !== -1;
+    }
+
+    static normalizeType(type) {
+        var map = { restaurant: 'restaurants', cafe: 'cafes', attraction: 'attractions' };
+        return map[type] || type;
+    }
+
+    static renderCard(venue, type) {
         var badgeHtml = venue.badge ? '<div class="place-card__badge ' + (venue.badge === 'popular' ? 'popular' : '') + ' ' + (venue.badge === 'trending' ? 'trending' : '') + '" data-i18n="badge.' + venue.badge + '">' + this.t('badge.' + venue.badge) + '</div>' : '';
         /* priceLabel is present on every restaurant, cafe and club and on no
            attraction, so it alone tells the two apart — the old extra check on
@@ -125,7 +161,7 @@ class CardRenderer {
                 .replace(/\bentry\b/i, this.t('venue.price.entry'));
         }
         var priceHtml = isAttraction ? '' : '<div class="place-card__meta"><span class="price-range">' + translatedPrice + '</span></div>';
-        var reserveHtml = isAttraction ? '' : '<button class="btn-icon btn-reserve" title="' + this.t('popup.reserve') + '" data-booking=""><i class="fas fa-calendar-check"></i></button>';
+        var reserveHtml = this.isReservable(venue, type) ? '<button class="btn-icon btn-reserve" title="' + this.t('popup.reserve') + '" data-booking=""><i class="fas fa-calendar-check"></i></button>' : '';
 
         // Attractions carry editorial copy. The hook is the sharper opening
         // line, so on the card it stands in for the flat description; venues
@@ -164,18 +200,23 @@ class CardRenderer {
         return this.t('badge.' + badge) || '';
     }
 
-    static renderGrid(venues, containerId) {
+    static renderGrid(venues, containerId, type) {
         var container = document.getElementById(containerId);
         if (!container) return;
-        container.innerHTML = venues.map(function(v) { return CardRenderer.renderCard(v); }).join('');
+        container.innerHTML = venues.map(function(v) { return CardRenderer.renderCard(v, type || v.type); }).join('');
     }
 
     static renderAll(containerId) {
         var venues = window.FEELBG_VENUES;
         if (!venues) return;
+        // Tagged with the collection they came from, so a mixed grid still
+        // knows which cards may carry a Reserve button.
+        var tag = function(list, type) {
+            return (list || []).map(function(v) { return Object.assign({}, v, { type: type }); });
+        };
         var all = [].concat(
-            venues.restaurants || [], venues.cafes || [],
-            venues.nightlife || [], venues.attractions || []
+            tag(venues.restaurants, 'restaurants'), tag(venues.cafes, 'cafes'),
+            tag(venues.nightlife, 'nightlife'), tag(venues.attractions, 'attractions')
         );
         this.renderGrid(all, containerId);
     }
@@ -183,7 +224,7 @@ class CardRenderer {
     static renderByType(type, containerId) {
         var venues = window.FEELBG_VENUES;
         if (!venues || !venues[type]) return;
-        this.renderGrid(venues[type], containerId);
+        this.renderGrid(venues[type], containerId, type);
     }
 }
 

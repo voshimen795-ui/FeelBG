@@ -67,16 +67,6 @@
     <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/dva-jelena/"/>
   </url>
   <url>
-    <loc>https://feelbg.com/en/venue/smokvica/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/smokvica/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/smokvica/"/>
-  </url>
-  <url>
-    <loc>https://feelbg.com/sr/mesto/smokvica/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/smokvica/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/smokvica/"/>
-  </url>
-  <url>
     <loc>https://feelbg.com/en/venue/supermarket-concept-store/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/supermarket-concept-store/"/>
     <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/supermarket-concept-store/"/>
@@ -95,16 +85,6 @@
     <loc>https://feelbg.com/sr/mesto/manufaktura/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/manufaktura/"/>
     <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/manufaktura/"/>
-  </url>
-  <url>
-    <loc>https://feelbg.com/en/venue/comunale-caffe/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/comunale-caffe/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/comunale-caffe/"/>
-  </url>
-  <url>
-    <loc>https://feelbg.com/sr/mesto/comunale-caffe/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/comunale-caffe/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/comunale-caffe/"/>
   </url>
   <url>
     <loc>https://feelbg.com/en/venue/kafeterija/</loc>
@@ -135,16 +115,6 @@
     <loc>https://feelbg.com/sr/mesto/hotel-moskva/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/hotel-moskva/"/>
     <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/hotel-moskva/"/>
-  </url>
-  <url>
-    <loc>https://feelbg.com/en/venue/frans/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/frans/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/frans/"/>
-  </url>
-  <url>
-    <loc>https://feelbg.com/sr/mesto/frans/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://feelbg.com/en/venue/frans/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://feelbg.com/sr/mesto/frans/"/>
   </url>
   <url>
     <loc>https://feelbg.com/en/venue/money/</loc>
