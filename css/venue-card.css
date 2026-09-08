@@ -93,23 +93,106 @@
 
 .vcard__shot-wrap { position: relative; }
 
-/* The photograph is capped, not free-running. At 16:9 across an 880px card
-   it eats the whole screen and pushes the name, the numbers and the buttons
-   below the fold — the one thing this card cannot afford. */
+/* A scroll container with snap points, not a transformed row: the browser's
+   own horizontal scrolling then does the work, so a swipe on a phone and a
+   trackpad flick both behave the way they do everywhere else, and the arrows
+   and dots simply scroll it.
+
+   The photograph itself is capped, not free-running. At 16:9 across an 880px
+   card it eats the whole screen and pushes the name, the numbers and the
+   buttons below the fold — the one thing this card cannot afford. */
 .vcard__shots {
     display: flex;
     width: 100%;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    /* The strip is its own scrollbar-free surface; position is shown by the
+       dots instead. */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
+.vcard__shots::-webkit-scrollbar { display: none; }
+.vcard__shots:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
 
 .vcard__shot {
     flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
     aspect-ratio: 16 / 9;
     max-height: 300px;
     background-color: var(--paper-sunk);
     background-size: cover;
     background-position: center;
 }
+
+/* ---------- gallery controls ---------- */
+
+.vcard__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(12, 16, 30, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.18s, opacity 0.18s;
+    z-index: 2;
+}
+
+.vcard__nav svg { width: 20px; height: 20px; }
+.vcard__nav:hover { background: rgba(12, 16, 30, 0.85); }
+.vcard__nav:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+/* Kept in place rather than hidden at the ends, so the strip does not jump. */
+.vcard__nav:disabled { opacity: 0.25; cursor: default; }
+.vcard__nav--prev { left: 12px; }
+/* Clears the close button's column on a narrow card. */
+.vcard__nav--next { right: 12px; }
+
+.vcard__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    z-index: 2;
+}
+
+/* The visible dot is small; the button around it is thumb-sized. */
+.vcard__dot {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.vcard__dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    transition: width 0.22s, background 0.22s;
+}
+
+.vcard__dot.is-on::before { width: 22px; background: #fff; }
+.vcard__dot:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 999px; }
 
 @container vcard (max-width: 560px) {
     .vcard__shot { aspect-ratio: 4 / 3; max-height: 230px; }
@@ -156,8 +239,9 @@
 .vcard__close:hover { background: rgba(12, 16, 30, 0.85); }
 .vcard__close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
-/* A thumbnail strip needs thumbnails. One quiet chip instead — it works
-   whether the venue has two photographs or twenty. */
+/* Reads out where you are in the strip ("2 / 3"). It used to be the only
+   control — a button that stepped forward one photograph — which is why the
+   arrows, the dots and the swipe exist now; it just reports. */
 .vcard__photos {
     position: absolute;
     left: 16px;
@@ -176,13 +260,11 @@
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.03em;
-    cursor: pointer;
-    transition: background 0.18s;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
     z-index: 2;
 }
 
-.vcard__photos:hover { background: rgba(12, 16, 30, 0.85); }
-.vcard__photos:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .vcard__photos svg { width: 14px; height: 14px; flex: 0 0 auto; }
 
 /* ---------- the essentials ---------- */
@@ -611,5 +693,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .vcard-overlay, .vcard, .vcard__shots { transition: none; }
+    .vcard-overlay, .vcard { transition: none; }
+    .vcard__dot::before { transition: none; }
 }

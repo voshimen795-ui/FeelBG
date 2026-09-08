@@ -557,19 +557,32 @@ class PlaceDetails {
 
         const initial = (title || '?').trim().charAt(0).toUpperCase();
         const shotsHtml = gallery.length
-            ? gallery.map(src => `<div class="vcard__shot" style="background-image:url('${esc(src)}')" role="img" aria-label="${esc(title)}"></div>`).join('')
+            ? gallery.map((src, i) => `<div class="vcard__shot" style="background-image:url('${esc(src)}')" role="img" aria-label="${esc(title)} — ${i + 1}/${gallery.length}"></div>`).join('')
             : `<div class="vcard__shot vcard__shot--none" data-initial="${esc(initial)}" role="img" aria-label="${esc(title)}"></div>`;
+
+        /* The photo strip scrolls. It used to be a flex row nudged by
+           transform, advanced only by clicking the little count chip: one
+           direction, no way back, and a swipe did nothing at all — which on a
+           phone reads as a broken carousel. It is now a real scroll container
+           with snap points, so the native swipe works, plus arrows, dots and a
+           counter for everyone else. */
+        const arrow = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="${d}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        const galleryUi = gallery.length > 1 ? `
+                    <button class="vcard__nav vcard__nav--prev" type="button" aria-label="${esc(t('card.photoPrev'))}">${arrow('m15 5-7 7 7 7')}</button>
+                    <button class="vcard__nav vcard__nav--next" type="button" aria-label="${esc(t('card.photoNext'))}">${arrow('m9 5 7 7-7 7')}</button>
+                    <div class="vcard__dots" role="tablist">
+                        ${gallery.map((_, i) => `<button class="vcard__dot" type="button" role="tab" data-shot="${i}" aria-label="${i + 1} / ${gallery.length}"></button>`).join('')}
+                    </div>
+                    <span class="vcard__photos">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h3l1.6-2h8.8L18 7h3v12H3z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg>
+                        <span class="vcard__photos-index">1 / ${gallery.length}</span>
+                    </span>` : '';
 
         overlay.innerHTML = `
             <article class="vcard">
                 <div class="vcard__shot-wrap">
-                    <div class="vcard__shots">${shotsHtml}</div>
-                    <button class="vcard__close" type="button" aria-label="${esc(t('popup.close'))}">&times;</button>
-                    ${gallery.length > 1 ? `
-                        <button class="vcard__photos" type="button">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h3l1.6-2h8.8L18 7h3v12H3z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg>
-                            ${esc(t('card.photoCount').replace('{n}', gallery.length))}
-                        </button>` : ''}
+                    <div class="vcard__shots" tabindex="0" aria-label="${esc(title)}">${shotsHtml}</div>
+                    <button class="vcard__close" type="button" aria-label="${esc(t('popup.close'))}">&times;</button>${galleryUi}
                 </div>
 
                 <div class="vcard__head">
@@ -667,11 +680,64 @@ class PlaceDetails {
         // photograph strip
         if (gallery.length > 1) {
             const shots = overlay.querySelector('.vcard__shots');
-            let index = 0;
-            overlay.querySelector('.vcard__photos').addEventListener('click', () => {
-                index = (index + 1) % gallery.length;
-                shots.style.transform = `translateX(-${index * 100}%)`;
+            const prev = overlay.querySelector('.vcard__nav--prev');
+            const next = overlay.querySelector('.vcard__nav--next');
+            const dots = Array.from(overlay.querySelectorAll('.vcard__dot'));
+            const counter = overlay.querySelector('.vcard__photos-index');
+
+            // Which photograph is under the viewport, read back from the
+            // scroll position — so a finger swipe and a button press stay in
+            // agreement without either having to tell the other.
+            const at = () => Math.round(shots.scrollLeft / Math.max(1, shots.clientWidth));
+            const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const paint = (i) => {
+                dots.forEach((d, k) => {
+                    d.classList.toggle('is-on', k === i);
+                    d.setAttribute('aria-selected', k === i ? 'true' : 'false');
+                });
+                if (counter) counter.textContent = `${i + 1} / ${gallery.length}`;
+                prev.disabled = i <= 0;
+                next.disabled = i >= gallery.length - 1;
+            };
+            // Painted from the target rather than from the scroll position, so
+            // the dots and the counter move with the press instead of trailing
+            // the smooth-scroll animation by half a second. `pending` holds
+            // that target until the scroll arrives: without it a slow frame
+            // mid-animation lets the scroll handler below repaint whatever
+            // photograph the strip happens to be passing over.
+            let pending = null;
+            const goTo = (i) => {
+                const target = Math.max(0, Math.min(gallery.length - 1, i));
+                pending = target;
+                paint(target);
+                shots.scrollTo({ left: target * shots.clientWidth, behavior: calm ? 'auto' : 'smooth' });
+            };
+            // A finger on the strip overrides an animation still running.
+            shots.addEventListener('pointerdown', () => { pending = null; }, { passive: true });
+
+            prev.addEventListener('click', () => goTo(at() - 1));
+            next.addEventListener('click', () => goTo(at() + 1));
+            dots.forEach((d) => d.addEventListener('click', () => goTo(Number(d.dataset.shot))));
+            shots.addEventListener('keydown', (e) => {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                e.preventDefault();
+                goTo(at() + (e.key === 'ArrowRight' ? 1 : -1));
             });
+
+            // Coalesced: a swipe fires scroll events all the way through the
+            // gesture, and only where it lands matters. This is what keeps a
+            // finger swipe in step with the dots.
+            let settle = null;
+            shots.addEventListener('scroll', () => {
+                clearTimeout(settle);
+                settle = setTimeout(() => {
+                    const here = at();
+                    if (pending !== null && pending !== here) return; // still travelling
+                    pending = null;
+                    paint(here);
+                }, 60);
+            }, { passive: true });
+            paint(0);
         }
 
         // menu sheet
