@@ -369,6 +369,58 @@
     color: var(--gold);
 }
 
+/* ---------- club events (nightlife only) ----------
+   Filled in after the card is already open — see PlaceDetails.showDetails()
+   in js/pages.js, which fetches /api/events once per page load and patches
+   this in above the action buttons. Absent entirely when the venue has no
+   upcoming event, so every other venue type is unaffected. */
+
+.vcard__events {
+    margin: 0 clamp(20px, 4cqi, 34px) 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vcard__event {
+    padding: 14px 16px;
+    border: 1px solid var(--gold-line);
+    border-radius: var(--vcard-radius);
+    background: var(--gold-wash);
+}
+
+.vcard__event-badge {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.vcard__event-title {
+    margin: 0 0 4px;
+    font-family: var(--vcard-serif);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+}
+
+.vcard__event-meta {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-soft);
+}
+
+.vcard__event-desc {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--ink-soft);
+}
+
 /* ---------- actions ---------- */
 
 .vcard__actions {

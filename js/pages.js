@@ -11,6 +11,71 @@ function t(key) {
     return key;
 }
 
+/* Club events — "live tonight" / "upcoming" text on a nightlife venue's
+   popup, entered by hand through /admin/events.html (there is no reliable
+   public API for Belgrade club listings; see api/events.js for why).
+
+   Fetched once per page load and cached: every nightlife popup opened
+   afterwards reads the same resolved list instead of firing its own
+   request. Nothing calls this outside a nightlife popup, so no other venue
+   type ever triggers it. */
+let _clubEventsPromise = null;
+function clubEvents() {
+    if (!_clubEventsPromise) {
+        _clubEventsPromise = fetch('/api/events')
+            .then((r) => (r.ok ? r.json() : null))
+            .then((data) => (data && data.ok && Array.isArray(data.events)) ? data.events : [])
+            .catch(() => []); // offline, or the endpoint isn't deployed yet — no events, not an error visitors see
+    }
+    return _clubEventsPromise;
+}
+
+/* venue.date compares are done as plain ISO strings ('YYYY-MM-DD'), which
+   sort and compare correctly without parsing — same trick api/events.js
+   uses server-side. */
+function todayIso() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function eventField(ev, base, langCode) {
+    if (langCode === 'sr' && ev[base + 'Sr']) return ev[base + 'Sr'];
+    return ev[base] || '';
+}
+
+/* 'YYYY-MM-DD' -> a short locale date ("Sep 12"), same convention as the
+   other ts -> readable-date spots in this codebase (js/script.js,
+   js/booking.js, js/referral.js): toLocaleDateString(undefined, …) so it
+   follows the visitor's device locale rather than the site's chosen UI
+   language, which nothing here otherwise tracks per-date. */
+function formatEventDate(iso) {
+    const parts = String(iso).split('-').map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return iso;
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+function eventsHtml(events, langCode, esc) {
+    const today = todayIso();
+    return '<div class="vcard__events">' + events.map((ev) => {
+        const isTonight = ev.date === today;
+        const badge = isTonight ? '🔥 ' + t('event.liveTonight') : '📅 ' + t('event.upcoming');
+        // The badge already says "tonight" — repeating it in the meta line
+        // said the same thing twice, so that line carries the date only when
+        // it's telling the reader something the badge didn't.
+        const metaBits = [isTonight ? '' : formatEventDate(ev.date), ev.time, ev.price].filter(Boolean).map(esc);
+        const title = eventField(ev, 'title', langCode);
+        const desc = eventField(ev, 'description', langCode);
+        return `
+            <div class="vcard__event">
+                <p class="vcard__event-badge">${esc(badge)}</p>
+                ${title ? `<h3 class="vcard__event-title">${esc(title)}</h3>` : ''}
+                ${metaBits.length ? `<p class="vcard__event-meta">${metaBits.join(' · ')}</p>` : ''}
+                ${desc ? `<p class="vcard__event-desc">${esc(desc)}</p>` : ''}
+            </div>`;
+    }).join('') + '</div>';
+}
+
 class PlaceFiltering {
     constructor() {
         this.grid = document.getElementById('restaurants-grid') || document.getElementById('places-grid');
@@ -679,6 +744,19 @@ class PlaceDetails {
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
         document.addEventListener('keydown', escHandler);
         overlay.querySelector('.vcard__close').focus({ preventScroll: true });
+
+        // Club events, nightlife only. Patched in after the popup is already
+        // open and visible, since the fetch (cached beyond the first call) is
+        // never worth delaying the rest of the card for.
+        if (pageType === 'nightlife' && venue && venue.slug) {
+            clubEvents().then((events) => {
+                if (!overlay.isConnected) return; // closed before this resolved
+                const mine = events.filter((ev) => ev.venueSlug === venue.slug);
+                if (!mine.length) return;
+                const actionsEl = overlay.querySelector('.vcard__actions');
+                if (actionsEl) actionsEl.insertAdjacentHTML('beforebegin', eventsHtml(mine, CR ? CR.currentLang() : 'en', esc));
+            });
+        }
 
         // photograph strip
         if (gallery.length > 1) {

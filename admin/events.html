@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FeelBG · Club events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Same non-blocking font load as /admin/index.html, and the same reasoning:
+     a stylesheet in the head holds up every script after it, and this page
+     has to work as a login form even if Google Fonts never arrives. -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+/* Same palette and gate pattern as /admin/index.html — this page shares no
+   components with it (each is self-contained on purpose), it just agrees on
+   how FeelBG's admin surfaces look. */
+:root{
+  --bg:#0a1128; --surface:#0d1a3d; --surface-2:#122350;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+  --ink:#f4efe2; --ink-2:#b9c2de; --ink-3:#7f8bb0;
+  --gold:#ffd700; --gold-deep:#b8860b;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Poppins',system-ui,sans-serif;font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;margin:0}
+a{color:var(--gold)}
+
+.wrap{max-width:840px;margin:0 auto;padding:28px 20px 72px}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+.gate__card{width:100%;max-width:380px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);padding:32px}
+.gate__mark{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);margin-bottom:6px}
+.gate__hint{color:var(--ink-3);font-size:13px;margin:0 0 22px}
+.field{display:block;margin-bottom:14px}
+.field span{display:block;font-size:12px;color:var(--ink-2);margin-bottom:6px;
+  letter-spacing:.08em;text-transform:uppercase}
+input[type=password],input[type=text],input[type=date],input[type=time],input[type=url],select,textarea{
+  width:100%;padding:11px 13px;border-radius:10px;
+  background:var(--bg);border:1px solid var(--line-2);color:var(--ink);
+  font:inherit;font-size:15px}
+textarea{resize:vertical;min-height:64px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-deep);outline-offset:1px}
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  min-height:44px;padding:0 18px;border:0;border-radius:999px;cursor:pointer;
+  font:inherit;font-weight:600;
+  background:linear-gradient(135deg,var(--gold-deep),var(--gold));color:#14204a}
+.btn:hover{filter:brightness(1.06)}
+.btn--ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line-2)}
+.btn--ghost:hover{color:var(--ink);border-color:var(--gold-deep);filter:none}
+.btn--danger{background:transparent;color:#f0a3a0;border:1px solid rgba(240,163,160,.4)}
+.btn--danger:hover{background:rgba(240,163,160,.1)}
+.btn[disabled]{opacity:.55;cursor:default;filter:none}
+.err{margin-top:14px;color:#f0a3a0;font-size:13px;min-height:18px}
+.ok{margin-top:14px;color:#8fd6a8;font-size:13px;min-height:18px}
+
+/* ---------- chrome ---------- */
+.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;
+  justify-content:space-between;margin-bottom:24px}
+.top h1{font-size:27px;color:var(--gold)}
+.top p{margin:4px 0 0;color:var(--ink-3);font-size:13px}
+
+.note{background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--gold-deep);border-radius:10px;
+  padding:14px 16px;margin-bottom:22px;color:var(--ink-2);font-size:13px}
+.note code{color:var(--gold);font-size:12px}
+
+/* ---------- form ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:20px;margin-bottom:22px}
+.panel h2{font-size:17px;margin-bottom:16px}
+.row2{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr}}
+.row3{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:640px){.row3{grid-template-columns:1fr 1fr 1fr}}
+
+/* ---------- event list ---------- */
+.elist{display:grid;gap:12px}
+.ecard{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+  padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.ecard[data-active="false"]{opacity:.5}
+.ecard__body{min-width:0}
+.ecard__title{font-weight:600;color:var(--ink)}
+.ecard__meta{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.ecard__venue{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(255,215,0,.35);border-radius:999px;padding:2px 9px;margin-right:8px}
+.empty{color:var(--ink-3);text-align:center;padding:24px 0;font-size:13.5px}
+</style>
+</head>
+<body>
+
+<!-- Password gate. Same check as /admin/index.html — the server-side
+     ADMIN_PASSWORD in api/events.js, nothing to bypass by reading this file. -->
+<div class="gate" id="gate">
+  <form class="gate__card" id="gate-form">
+    <div class="gate__mark">Feel<span style="color:#3b82f6">BG</span></div>
+    <p class="gate__hint">Club events</p>
+    <label class="field">
+      <span>Password</span>
+      <input type="password" id="pw" autocomplete="current-password" required>
+    </label>
+    <button class="btn" style="width:100%" id="gate-btn" type="submit">Open</button>
+    <div class="err" id="gate-err"></div>
+  </form>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <div class="top">
+    <div>
+      <h1>Club events</h1>
+      <p>What shows on a nightlife card's "Live Tonight / Upcoming" section</p>
+    </div>
+    <a class="btn btn--ghost" href="/admin/">← Traffic</a>
+  </div>
+
+  <div id="notice"></div>
+
+  <div class="panel">
+    <h2>Add an event</h2>
+    <form id="add-form">
+      <label class="field">
+        <span>Club</span>
+        <select id="f-venue" required></select>
+      </label>
+      <div class="row2">
+        <label class="field">
+          <span>Title (English)</span>
+          <input type="text" id="f-title" maxlength="120" required placeholder="Foam Party w/ DJ Name">
+        </label>
+        <label class="field">
+          <span>Title (Serbian, optional)</span>
+          <input type="text" id="f-title-sr" maxlength="120">
+        </label>
+      </div>
+      <div class="row3">
+        <label class="field">
+          <span>Date</span>
+          <input type="date" id="f-date" required>
+        </label>
+        <label class="field">
+          <span>Time</span>
+          <input type="text" id="f-time" maxlength="40" placeholder="23:00 – 05:00">
+        </label>
+        <label class="field">
+          <span>Price</span>
+          <input type="text" id="f-price" maxlength="40" placeholder="€10, or Free entry">
+        </label>
+      </div>
+      <div class="row2">
+        <label class="field">
+          <span>Description (English)</span>
+          <textarea id="f-desc" maxlength="300" placeholder="One or two sentences — who's playing, what the night is."></textarea>
+        </label>
+        <label class="field">
+          <span>Description (Serbian, optional)</span>
+          <textarea id="f-desc-sr" maxlength="300"></textarea>
+        </label>
+      </div>
+      <label class="field">
+        <span>Ticket link (optional)</span>
+        <input type="url" id="f-ticket" maxlength="300" placeholder="https://…">
+      </label>
+      <button class="btn" type="submit" id="add-btn">Publish</button>
+      <div class="err" id="add-err"></div>
+      <div class="ok" id="add-ok"></div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>All events</h2>
+    <p style="color:var(--ink-3);font-size:12.5px;margin:-10px 0 16px">Newest first. An event also stops showing on its own once its date has passed, whether or not it's deactivated here.</p>
+    <div class="elist" id="elist"><p class="empty">Loading…</p></div>
+  </div>
+</div>
+
+<!-- The public venue database, same file every page on the site loads —
+     this is only for the club dropdown, so the id and the display name can
+     never drift from the real thing. -->
+<script src="/js/venues.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+
+  // Kept in memory only, same as /admin/index.html — reloading asks again.
+  var password = '';
+
+  function api(body) {
+    return fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ password: password }, body))
+    }).then(function (r) {
+      return r.json().then(function (j) { return { status: r.status, body: j }; });
+    });
+  }
+
+  /* ---------------- club dropdown ---------------- */
+
+  function fillVenueSelect() {
+    var venues = (window.FEELBG_VENUES && window.FEELBG_VENUES.nightlife) || [];
+    var sel = $('f-venue');
+    sel.innerHTML = venues.map(function (v) {
+      return '<option value="' + esc(v.slug) + '">' + esc(v.name) + '</option>';
+    }).join('') || '<option value="">No nightlife venues found in venues.js</option>';
+  }
+
+  /* ---------------- event list ---------------- */
+
+  function venueName(slug) {
+    var venues = (window.FEELBG_VENUES && window.FEELBG_VENUES.nightlife) || [];
+    var v = venues.filter(function (x) { return x.slug === slug; })[0];
+    return v ? v.name : slug;
+  }
+
+  function renderList(events) {
+    var host = $('elist');
+    if (!events.length) { host.innerHTML = '<p class="empty">No events yet.</p>'; return; }
+    host.innerHTML = events.map(function (ev) {
+      var meta = [ev.date, ev.time, ev.price].filter(Boolean).map(esc).join(' · ');
+      return '<div class="ecard" data-active="' + (ev.active !== false) + '">' +
+        '<div class="ecard__body">' +
+          '<span class="ecard__venue">' + esc(venueName(ev.venueSlug)) + '</span>' +
+          '<span class="ecard__title">' + esc(ev.title) + '</span>' +
+          '<div class="ecard__meta">' + meta + '</div>' +
+        '</div>' +
+        (ev.active !== false
+          ? '<button class="btn btn--danger" type="button" data-deactivate="' + esc(ev.id) + '">Deactivate</button>'
+          : '<span class="ecard__meta">Off</span>') +
+        '</div>';
+    }).join('');
+  }
+
+  function loadList() {
+    var host = $('elist');
+    return api({ op: 'list' }).then(function (r) {
+      if (r.status === 200 && r.body.ok) {
+        $('notice').innerHTML = r.body.configured === false
+          ? '<div class="note">No events backend configured yet. Deploy <code>events-backend/Code.gs</code> and set <code>FEELBG_EVENTS_ENDPOINT</code> and <code>FEELBG_EVENTS_KEY</code> in Vercel.</div>'
+          : '';
+        renderList(r.body.events || []);
+        return true;
+      }
+      host.innerHTML = '<p class="empty">Could not load events.</p>';
+      return false;
+    }).catch(function () {
+      host.innerHTML = '<p class="empty">Could not reach the server.</p>';
+      return false;
+    });
+  }
+
+  $('elist').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-deactivate]');
+    if (!btn) return;
+    btn.disabled = true;
+    api({ op: 'deactivate', id: btn.getAttribute('data-deactivate') }).then(function (r) {
+      if (r.status === 200 && r.body.ok) return loadList();
+      btn.disabled = false;
+    }).catch(function () { btn.disabled = false; });
+  });
+
+  /* ---------------- add form ---------------- */
+
+  $('add-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('add-btn');
+    var err = $('add-err');
+    var ok = $('add-ok');
+    err.textContent = '';
+    ok.textContent = '';
+    btn.disabled = true;
+
+    var event = {
+      venueSlug: $('f-venue').value,
+      title: $('f-title').value.trim(),
+      titleSr: $('f-title-sr').value.trim(),
+      date: $('f-date').value,
+      time: $('f-time').value.trim(),
+      price: $('f-price').value.trim(),
+      description: $('f-desc').value.trim(),
+      descriptionSr: $('f-desc-sr').value.trim(),
+      ticketUrl: $('f-ticket').value.trim()
+    };
+
+    if (!event.venueSlug || !event.title || !event.date) {
+      err.textContent = 'Club, title and date are required.';
+      btn.disabled = false;
+      return;
+    }
+
+    api({ op: 'add', event: event }).then(function (r) {
+      btn.disabled = false;
+      if (r.status === 200 && r.body.ok) {
+        ok.textContent = 'Published.';
+        e.target.reset();
+        return loadList();
+      }
+      err.textContent = r.body && r.body.detail ? r.body.detail
+        : r.body && r.body.error ? r.body.error
+        : 'Could not publish.';
+    }).catch(function () {
+      btn.disabled = false;
+      err.textContent = 'Could not reach the server.';
+    });
+  });
+
+  /* ---------------- gate ---------------- */
+
+  $('gate-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('gate-btn');
+    var err = $('gate-err');
+    password = $('pw').value;
+    btn.disabled = true;
+    err.textContent = '';
+    fillVenueSelect();
+    loadList().then(function (okLoad) {
+      if (okLoad) {
+        $('gate').hidden = true;
+        $('app').hidden = false;
+        return;
+      }
+      password = '';
+      err.textContent = 'Wrong password, or the server could not be reached.';
+    }).finally(function () { btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
