@@ -111,12 +111,11 @@
     transform: rotate(90deg);
 }
 
-/* Toggle button always visible. This file loads after styles.css, which
-   hides .nav__toggle, so plain source order is enough to win. */
-.nav__toggle {
-    display: flex;
-    cursor: pointer;
-}
+/* The hamburger is gone from the markup. It only ever added .show-menu to
+   .nav__menu, which styles.css keeps at display:none below 768px and which the
+   desktop navbar replaces above it — so the button opened nothing on either
+   side of the breakpoint. Navigation is the header navbar on desktop and the
+   bottom tab bar on mobile. */
 
 /* Show menu on desktop and mobile */
 @media (min-width: 768px) {

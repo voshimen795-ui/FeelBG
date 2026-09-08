@@ -102,7 +102,6 @@ class CustomCursor {
 class Header {
     constructor() {
         this.header = $('#header');
-        this.navToggle = $('#nav-toggle');
         this.navClose = $('#nav-close');
         this.navMenu = $('#nav-menu');
         this.navLinks = $$('.nav__link');
@@ -128,12 +127,14 @@ class Header {
         window.addEventListener('scroll', throttle(scrollHeader, 100));
     }
 
+    /* Closing the slide-out menu.
+       Nothing opens it any more — the hamburger that used to has been removed,
+       because the panel it toggled is display:none below 768px and replaced by
+       the header navbar above it, so the button opened nothing either way.
+       These handlers stay because .show-menu can still be set by hand, and they
+       cost nothing when the elements are absent. */
     handleMobileMenu() {
-        if (this.navToggle) {
-            this.navToggle.addEventListener('click', () => {
-                this.navMenu.classList.add('show-menu');
-            });
-        }
+        if (!this.navMenu) return;
 
         if (this.navClose) {
             this.navClose.addEventListener('click', () => {
