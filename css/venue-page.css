@@ -76,6 +76,44 @@
     letter-spacing: var(--tracking-wide);
 }
 
+/* --- Reserve --- */
+.venue-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin: var(--space-5) 0 0;
+}
+
+.venue-reserve-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: 1px solid rgba(255, 236, 170, 0.8);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 60%, #ffe9a8 100%);
+    color: #14204a;
+    font-family: inherit;
+    font-size: var(--text-base);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(255, 215, 0, 0.22);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.venue-reserve-btn:hover,
+.venue-reserve-btn:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(255, 215, 0, 0.34);
+    outline: none;
+}
+
+.venue-cta__note {
+    font-size: var(--text-sm);
+    color: var(--page-text-secondary);
+}
+
 /* --- Photograph --- */
 .venue-figure {
     margin: 0 0 var(--space-6);

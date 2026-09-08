@@ -21,7 +21,10 @@ class ReservePicker {
             const trigger = e.target.closest('[data-venue-browser]');
             if (trigger) {
                 e.preventDefault();
-                this.open();
+                // The attribute may name a category ("cafes"), which opens the
+                // picker already filtered to it — that is what the reserve
+                // button in a category page hero uses.
+                this.open(trigger.getAttribute('data-venue-browser'));
             }
         });
         document.addEventListener('keydown', (e) => {
@@ -52,6 +55,7 @@ class ReservePicker {
                 out.push({
                     category: cat,
                     name: v.name,
+                    slug: v.slug || '',
                     area: v.area || '',
                     rating: v.rating || null,
                     priceLabel: v.priceLabel || '',
@@ -73,15 +77,16 @@ class ReservePicker {
         return { restaurants: 'fa-utensils', cafes: 'fa-coffee', nightlife: 'fa-glass-cheers' }[cat] || 'fa-utensils';
     }
 
-    open() {
-        this.activeCategory = 'all';
+    open(category) {
+        const cats = this.availableCategories();
+        this.activeCategory = cats.indexOf(category) !== -1 ? category : 'all';
         this.query = '';
         if (this.modalEl) this.modalEl.remove();
 
-        const cats = this.availableCategories();
-        const chips = ['<button class="rvp-chip rvp-chip--active" data-cat="all">' + this.t('reserve.all') + '</button>']
+        const chipClass = (c) => 'rvp-chip' + (this.activeCategory === c ? ' rvp-chip--active' : '');
+        const chips = ['<button class="' + chipClass('all') + '" data-cat="all">' + this.t('reserve.all') + '</button>']
             .concat(cats.map((c) =>
-                '<button class="rvp-chip" data-cat="' + c + '"><i class="fas ' + this.categoryIcon(c) + '"></i> ' + this.t('reserve.' + c) + '</button>'
+                '<button class="' + chipClass(c) + '" data-cat="' + c + '"><i class="fas ' + this.categoryIcon(c) + '"></i> ' + this.t('reserve.' + c) + '</button>'
             )).join('');
 
         const modal = document.createElement('div');
@@ -132,7 +137,7 @@ class ReservePicker {
         // Delegated so re-renders don't need re-binding
         modal.querySelector('#rvp-list').addEventListener('click', (e) => {
             const row = e.target.closest('[data-venue]');
-            if (row) this.pick(row.getAttribute('data-venue'));
+            if (row) this.pick(row.getAttribute('data-venue'), row.getAttribute('data-slug'));
         });
 
         this.renderList();
@@ -159,7 +164,7 @@ class ReservePicker {
             const rating = v.rating ? '<span class="rvp-rating"><i class="fas fa-star"></i> ' + v.rating.toFixed(1) + '</span>' : '';
             const area = v.area ? '<span class="rvp-area"><i class="fas fa-map-marker-alt"></i> ' + v.area + '</span>' : '';
             return `
-                <div class="rvp-row" data-venue="${v.name.replace(/"/g, '&quot;')}" role="button" tabindex="0">
+                <div class="rvp-row" data-venue="${v.name.replace(/"/g, '&quot;')}" data-slug="${v.slug}" role="button" tabindex="0">
                     ${thumb}
                     <div class="rvp-info">
                         <div class="rvp-name">${v.name}</div>
@@ -170,11 +175,14 @@ class ReservePicker {
         }).join('');
     }
 
-    pick(venueName) {
+    // The slug travels with the name: it is what the chatbot matches the venue
+    // on (a club gets the seating question, a cafe does not) and what the
+    // referral tracker files the row under.
+    pick(venueName, slug) {
         this.close();
         // small delay so the two modals don't visually overlap mid-transition
         setTimeout(() => {
-            if (window.bookingChatbot) window.bookingChatbot.open(venueName);
+            if (window.bookingChatbot) window.bookingChatbot.open(venueName, slug || '');
         }, 260);
     }
 
