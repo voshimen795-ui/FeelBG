@@ -40,6 +40,15 @@
         return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     }
 
+    /* Desktop renders the site without decorative motion, so the 3D layer is
+       skipped there exactly as it is for reduced motion — the scroller and
+       its real cards remain, and css/desktop-static.css lays them out as a
+       row of three full-size cards instead of one phone-width card. Same
+       breakpoint as that stylesheet (1024px). */
+    function isDesktop() {
+        return !!(window.matchMedia && window.matchMedia('(min-width: 1024px)').matches);
+    }
+
     function t(key) {
         var translations = window.FEELBG_TRANSLATIONS || {};
         var code = 'en';
@@ -166,9 +175,10 @@
 
         this.buildScroller();
 
-        /* Reduced motion keeps the scroller and the real cards, and simply
-           never builds the 3D layer. The section stays fully usable. */
-        if (prefersReducedMotion() || this.cardCount < 2) return;
+        /* Reduced motion and desktop both keep the scroller and the real
+           cards, and simply never build the 3D layer. The section stays
+           fully usable. */
+        if (prefersReducedMotion() || isDesktop() || this.cardCount < 2) return;
 
         this.buildVisuals();
         this.buildDots();

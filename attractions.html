@@ -27,7 +27,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <!-- Design system: tokens first, then base, then components, then theme.
          This order is identical on every page — do not reshuffle it. -->
@@ -42,10 +41,9 @@
     <link rel="stylesheet" href="css/insider-tips.css">
     <link rel="stylesheet" href="css/premium-fx.css">
     <link rel="stylesheet" href="css/venue-card.css">
+    <link rel="stylesheet" href="css/desktop-static.css">
 </head>
 <body>
-    <div class="cursor-dot" data-cursor-dot></div>
-    <div class="cursor-outline" data-cursor-outline></div>
 
     <header class="header scroll-header" id="header">
         <nav class="nav container">
@@ -90,12 +88,16 @@
 
     <main class="main">
         <section class="page-hero">
-            <video class="page-hero__video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1580896571539-68e6c1e0e5a5?w=1200&q=80">
-                <source src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <!-- Background clip. The <source> holds data-src, not src, so the
+                 browser fetches nothing while parsing; js/script.js assigns it
+                 off desktop only. With no source the element paints its own
+                 poster, which is what desktop shows. -->
+            <video class="page-hero__video" muted loop playsinline preload="none" poster="https://images.unsplash.com/photo-1580896571539-68e6c1e0e5a5?w=1200&q=80">
+                <source data-src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_30fps.mp4" type="video/mp4">
             </video>
             <div class="page-hero__background"></div>
             <div class="container">
-                <div class="page-hero__content" data-aos="fade-up">
+                <div class="page-hero__content">
                     <div class="breadcrumb">
                         <a href="index.html"><i class="fas fa-home"></i> <span data-i18n="nav.home">Home</span></a>
                         <span>/</span>
@@ -143,8 +145,6 @@
         </div>
     </footer>
 
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/venue-translations.js"></script>
     <script src="js/attraction-translations.js"></script>
@@ -168,11 +168,6 @@
         <a href="nightlife.html" class="mobile-nav-item"><i class="fas fa-music"></i><span data-i18n="nav.nightlife">Night</span></a>
         <a href="cafes.html" class="mobile-nav-item"><i class="fas fa-coffee"></i><span data-i18n="nav.cafes">Cafes</span></a>
     </nav>
-
-    <!-- GSAP + ScrollTrigger (premium scroll animations) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="js/gsap-fx.js"></script>
 
     <!-- Vercel Web Analytics (static-site integration -- no framework/bundler here,
          so this is the plain-HTML path Vercel documents instead of the

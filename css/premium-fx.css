@@ -3,13 +3,6 @@
    GSAP-driven scroll animation support styles
    ============================================ */
 
-/* Reduce layout thrash on animated elements */
-.card-scatter-stage .place-card,
-.mask-reveal__panel,
-.mask-reveal__circle {
-    will-change: transform, opacity;
-}
-
 /* ============================================
    HOME HERO VIDEO PLAYLIST
    4 clips crossfade in an endless rotation (driven by the
@@ -348,23 +341,6 @@ body {
 
 .mask-reveal__panel-inner p {
     color: var(--text-secondary);
-}
-
-/* ============================================
-   PHASE 2 — 3D PERSPECTIVE CARD SCATTER
-   ============================================ */
-.card-scatter-stage {
-    perspective: 1200px;
-    perspective-origin: 50% 50%;
-}
-
-.card-scatter-stage .places-grid {
-    transform-style: preserve-3d;
-}
-
-.card-scatter-stage .place-card {
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
 }
 
 /* Premium hover refinements for business cards */
@@ -931,9 +907,31 @@ body {
         z-index: auto;
     }
 
+    /* Three columns, not space-between.
+
+       The header's three blocks are the logo, the links and the language
+       picker, and they are all different widths — so distributing the free
+       space between them put the link row wherever the difference between
+       the logo and the picker happened to fall, which is near the middle but
+       never on it. Equal 1fr side columns pin the middle column to the
+       header's true centre, whatever the outer two contain (on the Serbian
+       category pages the actions block is empty, and the links stay centred
+       all the same). */
+    .nav {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        column-gap: var(--space-4);
+    }
+
+    .nav__left { justify-self: start; }
+    .nav__menu { justify-self: center; }
+    .nav__actions { justify-self: end; }
+
     .nav__list {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: var(--space-1);
         margin: 0;
         padding: 0;

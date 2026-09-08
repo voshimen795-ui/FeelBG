@@ -32,6 +32,12 @@
 
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+    /* Desktop renders the site without decorative motion, so this never runs
+       there — which also means Three.js is never fetched on the widest, most
+       stylesheet-heavy rendering of the home page. Same 1024px breakpoint as
+       css/desktop-static.css. */
+    if (window.matchMedia && window.matchMedia('(min-width: 1024px)').matches) return;
+
     function ready(fn) {
         if (document.readyState !== 'loading') fn();
         else document.addEventListener('DOMContentLoaded', fn);

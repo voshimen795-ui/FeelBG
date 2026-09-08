@@ -502,6 +502,9 @@ class PlaceDetails {
         const venue = venueOverride || this.findVenue(title);
         const pageType = forcedPageType || (venue && venue.type ? this.typeToPageType(venue.type) : this.getPageType());
         const isAttraction = pageType === 'attractions';
+        /* Cafes are walk-in, so the popup offers no table booking either —
+           same rule the cards and the venue pages follow. */
+        const canReserve = !isAttraction && pageType !== 'cafes';
 
         // The venue record is the source. The card DOM is only consulted for
         // places rendered outside venues.js, and never overrides real data.
@@ -597,7 +600,7 @@ class PlaceDetails {
                 </div>
 
                 <div class="vcard__actions">
-                    ${isAttraction ? '' : `
+                    ${!canReserve ? '' : `
                         <button class="vcard__btn vcard__btn--primary" type="button" data-booking="${esc(title)}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16v15H4z" stroke-linejoin="round"/><path d="M8 3v4M16 3v4M4 10h16" stroke-linecap="round"/></svg>
                             ${esc(t(pageType === 'nightlife' ? 'card.reserveSpot' : 'popup.reserve'))}
@@ -794,8 +797,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // The category pages now ship their cards in the HTML (tools/build-seo.mjs),
         // so a crawler sees them without running any of this. When the markup on
         // the page is already in the reader's language there is nothing to do —
-        // re-rendering identical nodes only throws away the elements gsap-fx.js
-        // is about to attach its scroll animation to.
+        // re-rendering identical nodes would only throw away DOM that is already
+        // correct, along with anything bound to it.
         //
         // Note this only skips the render; PlaceFiltering below must still be
         // constructed either way, or the details popup never binds.
