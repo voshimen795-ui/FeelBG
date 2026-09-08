@@ -1,11 +1,31 @@
 'use strict';
 
+/* What a Belgrade club actually sells. The three are priced and confirmed
+   differently — high tables go by the head, a "sto sa uslovom" carries a
+   minimum spend, a separe is booked whole — so the club cannot answer a
+   request that does not say which one it is. Asking here saves the WhatsApp
+   round trip that every club booking used to need.
+
+   Restaurants and cafes keep the shorter flow: a table is a table. */
+const CLUB_SEATING = [
+    { id: 'high', icon: 'fa-martini-glass' },
+    { id: 'conditional', icon: 'fa-wine-bottle' },
+    { id: 'separe', icon: 'fa-crown' }
+];
+
 class BookingChatbot {
     constructor() {
         this.step = 0;
-        this.answers = { venue: '', guests: '', time: '', requests: '' };
+        this.answers = { venue: '', guests: '', seating: '', time: '', requests: '' };
+        this.steps = [];
         this.whatsappNumber = '381653315640';
         this.init();
+    }
+
+    static escapeHtml(str) {
+        return String(str == null ? '' : str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     t(key) {
@@ -45,10 +65,49 @@ class BookingChatbot {
         });
     }
 
+    /* Which collection the venue belongs to: 'restaurants' | 'cafes' |
+       'nightlife' | ''.
+
+       The venue database is the first source, matched on slug and then on
+       name. It is not loaded on the generated venue pages (/en/venue/...),
+       which is why the body's data-venue-type is the fallback there — and the
+       page type is the last resort, for a card whose venue is not in the DB. */
+    categoryOf(venueName, venueId) {
+        const db = window.FEELBG_VENUES || {};
+        const cats = ['restaurants', 'cafes', 'nightlife'];
+        const wanted = String(venueName || '').trim().toLowerCase();
+        for (const cat of cats) {
+            const hit = (db[cat] || []).some((v) =>
+                (venueId && v.slug === venueId) || (wanted && String(v.name).toLowerCase() === wanted));
+            if (hit) return cat;
+        }
+        const bodyType = document.body && document.body.dataset ? document.body.dataset.venueType : '';
+        if (cats.indexOf(bodyType) !== -1) return bodyType;
+        if (/nightlife|nocni-zivot/.test(location.pathname)) return 'nightlife';
+        if (/cafes|kafici/.test(location.pathname)) return 'cafes';
+        if (/restaurants|restorani/.test(location.pathname)) return 'restaurants';
+        return '';
+    }
+
+    /* The questions to ask, in order. Clubs get the seating question in the
+       middle — it belongs right after the party size, because the size is what
+       decides whether a separe is even worth asking about. */
+    buildSteps() {
+        const steps = [{ key: 'guests', q: 'chatbot.q1' }];
+        if (this.venueCategory === 'nightlife') {
+            steps.push({ key: 'seating', q: 'chatbot.qSeating', options: CLUB_SEATING });
+        }
+        steps.push({ key: 'time', q: 'chatbot.q2' });
+        steps.push({ key: 'requests', q: 'chatbot.q3' });
+        return steps;
+    }
+
     open(venue, venueId) {
         this.step = 0;
-        this.answers = { venue: venue || 'FeelBG Reservation', guests: '', time: '', requests: '' };
+        this.answers = { venue: venue || 'FeelBG Reservation', guests: '', seating: '', time: '', requests: '' };
         this.venueId = venueId || '';
+        this.venueCategory = this.categoryOf(this.answers.venue, this.venueId);
+        this.steps = this.buildSteps();
 
         // Record the intent, not just the completion. Until now the first row
         // written was code_generated in showSummary(), which only fires after
@@ -73,7 +132,7 @@ class BookingChatbot {
                         <div class="bcb-avatar"><i class="fas fa-concierge-bell"></i></div>
                         <div>
                             <div class="bcb-title">${this.t('chatbot.title')}</div>
-                            <div class="bcb-subtitle">${this.answers.venue}</div>
+                            <div class="bcb-subtitle">${BookingChatbot.escapeHtml(this.answers.venue)}</div>
                         </div>
                     </div>
                     <button class="bcb-close" aria-label="Close">&times;</button>
@@ -167,38 +226,63 @@ class BookingChatbot {
     }
 
     askNext() {
-        const questions = [
-            this.t('chatbot.q1'),
-            this.t('chatbot.q2'),
-            this.t('chatbot.q3')
-        ];
+        const step = this.steps[this.step];
+        if (!step) return;
         this.showTyping();
         setTimeout(() => {
             this.hideTyping();
-            this.addMessage(questions[this.step], 'bot');
+            this.addMessage(BookingChatbot.escapeHtml(this.t(step.q)), 'bot');
+            if (step.options) this.renderOptions(step);
             this.inputEl.focus();
         }, 700);
+    }
+
+    /* Tappable answers for a step that has a fixed set of them. The text input
+       stays live underneath: someone who wants "separe za 8, može i visoko"
+       types it instead, and it is stored the same way. */
+    renderOptions(step) {
+        const wrap = document.createElement('div');
+        wrap.className = 'bcb-options';
+        wrap.innerHTML = step.options.map((opt) => {
+            const label = this.t('chatbot.seat.' + opt.id);
+            const note = this.t('chatbot.seat.' + opt.id + '.note');
+            return `<button type="button" class="bcb-option" data-value="${BookingChatbot.escapeHtml(label)}">` +
+                `<span class="bcb-option__icon"><i class="fas ${opt.icon}"></i></span>` +
+                `<span class="bcb-option__text">` +
+                `<span class="bcb-option__label">${BookingChatbot.escapeHtml(label)}</span>` +
+                `<span class="bcb-option__note">${BookingChatbot.escapeHtml(note)}</span>` +
+                `</span></button>`;
+        }).join('');
+        wrap.addEventListener('click', (e) => {
+            const btn = e.target.closest('.bcb-option');
+            if (!btn) return;
+            wrap.remove();
+            this.record(btn.getAttribute('data-value'));
+        });
+        this.messagesEl.appendChild(wrap);
+        this.scrollToBottom();
+    }
+
+    // Stores one answer, echoes it back and moves on. Both the text input and
+    // the option buttons come through here so a step behaves the same either way.
+    record(value) {
+        const step = this.steps[this.step];
+        if (!step || !value) return;
+        this.addMessage(BookingChatbot.escapeHtml(value), 'user');
+        this.answers[step.key] = value;
+        this.step += 1;
+        if (this.step >= this.steps.length) this.showSummary();
+        else this.askNext();
     }
 
     handleSend() {
         const val = this.inputEl.value.trim();
         if (!val) return;
-        this.addMessage(val, 'user');
         this.inputEl.value = '';
-
-        if (this.step === 0) {
-            this.answers.guests = val;
-            this.step = 1;
-            this.askNext();
-        } else if (this.step === 1) {
-            this.answers.time = val;
-            this.step = 2;
-            this.askNext();
-        } else if (this.step === 2) {
-            this.answers.requests = val;
-            this.step = 3;
-            this.showSummary();
-        }
+        // A typed answer supersedes the buttons for that step.
+        const options = this.messagesEl.querySelector('.bcb-options');
+        if (options) options.remove();
+        this.record(val);
     }
 
     showSummary() {
@@ -207,7 +291,9 @@ class BookingChatbot {
 
         this.referralCode = window.FeelBGReferral ? window.FeelBGReferral.getOrCreateCode(this.answers.venue) : null;
 
-        let msg = `${this.t('chatbot.reservationFor')} ${this.answers.venue}\n${this.t('chatbot.guests')}: ${this.answers.guests}\n${this.t('chatbot.time')}: ${this.answers.time}\n${this.t('chatbot.requests')}: ${this.answers.requests}`;
+        const seating = this.answers.seating
+            ? `\n${this.t('chatbot.seating')}: ${this.answers.seating}` : '';
+        let msg = `${this.t('chatbot.reservationFor')} ${this.answers.venue}\n${this.t('chatbot.guests')}: ${this.answers.guests}${seating}\n${this.t('chatbot.time')}: ${this.answers.time}\n${this.t('chatbot.requests')}: ${this.answers.requests}`;
         if (this.referralCode) msg = window.FeelBGReferral.buildWhatsAppMessage(msg, this.referralCode);
         const encoded = encodeURIComponent(msg);
         const waUrl = `https://wa.me/${this.whatsappNumber}?text=${encoded}`;
@@ -215,13 +301,16 @@ class BookingChatbot {
         this.showTyping();
         setTimeout(() => {
             this.hideTyping();
+            const esc = BookingChatbot.escapeHtml;
             this.addMessage(
-                `${this.t('chatbot.summary')}<br><br>` +
+                `${esc(this.t('chatbot.summary'))}<br><br>` +
                 `<div class="bcb-summary">` +
-                `<div class="bcb-summary-row"><i class="fas fa-map-marker-alt"></i> ${this.answers.venue}</div>` +
-                `<div class="bcb-summary-row"><i class="fas fa-users"></i> ${this.answers.guests} ${this.t('chatbot.people')}</div>` +
-                `<div class="bcb-summary-row"><i class="fas fa-clock"></i> ${this.answers.time}</div>` +
-                `<div class="bcb-summary-row"><i class="fas fa-comment"></i> ${this.answers.requests}</div>` +
+                `<div class="bcb-summary-row"><i class="fas fa-map-marker-alt"></i> ${esc(this.answers.venue)}</div>` +
+                `<div class="bcb-summary-row"><i class="fas fa-users"></i> ${esc(this.answers.guests)} ${esc(this.t('chatbot.people'))}</div>` +
+                (this.answers.seating
+                    ? `<div class="bcb-summary-row"><i class="fas fa-chair"></i> ${esc(this.answers.seating)}</div>` : '') +
+                `<div class="bcb-summary-row"><i class="fas fa-clock"></i> ${esc(this.answers.time)}</div>` +
+                `<div class="bcb-summary-row"><i class="fas fa-comment"></i> ${esc(this.answers.requests)}</div>` +
                 `</div>` +
                 `<div class="bcb-summary-actions">` +
                 `<a href="${waUrl}" target="_blank" rel="noopener" class="bcb-whatsapp-btn" id="bcb-wa-link">` +
@@ -249,7 +338,7 @@ class BookingChatbot {
             <div class="bcb-voucher-card">
                 <div class="bcb-voucher-brand">Feel<span>BG</span></div>
                 <div class="bcb-voucher-heading">${this.t('voucher.title')}</div>
-                <div class="bcb-voucher-venue">${this.answers.venue}</div>
+                <div class="bcb-voucher-venue">${BookingChatbot.escapeHtml(this.answers.venue)}</div>
                 <div class="bcb-voucher-code">${this.referralCode || ''}</div>
                 <div class="bcb-voucher-date"><i class="fas fa-calendar-day"></i> ${dateStr}</div>
                 <div class="bcb-voucher-perk"><i class="fas fa-glass-cheers"></i> ${this.t('voucher.perk')}</div>
@@ -290,6 +379,15 @@ class BookingChatbot {
 .bcb-typing-dot:nth-child(2){animation-delay:.15s}
 .bcb-typing-dot:nth-child(3){animation-delay:.3s}
 @keyframes bcbTypingBounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+/* Tappable answers (club seating). They sit in the message stream on the bot
+   side, so they read as part of the question rather than as a toolbar. */
+.bcb-options{align-self:flex-start;display:flex;flex-direction:column;gap:8px;width:88%;max-width:300px;animation:bcbFadeIn .3s}
+.bcb-option{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:10px 13px;border-radius:12px;border:1px solid rgba(30,58,138,.25);background:#fffdf9;cursor:pointer;font-family:'Poppins',sans-serif;box-shadow:0 1px 3px rgba(10,17,40,.1);transition:border-color .18s,box-shadow .18s,transform .18s}
+.bcb-option:hover,.bcb-option:focus-visible{border-color:#b8860b;box-shadow:0 4px 14px rgba(184,134,11,.22);transform:translateY(-1px);outline:none}
+.bcb-option__icon{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#14204a;background:linear-gradient(135deg,#b8860b 0%,#ffd700 100%)}
+.bcb-option__text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.bcb-option__label{font-size:14px;font-weight:600;color:#1f2937;line-height:1.3}
+.bcb-option__note{font-size:11.5px;color:#6b7280;line-height:1.35}
 .bcb-input-area{display:flex;padding:12px;gap:8px;background:#fffdf9;border-top:1px solid rgba(184,134,11,.2);flex-shrink:0}
 /* font-size must stay >=16px: iOS Safari auto-zooms the page on focus for
    any input below that, which is what made the reservation chat feel

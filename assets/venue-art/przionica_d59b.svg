@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Pržionica D59B">
+  <title>Pržionica D59B</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12102e"/>
+      <stop offset="1" stop-color="#2a1f52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="52%">
+      <stop offset="0" stop-color="#ffd700" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset=".55" stop-color="#ffd700"/>
+      <stop offset="1" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="750" fill="url(#sky)"/>
+  <rect width="1200" height="750" fill="url(#glow)"/>
+  <circle cx="210" cy="167" r="1" fill="#ffe9a8" opacity="0.18"/><circle cx="991" cy="192" r="1.6" fill="#ffe9a8" opacity="0.27"/><circle cx="1048" cy="117" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="629" cy="142" r="2.2" fill="#ffe9a8" opacity="0.54"/><circle cx="934" cy="266" r="1.6" fill="#ffe9a8" opacity="0.54"/><circle cx="515" cy="291" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="572" cy="216" r="2.2" fill="#ffe9a8" opacity="0.36"/><circle cx="153" cy="241" r="1" fill="#ffe9a8" opacity="0.45"/><circle cx="1162" cy="348" r="1.6" fill="#ffe9a8" opacity="0.36"/><circle cx="743" cy="373" r="2.2" fill="#ffe9a8" opacity="0.45"/><circle cx="685" cy="70" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="1104" cy="45" r="1" fill="#ffe9a8" opacity="0.54"/><circle cx="1047" cy="120" r="1" fill="#ffe9a8" opacity="0.36"/><circle cx="266" cy="95" r="2.2" fill="#ffe9a8" opacity="0.27"/><circle cx="209" cy="169" r="2.2" fill="#ffe9a8" opacity="0.54"/><circle cx="628" cy="144" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="571" cy="219" r="1.6" fill="#ffe9a8" opacity="0.27"/><circle cx="990" cy="194" r="1" fill="#ffe9a8" opacity="0.18"/><circle cx="933" cy="269" r="1" fill="#ffe9a8" opacity="0.45"/><circle cx="152" cy="244" r="2.2" fill="#ffe9a8" opacity="0.36"/><circle cx="360" cy="127" r="1" fill="#ffe9a8" opacity="0.18"/><circle cx="779" cy="102" r="2.2" fill="#ffe9a8" opacity="0.54"/><circle cx="1198" cy="77" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="417" cy="52" r="1" fill="#ffe9a8" opacity="0.36"/><circle cx="836" cy="27" r="2.2" fill="#ffe9a8" opacity="0.27"/><circle cx="55" cy="2" r="1.6" fill="#ffe9a8" opacity="0.18"/>
+  <g fill="url(#gold)" stroke="url(#gold)" stroke-width="0" stroke-linejoin="round">
+      <path d="M420 300 h300 v120 a150 150 0 0 1 -300 0 Z" fill="none" stroke-width="10"/>
+      <path d="M720 330 h44 a56 56 0 0 1 0 112 h-16" fill="none" stroke-width="10"/>
+      <path d="M360 560 h420" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <path d="M420 300 h300" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <path d="M520 246 q-26 -34 0 -68 q26 -34 0 -68" fill="none" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+      <path d="M600 232 q-26 -34 0 -68 q26 -34 0 -68" fill="none" stroke-width="8" stroke-linecap="round" opacity=".65"/>
+      <path d="M680 246 q-26 -34 0 -68 q26 -34 0 -68" fill="none" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+      
+      <ellipse cx="838" cy="512" rx="30" ry="20" transform="rotate(-24 838 512)" opacity=".8"/>
+      <ellipse cx="892" cy="536" rx="26" ry="17" transform="rotate(14 892 536)" opacity=".6"/>
+  </g>
+  <text x="600" y="618" text-anchor="middle" font-family="Poppins, Montserrat, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="6" fill="#ffd700" opacity=".85">COFFEE ROASTERY</text>
+  <text x="54" y="618" font-family="Playfair Display, Georgia, serif" font-size="28" font-weight="700" fill="#ffd700" opacity=".75">FeelBG</text>
+</svg>

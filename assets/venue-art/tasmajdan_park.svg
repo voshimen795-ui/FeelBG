@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Tašmajdan Park">
+  <title>Tašmajdan Park</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12102e"/>
+      <stop offset="1" stop-color="#2a1f52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="52%">
+      <stop offset="0" stop-color="#ffd700" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset=".55" stop-color="#ffd700"/>
+      <stop offset="1" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="750" fill="url(#sky)"/>
+  <rect width="1200" height="750" fill="url(#glow)"/>
+  <circle cx="650" cy="148" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="231" cy="173" r="1" fill="#ffe9a8" opacity="0.27"/><circle cx="288" cy="99" r="1" fill="#ffe9a8" opacity="0.45"/><circle cx="1069" cy="123" r="1.6" fill="#ffe9a8" opacity="0.54"/><circle cx="174" cy="248" r="1" fill="#ffe9a8" opacity="0.54"/><circle cx="955" cy="273" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="1012" cy="198" r="1.6" fill="#ffe9a8" opacity="0.36"/><circle cx="593" cy="223" r="2.2" fill="#ffe9a8" opacity="0.45"/><circle cx="898" cy="347" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="479" cy="372" r="2.2" fill="#ffe9a8" opacity="0.54"/><circle cx="389" cy="39" r="2.2" fill="#ffe9a8" opacity="0.54"/><circle cx="808" cy="14" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="751" cy="88" r="1.6" fill="#ffe9a8" opacity="0.27"/><circle cx="1170" cy="64" r="1" fill="#ffe9a8" opacity="0.18"/><circle cx="1113" cy="138" r="1" fill="#ffe9a8" opacity="0.45"/><circle cx="332" cy="113" r="2.2" fill="#ffe9a8" opacity="0.36"/><circle cx="275" cy="188" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="694" cy="163" r="1.6" fill="#ffe9a8" opacity="0.54"/><circle cx="141" cy="220" r="1" fill="#ffe9a8" opacity="0.27"/><circle cx="560" cy="195" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="448" cy="193" r="1.6" fill="#ffe9a8" opacity="0.45"/><circle cx="867" cy="168" r="1" fill="#ffe9a8" opacity="0.36"/><circle cx="86" cy="143" r="2.2" fill="#ffe9a8" opacity="0.27"/><circle cx="505" cy="118" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="924" cy="94" r="1" fill="#ffe9a8" opacity="0.54"/><circle cx="143" cy="69" r="2.2" fill="#ffe9a8" opacity="0.45"/>
+  <g fill="url(#gold)" stroke="url(#gold)" stroke-width="0" stroke-linejoin="round">
+      
+      <circle cx="378" cy="386" r="78" opacity=".9"/>
+      <circle cx="329.64" cy="403.15999999999997" r="45.239999999999995" opacity=".75"/>
+      <circle cx="426.36" cy="401.6" r="42.120000000000005" opacity=".75"/>
+      <rect x="370" y="464" width="16" height="96" rx="4"/>
+      
+      <circle cx="600" cy="332" r="108" opacity=".9"/>
+      <circle cx="533.04" cy="355.76" r="62.63999999999999" opacity=".75"/>
+      <circle cx="666.96" cy="353.6" r="58.32000000000001" opacity=".75"/>
+      <rect x="592" y="440" width="16" height="120" rx="4"/>
+      
+      <circle cx="834" cy="408" r="68" opacity=".9"/>
+      <circle cx="791.84" cy="422.96" r="39.44" opacity=".75"/>
+      <circle cx="876.16" cy="421.6" r="36.72" opacity=".75"/>
+      <rect x="826" y="476" width="16" height="84" rx="4"/>
+      <path d="M300 560 q300 -70 600 0" fill="none" stroke-width="8" opacity=".55"/>
+      <path d="M520 560 v-26 h160 v26" fill="none" stroke-width="7"/>
+      <path d="M508 534 h184" stroke-width="9" stroke-linecap="round" fill="none"/>
+  </g>
+  <text x="600" y="618" text-anchor="middle" font-family="Poppins, Montserrat, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="6" fill="#ffd700" opacity=".85">CITY PARK</text>
+  <text x="54" y="618" font-family="Playfair Display, Georgia, serif" font-size="28" font-weight="700" fill="#ffd700" opacity=".75">FeelBG</text>
+</svg>

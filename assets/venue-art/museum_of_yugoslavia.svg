@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Museum of Yugoslavia">
+  <title>Museum of Yugoslavia</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1128"/>
+      <stop offset="1" stop-color="#16295f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="52%">
+      <stop offset="0" stop-color="#ffd700" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset=".55" stop-color="#ffd700"/>
+      <stop offset="1" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="750" fill="url(#sky)"/>
+  <rect width="1200" height="750" fill="url(#glow)"/>
+  <circle cx="424" cy="62" r="1.6" fill="#ffe9a8" opacity="0.54"/><circle cx="5" cy="86" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="786" cy="111" r="1" fill="#ffe9a8" opacity="0.27"/><circle cx="367" cy="136" r="1.6" fill="#ffe9a8" opacity="0.36"/><circle cx="1148" cy="161" r="2.2" fill="#ffe9a8" opacity="0.45"/><circle cx="729" cy="186" r="1" fill="#ffe9a8" opacity="0.54"/><circle cx="310" cy="211" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="1091" cy="236" r="2.2" fill="#ffe9a8" opacity="0.27"/><circle cx="176" cy="243" r="2.2" fill="#ffe9a8" opacity="0.27"/><circle cx="957" cy="268" r="1" fill="#ffe9a8" opacity="0.36"/><circle cx="337" cy="60" r="1.6" fill="#ffe9a8" opacity="0.36"/><circle cx="1118" cy="85" r="2.2" fill="#ffe9a8" opacity="0.45"/><circle cx="699" cy="110" r="1" fill="#ffe9a8" opacity="0.54"/><circle cx="280" cy="135" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="813" cy="341" r="1" fill="#ffe9a8" opacity="0.45"/><circle cx="394" cy="366" r="1.6" fill="#ffe9a8" opacity="0.54"/><circle cx="1175" cy="11" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="756" cy="35" r="1" fill="#ffe9a8" opacity="0.27"/><circle cx="585" cy="259" r="1" fill="#ffe9a8" opacity="0.18"/><circle cx="166" cy="284" r="1.6" fill="#ffe9a8" opacity="0.27"/><circle cx="1146" cy="300" r="1" fill="#ffe9a8" opacity="0.27"/><circle cx="365" cy="275" r="2.2" fill="#ffe9a8" opacity="0.18"/><circle cx="308" cy="350" r="2.2" fill="#ffe9a8" opacity="0.45"/><circle cx="727" cy="325" r="1.6" fill="#ffe9a8" opacity="0.36"/><circle cx="670" cy="20" r="1.6" fill="#ffe9a8" opacity="0.18"/><circle cx="1089" cy="375" r="1" fill="#ffe9a8" opacity="0.54"/>
+  <g fill="url(#gold)" stroke="url(#gold)" stroke-width="0" stroke-linejoin="round">
+      <path d="M280 360 L600 232 L920 360 Z"/>
+      <rect x="280" y="360" width="640" height="26" rx="5"/>
+      <rect x="325" y="380" width="30" height="150" rx="4"/>
+      <rect x="455" y="380" width="30" height="150" rx="4"/>
+      <rect x="585" y="380" width="30" height="150" rx="4"/>
+      <rect x="715" y="380" width="30" height="150" rx="4"/>
+      <rect x="845" y="380" width="30" height="150" rx="4"/>
+      <rect x="260" y="530" width="680" height="14" rx="4"/>
+      <rect x="240" y="544" width="720" height="16" rx="4"/>
+  </g>
+  <text x="600" y="618" text-anchor="middle" font-family="Poppins, Montserrat, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="6" fill="#ffd700" opacity=".85">HISTORY MUSEUM</text>
+  <text x="54" y="618" font-family="Playfair Display, Georgia, serif" font-size="28" font-weight="700" fill="#ffd700" opacity=".75">FeelBG</text>
+</svg>

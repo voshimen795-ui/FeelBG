@@ -274,7 +274,14 @@ function imageFor(v) {
     if (!v.image) return null;
     const abs = path.join(ROOT, v.image);
     if (!existsSync(abs)) return null;
-    return { rel: v.image, url: absUrl(v.image), ...(jpegSize(abs) || {}) };
+    /* `raster` marks a real photograph. The stand-in artwork from
+       tools/make-venue-art.mjs is SVG, which is right on the page and wrong
+       everywhere a preview is generated from the file: neither the social
+       crawlers nor Google's rich results render SVG, so a page with art keeps
+       the FeelBG mark as its og:image and its schema.org image instead of
+       advertising a picture that will not draw. */
+    const raster = /\.(jpe?g|png|webp)$/i.test(v.image);
+    return { rel: v.image, url: absUrl(v.image), raster, ...(jpegSize(abs) || {}) };
 }
 
 /* ------------------------------------------------------------------ *
@@ -323,7 +330,7 @@ function venueJsonLd(v, lang) {
         hasMap: `https://www.google.com/maps/search/?api=1&query=${v.lat},${v.lng}`,
     };
 
-    if (img) node.image = img.url;
+    if (img && img.raster) node.image = img.url;
 
     // priceRange, telephone and openingHours are LocalBusiness properties. A Park
     // or a Church carrying them is invalid structured data.
@@ -640,6 +647,25 @@ function venuePage(v, lang) {
 
     const related = relatedFor(v, lang);
 
+    /* Reserving from the venue's own page.
+
+       These pages are where search traffic lands — someone who googled the
+       place by name — and until now the only thing they could do here was read.
+       js/booking.js is already loaded on every one of them and opens on any
+       [data-booking] element, so the button is all that was missing. The body's
+       data-venue-type tells it which venue this is, which is how a club gets
+       the seating question and a cafe does not.
+
+       Attractions are excluded: you cannot book a fortress. */
+    const reserve = v.type === 'attractions' ? '' : `
+            <p class="venue-cta">
+                <button class="venue-reserve-btn" type="button" data-booking="${esc(name)}">
+                    <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                    ${esc(t(lang, v.type === 'nightlife' ? 'card.reserveSpot' : 'popup.reserve', 'Reserve'))}
+                </button>
+                <span class="venue-cta__note">${esc(t(lang, 'reserve.footer', ''))}</span>
+            </p>`;
+
     const body = `<body data-page="venue" data-venue-type="${v.type}" data-venue-slug="${esc(v.slug)}" data-venue-name="${esc(v.name)}">
 ${CURSOR}
 ${siteHeader(lang)}
@@ -663,7 +689,7 @@ ${siteHeader(lang)}
                     <span aria-hidden="true">·</span>
                     <span class="venue-rating" title="${esc(s.ratingNote)}">★ ${v.rating} <small>${esc(s.ratingNote)}</small></span>
                 </p>
-            </header>
+${reserve}            </header>
 
 ${img ? `            <figure class="venue-figure">
                 <img src="/${encodePath(img.rel)}" alt="${esc([name, distinctLabel(v, lang), v.area, lang === 'sr' ? 'Beograd' : 'Belgrade'].filter(Boolean).join(', '))}"${img.width ? ` width="${img.width}" height="${img.height}"` : ''} loading="eager">
@@ -708,7 +734,7 @@ ${viewBeacon()}
 `;
 
     return head(lang, {
-        title, description, canonical, alternates, image: img,
+        title, description, canonical, alternates, image: img && img.raster ? img : null,
         noindex: NOINDEX.has(v.name),
         jsonLd: [venueJsonLd(v, lang), breadcrumbJsonLd(v, lang)],
     }) + '\n' + body;
