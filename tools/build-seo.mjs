@@ -531,9 +531,7 @@ ${nav.map(([href, key, en, icon]) =>
         `                    <li class="nav__item"><a href="${href}" class="nav__link"><i class="fas ${icon}"></i> <span data-i18n="${key}">${esc(t(lang, key, en))}</span></a></li>`).join('\n')}
                 </ul>
             </div>
-            <div class="nav__actions">
-                <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
-            </div>
+            <div class="nav__actions"></div>
         </nav>
     </header>`;
 }

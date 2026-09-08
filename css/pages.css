@@ -95,28 +95,6 @@
     max-width: 700px;
 }
 
-.page-hero__stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl);
-    font-weight: 600;
-}
-
-.stat-item i {
-    color: var(--secondary-light);
-    font-size: var(--icon-md);
-}
-
 /* Hero reservation call to action.
 
    Reserving used to be reachable only from a card's small calendar icon, so on
@@ -469,11 +447,6 @@
 @media (max-width: 767px) {
     .page-hero__title {
         font-size: var(--text-3xl);
-    }
-    
-    .page-hero__stats {
-        flex-direction: column;
-        align-items: flex-start;
     }
     
     .places-grid {
