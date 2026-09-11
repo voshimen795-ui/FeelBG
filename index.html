@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="css/card-stack.css">
     <link rel="stylesheet" href="css/hero.css">
     <link rel="stylesheet" href="css/venue-card.css">
+    <link rel="stylesheet" href="css/hero-reserve.css">
     <link rel="stylesheet" href="css/desktop-static.css">
 </head>
 <body class="page-home">
@@ -210,6 +211,37 @@
                             </span>
                         </h1>
                         <p class="hero__lede" data-i18n="hero.lede">A guide to Belgrade's best restaurants, clubs and hidden corners. We only list places locals actually go.</p>
+                    </div>
+
+                    <!-- Reservation call to action.
+
+                         The button carries data-venue-browser, so the click is
+                         handled by js/reserve-picker.js and opens the full
+                         picker — every venue that takes reservations, with
+                         search and category filters.
+
+                         js/hero-reserve.js fills the count on its shoulder and
+                         builds the rail underneath from the same venue list, so
+                         the preview and the picker cannot drift apart. A rail
+                         chip books that venue directly, skipping the picker. -->
+                    <div class="reserve-cta" data-reserve-cta>
+                        <button class="reserve-cta__btn" type="button" data-venue-browser>
+                            <span class="reserve-cta__halo" aria-hidden="true"></span>
+                            <span class="reserve-cta__face">
+                                <span class="reserve-cta__icon" aria-hidden="true"><i class="fas fa-calendar-check"></i></span>
+                                <span class="reserve-cta__roll">
+                                    <span class="reserve-cta__label" data-i18n="reserve.heroBtn">Reserve a Table</span>
+                                    <span class="reserve-cta__label reserve-cta__label--ghost" aria-hidden="true" data-i18n="reserve.heroBtn">Reserve a Table</span>
+                                </span>
+                                <span class="reserve-cta__arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                            </span>
+                            <span class="reserve-cta__count" data-reserve-count hidden></span>
+                        </button>
+                        <p class="reserve-cta__note">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                            <span data-i18n="reserve.heroNote">Free instant reservations at Belgrade’s finest venues</span>
+                        </p>
+                        <div class="reserve-cta__rail" data-reserve-rail hidden></div>
                     </div>
                 </div>
             </div>
@@ -645,6 +677,10 @@
          (js/pages.js) reads its translation helpers whenever a venue popup is
          opened from this page. -->
     <script src="js/card-renderer.js"></script>
+
+    <!-- After venues.js: it reads the venue list at DOMContentLoaded to fill
+         the hero reserve button's count and rail. -->
+    <script src="js/hero-reserve.js"></script>
 
     <script src="js/constellation-fx.js" defer></script>
 
