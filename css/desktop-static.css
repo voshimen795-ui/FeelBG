@@ -43,12 +43,27 @@
     .page-hero__background::before,
     .section__title,
     .hero-reserve-btn,
+    /* The hero reserve CTA idles still here too. Only its loops stop —
+       the magnet, tilt, label roll, spark burst and venue rail are all
+       pointer-driven, and this is the one place with a pointer to drive
+       them. */
+    .reserve-cta__face,
+    .reserve-cta__halo,
+    .reserve-cta__btn::after,
+    .reserve-cta__dot,
     .place-card,
     .event-slide,
     .scroll-down i,
     .floating-card,
     .belgrade-card-small {
         animation: none;
+    }
+
+    /* Stopped mid-rotation, the CTA's conic gold sits lopsided on one
+       shoulder of the button. Held still it wants to be an even glow. */
+    .reserve-cta__halo {
+        background: radial-gradient(closest-side, rgba(255, 236, 170, 0.6), transparent 78%);
+        opacity: 0.75;
     }
 
     /* Purely ornamental layers with no content in them. Hidden rather than

@@ -239,6 +239,49 @@
     text-wrap: balance;
 }
 
+/* ============================================
+   SHORT VIEWPORTS
+   ============================================ */
+/* A 768px-tall laptop screen is the common desktop case, and at full size
+   the block plus the reserve CTA under it is taller than that — which put
+   the one button the site is built around below the fold. The wordmark is
+   most of the height, so it gives most of it back; the rest comes from the
+   gaps between the lines. Nothing here fires on a tall screen. */
+@media (min-width: 768px) and (max-height: 860px) {
+    .hero {
+        padding-top: calc(var(--header-h, 80px) + var(--space-5));
+        padding-bottom: var(--space-5);
+    }
+
+    /* Capped against the viewport's height as well as its width, so the
+       block keeps shrinking as the screen gets shorter instead of needing a
+       breakpoint per laptop size. */
+    .hero__wordmark {
+        font-size: min(clamp(2.75rem, 8.5vw, 6.5rem), 13vh);
+    }
+
+    .hero-motto {
+        margin: var(--space-2) auto var(--space-3);
+    }
+
+    .hero-motto::before {
+        margin-bottom: var(--space-3);
+    }
+
+    .hero__title {
+        font-size: min(clamp(2rem, 4.4vw, 3.25rem), 6vh);
+    }
+
+    .hero__lede {
+        margin-top: var(--space-3);
+        font-size: 1rem;
+    }
+
+    .reserve-cta {
+        margin-top: var(--space-4);
+    }
+}
+
 @media (max-width: 767px) {
     .hero {
         padding-top: calc(var(--header-h, 80px) + var(--space-7));
@@ -265,5 +308,27 @@
     .hero__lede {
         font-size: 1.0625rem;
         margin-top: var(--space-4);
+    }
+}
+
+/* Small phones in portrait — the same problem as the short laptop above,
+   and the same answer: the wordmark and the gaps give the reserve button
+   the room it needs to land on the first screen. */
+@media (max-width: 767px) and (max-height: 700px) {
+    .hero {
+        padding-top: calc(var(--header-h, 80px) + var(--space-5));
+        padding-bottom: var(--space-5);
+    }
+
+    .hero__wordmark {
+        font-size: min(clamp(2.5rem, 15vw, 4rem), 13vh);
+    }
+
+    .hero-motto {
+        margin: var(--space-3) auto var(--space-4);
+    }
+
+    .hero__lede {
+        margin-top: var(--space-3);
     }
 }
