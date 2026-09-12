@@ -12,20 +12,39 @@
  * agreement or don't cover Serbia. So instead of scraping anything, this is
  * the FeelBG team's own text, typed once per event in /admin/events.html.
  *
+ * Storage is a single JSON array kept in a Redis-compatible key-value store
+ * reached over its REST API — no separate service to deploy, no key to type
+ * in by hand. In the Vercel dashboard: Storage tab -> Create Database ->
+ * Upstash for Redis -> Connect to Project. Vercel writes the env vars below
+ * into the project itself; nothing to copy-paste.
+ *
  * Split the same way as api/admin.js: GET is public and unauthenticated —
  * it's what every nightlife popup on the site reads, and it carries nothing
  * sensitive — POST is gated behind the same ADMIN_PASSWORD the traffic
- * dashboard uses. The Apps Script URL and its key never reach the browser
- * either way.
+ * dashboard uses.
  *
- * Environment variables, set in the Vercel dashboard:
- *   ADMIN_PASSWORD          required for POST — same one /admin/ already uses
- *   FEELBG_EVENTS_ENDPOINT  the Apps Script /exec URL (events-backend/)
- *   FEELBG_EVENTS_KEY       the EVENTS_KEY constant from events-backend/Code.gs
+ * Environment variables:
+ *   ADMIN_PASSWORD    required for POST — same one /admin/ already uses
+ *   KV_REST_API_URL / KV_REST_API_TOKEN
+ *     -or- UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+ *     whichever pair the Storage integration writes; both names are
+ *     accepted so it works regardless of which one Vercel picks.
  *
  * Vercel picks this up automatically: any /api/*.js file becomes a function,
  * with no build step and no change to vercel.json.
  */
+
+const STORE_KEY = 'feelbg:events';
+
+/** Longest string accepted in a short field vs. a description — same limits
+ *  the old Apps Script backend enforced, kept here now that this is the only
+ *  place events get written. */
+const MAX_SHORT = 120;
+const MAX_LONG = 300;
+
+function clean(value, max) {
+    return String(value == null ? '' : value).slice(0, max || MAX_SHORT);
+}
 
 /**
  * Compare without leaking the answer through timing. Same helper as
@@ -41,20 +60,55 @@ function safeEqual(a, b) {
 }
 
 /** Local date as YYYY-MM-DD, which is also how admin/events.html's <input
- *  type="date"> and events-backend/Code.gs both write the Date column — so
- *  these compare correctly as plain strings, no parsing needed. */
+ *  type="date"> writes the date field — so these compare correctly as plain
+ *  strings, no parsing needed. */
 function todayIso() {
     const d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
+function kvConfig() {
+    const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '';
+    const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '';
+    return { url: url.replace(/\/+$/, ''), token };
+}
+
+/** Reads the one JSON blob every event lives in. An unconfigured store and
+ *  an empty-so-far store look the same to callers except for `configured`,
+ *  same distinction the old endpoint-based version made. */
+async function readRows() {
+    const { url, token } = kvConfig();
+    if (!url || !token) return { configured: false, rows: [] };
+
+    const resp = await fetch(`${url}/get/${STORE_KEY}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error((data && data.error) || 'kv_get_failed');
+
+    let rows = [];
+    if (data.result) {
+        try { rows = JSON.parse(data.result) || []; } catch (e) { rows = []; }
+    }
+    return { configured: true, rows };
+}
+
+async function writeRows(rows) {
+    const { url, token } = kvConfig();
+    if (!url || !token) throw new Error('not_configured');
+
+    const resp = await fetch(`${url}/set/${STORE_KEY}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' },
+        body: JSON.stringify(rows),
+    });
+    const data = await resp.json();
+    if (!resp.ok || data.result !== 'OK') throw new Error((data && data.error) || 'kv_set_failed');
+}
+
 /**
- * Rows as the Apps Script hands them back -> what the public GET returns.
- *
- * Filtered here rather than in Code.gs, same division of labour as
- * api/admin.js's aggregate(): the script stays a dumb store, the shaping
- * happens in code that's easy to redeploy and easy to test. A row with no
- * venueSlug or title is dropped rather than shown as a blank card.
+ * Stored rows -> what the public GET returns. A row with no venueSlug or
+ * title is dropped rather than shown as a blank card.
  */
 function upcomingEvents(rows) {
     const today = todayIso();
@@ -69,25 +123,11 @@ function upcomingEvents(rows) {
         }));
 }
 
-/** The one upstream call, shared by the public read and the admin list —
- *  the two differ only in how the rows get filtered afterwards. */
-async function fetchRows() {
-    const endpoint = process.env.FEELBG_EVENTS_ENDPOINT || '';
-    if (!endpoint) return { configured: false, rows: [] };
-
-    const key = process.env.FEELBG_EVENTS_KEY || '';
-    const url = endpoint + (endpoint.includes('?') ? '&' : '?') + 'key=' + encodeURIComponent(key);
-    const upstream = await fetch(url, { redirect: 'follow' });
-    const data = await upstream.json();
-    if (!data || !data.ok) throw new Error((data && data.error) || 'unreadable');
-    return { configured: true, rows: data.rows || [] };
-}
-
 async function handleGet(req, res) {
     try {
-        const { configured, rows } = await fetchRows();
+        const { configured, rows } = await readRows();
         if (!configured) {
-            // No backend deployed yet: say so as an empty, valid list rather
+            // No store connected yet: say so as an empty, valid list rather
             // than an error — every nightlife popup calls this, and none of
             // them should break because events haven't been set up.
             res.setHeader('Cache-Control', 'no-store');
@@ -98,7 +138,7 @@ async function handleGet(req, res) {
         res.setHeader('Cache-Control', 'public, max-age=120, stale-while-revalidate=300');
         return res.status(200).json({ ok: true, configured: true, events: upcomingEvents(rows) });
     } catch (err) {
-        return res.status(502).json({ ok: false, error: 'upstream', detail: String(err && err.message || err) });
+        return res.status(502).json({ ok: false, error: 'store_unreachable', detail: String(err && err.message || err) });
     }
 }
 
@@ -118,11 +158,11 @@ async function handlePost(req, res) {
 
     // The admin page's own listing: every row, active or not, past or
     // future, newest first — so retiring an event or checking what ran is
-    // possible without opening the spreadsheet. The public GET above is a
-    // deliberately narrower view of the same data.
+    // possible without opening the store directly. The public GET above is
+    // a deliberately narrower view of the same data.
     if (body.op === 'list') {
         try {
-            const { configured, rows } = await fetchRows();
+            const { configured, rows } = await readRows();
             const events = rows
                 .slice()
                 .sort((a, b) => String(b.date).localeCompare(String(a.date)))
@@ -134,37 +174,60 @@ async function handlePost(req, res) {
                 }));
             return res.status(200).json({ ok: true, configured, events });
         } catch (err) {
-            return res.status(502).json({ ok: false, error: 'upstream', detail: String(err && err.message || err) });
+            return res.status(502).json({ ok: false, error: 'store_unreachable', detail: String(err && err.message || err) });
         }
     }
 
-    const endpoint = process.env.FEELBG_EVENTS_ENDPOINT || '';
-    const key = process.env.FEELBG_EVENTS_KEY || '';
-    if (!endpoint) {
-        return res.status(500).json({ ok: false, error: 'not_configured', detail: 'FEELBG_EVENTS_ENDPOINT is not set — deploy events-backend/Code.gs and add the URL.' });
+    let configured, rows;
+    try {
+        ({ configured, rows } = await readRows());
+    } catch (err) {
+        return res.status(502).json({ ok: false, error: 'store_unreachable', detail: String(err && err.message || err) });
+    }
+    if (!configured) {
+        return res.status(500).json({ ok: false, error: 'not_configured', detail: 'No storage connected — in the Vercel dashboard, Storage tab, connect a Redis database to this project.' });
     }
 
     // The two things left the admin form can ask for: add one, or turn one
     // off. Nothing is ever deleted outright, so a mistaken deactivate is
-    // reversible by hand in the sheet.
-    const isDeactivate = body.op === 'deactivate';
-    const payload = isDeactivate
-        ? { key, action: 'deactivate_event', id: String(body.id || '') }
-        : { key, action: 'add_event', event: body.event || {} };
-
-    try {
-        const upstream = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
-        const data = await upstream.json();
-        if (!data || !data.ok) {
-            return res.status(502).json({ ok: false, error: (data && data.error) || 'upstream' });
+    // reversible by hand (flip `active` back to true in the store).
+    if (body.op === 'deactivate') {
+        const targetId = clean(body.id);
+        const row = rows.find((r) => String(r.id) === targetId);
+        if (!row) return res.status(404).json({ ok: false, error: 'not_found' });
+        row.active = false;
+        try {
+            await writeRows(rows);
+            return res.status(200).json({ ok: true });
+        } catch (err) {
+            return res.status(502).json({ ok: false, error: 'store_unreachable', detail: String(err && err.message || err) });
         }
-        return res.status(200).json({ ok: true, id: data.id });
+    }
+
+    const ev = body.event || {};
+    if (!ev.venueSlug || !ev.title || !ev.date) {
+        return res.status(400).json({ ok: false, error: 'missing_fields', detail: 'Club, title and date are required.' });
+    }
+    const row = {
+        id: `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
+        venueSlug: clean(ev.venueSlug),
+        title: clean(ev.title),
+        titleSr: clean(ev.titleSr),
+        date: clean(ev.date, 10),
+        time: clean(ev.time, 40),
+        price: clean(ev.price, 40),
+        description: clean(ev.description, MAX_LONG),
+        descriptionSr: clean(ev.descriptionSr, MAX_LONG),
+        ticketUrl: clean(ev.ticketUrl, MAX_LONG),
+        active: true,
+        createdAt: new Date().toISOString(),
+    };
+    rows.push(row);
+    try {
+        await writeRows(rows);
+        return res.status(200).json({ ok: true, id: row.id });
     } catch (err) {
-        return res.status(502).json({ ok: false, error: 'upstream_unreachable', detail: String(err && err.message || err) });
+        return res.status(502).json({ ok: false, error: 'store_unreachable', detail: String(err && err.message || err) });
     }
 }
 

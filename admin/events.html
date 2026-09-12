@@ -248,7 +248,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-deep);outli
     return api({ op: 'list' }).then(function (r) {
       if (r.status === 200 && r.body.ok) {
         $('notice').innerHTML = r.body.configured === false
-          ? '<div class="note">No events backend configured yet. Deploy <code>events-backend/Code.gs</code> and set <code>FEELBG_EVENTS_ENDPOINT</code> and <code>FEELBG_EVENTS_KEY</code> in Vercel.</div>'
+          ? '<div class="note">No storage connected yet. In the Vercel dashboard, open the Storage tab, create a Redis database, and connect it to this project.</div>'
           : '';
         renderList(r.body.events || []);
         return true;
