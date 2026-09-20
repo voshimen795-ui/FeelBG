@@ -7,7 +7,8 @@
     "start": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
     "dev": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
     "seo:build": "node tools/build-seo.mjs",
-    "seo:check": "node tools/build-seo.mjs --check"
+    "seo:check": "node tools/build-seo.mjs --check",
+    "i18n:check": "node tools/check-i18n.mjs"
   },
   "keywords": [
     "modern",

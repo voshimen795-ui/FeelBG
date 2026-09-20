@@ -32,8 +32,11 @@ FeelBG is a modern Belgrade tourism and restaurant discovery website targeting i
 │   ├── card-renderer.js    — Dynamic card rendering with i18n (venueSlug + getTranslated)
 │   ├── script.js           — Core site functionality (Preloader, CustomCursor, Header)
 │   ├── pages.js            — Filter/search + PlaceDetails popup
-│   ├── translations.js     — i18n UI string translations (10 languages, window.FEELBG_TRANSLATIONS)
+│   ├── translations.js     — i18n UI string translations (11 locales, window.FEELBG_TRANSLATIONS)
 │   ├── venue-translations.js — Venue content translations (45 venues × 9 langs, insider tips, filter labels)
+│   ├── attraction-translations.js — Long-form attraction copy (hook/about/why/insider/pills)
+│   ├── venue-labels.js     — Shared category labels (label.<slug>)
+│   ├── menu-translations.js — Card and menu-sheet strings, course headings
 │   ├── language-selector.js — Language selector UI + card re-render on switch
 │   ├── map.js              — Interactive Leaflet.js map modal (uses venues.js data)
 │   ├── booking.js          — WhatsApp chatbot booking system
@@ -109,9 +112,13 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), are
 6. Leaflet.js → map.js (map library → map component)
 
 ## i18n Architecture
-- **UI strings**: translations.js defines all UI keys per language (nav, hero, filters, badges, popups, chatbot, map, adventure)
+- **Locales** (11): `en`, `us` (clone of `en`), `sr`, `tr`, `de`, `fr`, `it`, `es`, `ru`, `el`, `he`. The list lives in three places that must agree — the `languages` array and `flagMap` in js/language-selector.js, the `.language-option` buttons in every HTML page, and the locale blocks in the five translation files. `npm run i18n:check` enforces that.
+- **UI strings**: translations.js defines all UI keys per language (nav, hero, filters, badges, popups, chatbot, map, adventure, contact form, newsletter)
 - **Venue content**: venue-translations.js adds venue.{slug}.desc and venue.{slug}.cuisine keys per language, plus insider.tip1–12, filter category labels
 - **Slug generation**: `name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')`
 - **Language switch flow**: selectLanguage() → translatePage() → reRenderCards() → dispatch feelbg:languageChanged
 - **Card rendering**: CardRenderer.getTranslated(venue, 'desc'|'cuisine') looks up venue.{slug}.{field} via t(), falls back to English venue data
 - **Event-driven**: insider-tips.js and other widgets listen to feelbg:languageChanged for live refresh
+- **Strings built in JS** cannot carry a `data-i18n` attribute, so they resolve their own key: `CardRenderer.t()`, `feelbgT()` in js/script.js, and the local `t()` in js/insider-tips.js all do the same stored-language lookup with an English fallback.
+- **Checking**: `npm run i18n:check` (tools/check-i18n.mjs) fails the moment a locale falls behind. It verifies every locale carries every key, that no value is blank, that the selector/dropdowns/translation files offer the same locales, that every `data-i18n` and `t()` key referenced in HTML or JS exists (including keys assembled at runtime, like `badge.<venue.badge>`), that `{n}`/`{name}`/`{area}`/`{attraction}`/`{d}` placeholders survive translation, and that all 45 venues render a non-empty description and category label in all 11 locales. Run it after touching any translation file.
+- **Not client-side**: the generated pages under `/en/venue/` and `/sr/…` are per-language static documents (see tools/seo.config.mjs `ROUTES`). Their header and footer follow the selector via `data-i18n`, but the body chrome the generator writes ("Good to know", "Address", …) stays in the page's own language, matching its `<html lang>` and hreflang pair. Adding a third static locale is a build change, not a translation one.
