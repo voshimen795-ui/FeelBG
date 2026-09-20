@@ -485,6 +485,14 @@ function head(lang, { title, description, canonical, alternates, image, noindex,
 ${noindex ? '    <meta name="robots" content="noindex, follow">\n' : ''}    <link rel="canonical" href="${esc(canonical)}">
 ${alternates.map((a) => `    <link rel="alternate" hreflang="${a.lang}" href="${esc(a.href)}">`).join('\n')}
 
+    <!-- Site icon. Google reads rel="icon" from the page it is ranking, not
+         just from the home page, so every generated page carries it too.
+         Built by tools/make-favicon.mjs. -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="icon" type="image/png" href="/assets/images/logo/favicon-96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/assets/images/logo/favicon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/assets/images/logo/apple-touch-icon.png">
+
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="${SITE_NAME}">
     <meta property="og:locale" content="${lang === 'sr' ? 'sr_RS' : 'en_GB'}">

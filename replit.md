@@ -111,6 +111,9 @@ Each venue has: name, cuisine, cuisineLabel, price, priceLabel (€ ranges), are
 5. insider-tips.js (listens for feelbg:languageChanged event)
 6. Leaflet.js → map.js (map library → map component)
 
+## Site Icon
+The favicon Google shows next to a search result comes from `<link rel="icon">` on the page it ranks, plus a probe of `/favicon.ico`. Both are generated from `assets/images/logo/feelbg-monogram-f.png` (the gold "F" disc in the header) by `npm run icons:build` — `favicon.ico` (16/32/48), `favicon-96.png` and `favicon-192.png` (multiples of 48, which is what Google asks for) and `apple-touch-icon.png` (180x180, flattened onto navy because iOS ignores alpha). Output is committed, since vercel.json runs no build step; `npm run icons:check` fails if it drifts from the source. All 99 pages declare it — the five top-level pages inline, the 94 generated ones through the head template in tools/build-seo.mjs. Changing the mark means re-running `icons:build` and then `seo:build`.
+
 ## i18n Architecture
 - **Locales** (11): `en`, `us` (clone of `en`), `sr`, `tr`, `de`, `fr`, `it`, `es`, `ru`, `el`, `he`. The list lives in three places that must agree — the `languages` array and `flagMap` in js/language-selector.js, the `.language-option` buttons in every HTML page, and the locale blocks in the five translation files. `npm run i18n:check` enforces that.
 - **UI strings**: translations.js defines all UI keys per language (nav, hero, filters, badges, popups, chatbot, map, adventure, contact form, newsletter)

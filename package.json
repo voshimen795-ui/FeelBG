@@ -8,7 +8,9 @@
     "dev": "npx live-server --port=5000 --host=0.0.0.0 --no-browser",
     "seo:build": "node tools/build-seo.mjs",
     "seo:check": "node tools/build-seo.mjs --check",
-    "i18n:check": "node tools/check-i18n.mjs"
+    "i18n:check": "node tools/check-i18n.mjs",
+    "icons:build": "node tools/make-favicon.mjs",
+    "icons:check": "node tools/make-favicon.mjs --check"
   },
   "keywords": [
     "modern",
