@@ -294,20 +294,6 @@ body {
     opacity: 0.9;
 }
 
-.logo-watermark {
-    position: fixed;
-    bottom: 85px;
-    left: 10px;
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.logo-watermark img {
-    width: 60px;
-    height: auto;
-}
-
 /* ============================================
    BELGRADE-THEMED DECORATIVE ELEMENTS
    ============================================ */
