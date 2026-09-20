@@ -131,6 +131,10 @@
                             <img src="https://flagcdn.com/w80/it.png" alt="IT" class="flag-img">
                             <span class="lang-code">IT</span>
                         </button>
+                        <button class="language-option" data-code="es" data-flag="es" title="Español">
+                            <img src="https://flagcdn.com/w80/es.png" alt="ES" class="flag-img">
+                            <span class="lang-code">ES</span>
+                        </button>
                         <button class="language-option" data-code="ru" data-flag="ru" title="Русский">
                             <img src="https://flagcdn.com/w80/ru.png" alt="RU" class="flag-img">
                             <span class="lang-code">RU</span>
@@ -390,7 +394,7 @@
                                         <p class="event-venue"><i class="fas fa-map-marker-alt"></i> Belgrade Arena, Novi Beograd</p>
                                         <p class="event-desc" data-i18n="events.e3.desc">History in Serbia — the UFC's first-ever event in the country lands at Belgrade Arena, headlined by hometown welterweight Uroš Medić on a stacked 13-fight card.</p>
                                         <div class="event-meta">
-                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> Tickets via official UFC channels</span>
+                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> <span data-i18n="events.e3.price">Tickets via official UFC channels</span></span>
                                             <span class="event-status"></span>
                                         </div>
                                     </div>
@@ -408,7 +412,7 @@
                                         <p class="event-venue"><i class="fas fa-map-marker-alt"></i> Ušće Park, Novi Beograd</p>
                                         <p class="event-desc" data-i18n="events.e4.desc">Four days of open-air rock, food and beer at the confluence of the Sava and Danube — headlined this year by Bijelo Dugme's 50th-anniversary reunion show.</p>
                                         <div class="event-meta">
-                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> Free entry before 19:30</span>
+                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> <span data-i18n="events.e4.price">Free entry before 19:30</span></span>
                                             <span class="event-status"></span>
                                         </div>
                                     </div>
@@ -426,7 +430,7 @@
                                         <p class="event-venue"><i class="fas fa-map-marker-alt"></i> Kolarac Foundation, Stari Grad</p>
                                         <p class="event-desc" data-i18n="events.e5.desc">The 57th edition of Serbia's oldest music festival opens with the Belgrade Philharmonic Orchestra, running through late October with world-renowned soloists.</p>
                                         <div class="event-meta">
-                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> Tickets via Kolarac box office</span>
+                                            <span class="event-price"><i class="fas fa-ticket-alt"></i> <span data-i18n="events.e5.price">Tickets via Kolarac box office</span></span>
                                             <span class="event-status"></span>
                                         </div>
                                     </div>
@@ -459,9 +463,9 @@
             <div class="container">
                 <div class="newsletter-content">
                     <form class="newsletter-form-inline">
-                        <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                        <input type="email" class="newsletter-input" placeholder="Your email address" data-i18n="newsletter.placeholder" required>
                         <button type="submit" class="btn btn-primary">
-                            <span>Subscribe</span>
+                            <span data-i18n="newsletter.subscribe">Subscribe</span>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
@@ -473,9 +477,9 @@
         <section class="section contact" id="contact">
             <div class="container">
                 <div class="section__header">
-                    <span class="section__subtitle">Get In Touch</span>
-                    <h2 class="section__title">Have Questions?</h2>
-                    <p class="section__description">
+                    <span class="section__subtitle" data-i18n="contact.subtitle">Get In Touch</span>
+                    <h2 class="section__title" data-i18n="contact.title">Have Questions?</h2>
+                    <p class="section__description" data-i18n="contact.description">
                         We're here to help you plan the perfect Belgrade experience
                     </p>
                 </div>
@@ -487,8 +491,8 @@
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <div class="contact__details">
-                                <h4>Location</h4>
-                                <p>Belgrade, Serbia</p>
+                                <h4 data-i18n="contact.location">Location</h4>
+                                <p data-i18n="contact.locationValue">Belgrade, Serbia</p>
                             </div>
                         </div>
                         
@@ -497,8 +501,8 @@
                                 <i class="fas fa-calendar-check"></i>
                             </div>
                             <div class="contact__details">
-                                <h4>Reservations</h4>
-                                <p><button class="contact-reserve-btn" data-booking="FeelBG"><i class="fab fa-whatsapp"></i> Reserve via WhatsApp</button></p>
+                                <h4 data-i18n="contact.reservations">Reservations</h4>
+                                <p><button class="contact-reserve-btn" data-booking="FeelBG"><i class="fab fa-whatsapp"></i> <span data-i18n="contact.reserveWhatsApp">Reserve via WhatsApp</span></button></p>
                             </div>
                         </div>
                         
@@ -507,7 +511,7 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div class="contact__details">
-                                <h4>Email</h4>
+                                <h4 data-i18n="contact.email">Email</h4>
                                 <p>hello@feelbg.com</p>
                             </div>
                         </div>
@@ -517,8 +521,8 @@
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div class="contact__details">
-                                <h4>Support Hours</h4>
-                                <p>24/7 - Always Here</p>
+                                <h4 data-i18n="contact.supportHours">Support Hours</h4>
+                                <p data-i18n="contact.supportValue">24/7 - Always Here</p>
                             </div>
                         </div>
                         
@@ -532,32 +536,32 @@
                     <form class="contact__form" id="contact-form">
                         <div class="form__group">
                             <input type="text" id="name" class="form__input" placeholder=" " required>
-                            <label for="name" class="form__label">Your Name</label>
+                            <label for="name" class="form__label" data-i18n="contact.form.name">Your Name</label>
                         </div>
                         
                         <div class="form__group">
                             <input type="email" id="email" class="form__input" placeholder=" " required>
-                            <label for="email" class="form__label">Your Email</label>
+                            <label for="email" class="form__label" data-i18n="contact.form.email">Your Email</label>
                         </div>
                         
                         <div class="form__group">
                             <select id="inquiry-type" class="form__input" required>
-                                <option value="">Select inquiry type</option>
-                                <option value="general">General Question</option>
-                                <option value="recommendation">Need Recommendations</option>
-                                <option value="business">Business Partnership</option>
-                                <option value="feedback">Feedback</option>
+                                <option value="" data-i18n="contact.form.selectType">Select inquiry type</option>
+                                <option value="general" data-i18n="contact.form.general">General Question</option>
+                                <option value="recommendation" data-i18n="contact.form.recommendation">Need Recommendations</option>
+                                <option value="business" data-i18n="contact.form.business">Business Partnership</option>
+                                <option value="feedback" data-i18n="contact.form.feedback">Feedback</option>
                             </select>
-                            <label for="inquiry-type" class="form__label">Inquiry Type</label>
+                            <label for="inquiry-type" class="form__label" data-i18n="contact.form.inquiryType">Inquiry Type</label>
                         </div>
                         
                         <div class="form__group">
                             <textarea id="message" class="form__input form__textarea" placeholder=" " required></textarea>
-                            <label for="message" class="form__label">Your Message</label>
+                            <label for="message" class="form__label" data-i18n="contact.form.message">Your Message</label>
                         </div>
                         
                         <button type="submit" class="btn btn-primary">
-                            <span>Send Message</span>
+                            <span data-i18n="contact.form.send">Send Message</span>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
@@ -595,10 +599,10 @@
                 <div class="footer__section">
                     <h4 class="footer__subtitle" data-i18n="footer.popularAreas">Popular Areas</h4>
                     <ul class="footer__links">
-                        <li><a href="restaurants.html?area=skadarlija">Skadarlija</a></li>
-                        <li><a href="nightlife.html?area=savamala">Savamala</a></li>
-                        <li><a href="cafes.html?area=dorcol">Dorćol</a></li>
-                        <li><a href="attractions.html?area=stari-grad">Stari Grad</a></li>
+                        <li><a href="restaurants.html?area=skadarlija" data-i18n="area.skadarlija">Skadarlija</a></li>
+                        <li><a href="nightlife.html?area=savamala" data-i18n="area.savamala">Savamala</a></li>
+                        <li><a href="cafes.html?area=dorcol" data-i18n="area.dorcol">Dorćol</a></li>
+                        <li><a href="attractions.html?area=stari-grad" data-i18n="area.stariGrad">Stari Grad</a></li>
                     </ul>
                 </div>
                 

@@ -12,6 +12,24 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
+/* Translated string for the stored language, falling back to English.
+   Mirrors the lookup in CardRenderer.t() and js/insider-tips.js — strings
+   built in JavaScript cannot carry a data-i18n attribute, so they have to
+   resolve their own key. */
+function feelbgT(key) {
+    const translations = window.FEELBG_TRANSLATIONS || {};
+    let langCode = 'en';
+    try {
+        const stored = localStorage.getItem('feelbg_language');
+        if (stored) langCode = JSON.parse(stored).code;
+    } catch (e) { /* private mode, or a malformed value: English it is */ }
+    const lang = translations[langCode] || {};
+    const fallback = translations['en'] || {};
+    if (key in lang) return lang[key];
+    if (key in fallback) return fallback[key];
+    return key;
+}
+
 const debounce = (func, wait = 20) => {
     let timeout;
     return function executedFunction(...args) {
@@ -306,7 +324,7 @@ class ContactForm {
         const data = Object.fromEntries(formData);
         
         // Show success message
-        this.showMessage('success', 'Thank you! Your message has been sent successfully.');
+        this.showMessage('success', feelbgT('contact.successToast'));
         
         // Reset form
         this.form.reset();
@@ -349,7 +367,7 @@ class ContactForm {
 
 class NewsletterForm {
     constructor() {
-        this.form = $('.newsletter__form');
+        this.form = $('.newsletter__form') || $('.newsletter-form-inline');
         
         if (this.form) {
             this.init();
@@ -362,7 +380,7 @@ class NewsletterForm {
             const email = this.form.querySelector('input[type="email"]').value;
             
             // Show success message
-            this.showMessage('success', 'Successfully subscribed to our newsletter!');
+            this.showMessage('success', feelbgT('newsletter.successToast'));
             
             // Reset form
             this.form.reset();
@@ -773,14 +791,7 @@ class PageHeroVideo {
 // ============================================
 
 function liveEventsT(key) {
-    const translations = window.FEELBG_TRANSLATIONS || {};
-    const stored = localStorage.getItem('feelbg_language');
-    const langCode = stored ? JSON.parse(stored).code : 'en';
-    const lang = translations[langCode] || {};
-    const fallback = translations['en'] || {};
-    if (key in lang) return lang[key];
-    if (key in fallback) return fallback[key];
-    return key;
+    return feelbgT(key);
 }
 
 class LiveEventsInit {
